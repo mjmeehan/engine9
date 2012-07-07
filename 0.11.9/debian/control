@@ -1,0 +1,28 @@
+Source: bomberclone
+Section: games
+Priority: extra
+Maintainer: Bart Martens <bartm@debian.org>
+Build-Depends: cdbs, debhelper (>= 5), autotools-dev, libsdl1.2-dev, libsdl-mixer1.2-dev, libsdl-image1.2-dev, findutils (>= 4.1.7-2), docbook-to-man
+Standards-Version: 3.9.2
+Homepage: http://www.bomberclone.de/
+
+Package: bomberclone
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, bomberclone-data (= ${source:Version})
+Description: free Bomberman clone
+ BomberClone is a free Bomberman-like game for Linux and Windows. The rules of
+ the game are simple: run through a level and bomb other players. It features
+ powerups that give you more strength, make you walk faster through the level,
+ or let you drop more bombs.
+ .
+ BomberClone can be played in multi-player mode via IPv4 or IPv6 networks or in
+ single-player mode against the local AI.
+
+Package: bomberclone-data
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: bomberclone
+Description: Data files for bomberclone game
+ BomberClone is a free Bomberman-like game for Linux and Windows.
+ .
+ This package contains the data files needed to run the game.

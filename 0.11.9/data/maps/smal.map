@@ -1,0 +1,22 @@
+% Some Informations about the map
+% and who made the map
+%
+###########
+#@@@@@@@@@#
+#@#@#@#@#@#
+#@@@@@@@@@#
+#@#@###@#@#
+#@@@###@@@#
+#@#@###@#@#
+#@@@@@@@@@#
+#@#@#@#@#@#
+#@@@@@@@@@#
+###########
+bombs=5
+fire=5
+shoes=5
+mixed=5
+death=10
+sp_trigger=2
+sp_row=2
+sp_push=2

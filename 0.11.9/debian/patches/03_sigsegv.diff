@@ -1,0 +1,22 @@
+Fixes SIGSEGV's.
+
+--- ../orig/bomberclone-0.11.8/src/packets.c	2007-08-05 20:30:52.000000000 +0200
++++ src/packets.c	2008-12-27 20:31:06.000000000 +0100
+@@ -251,7 +251,9 @@
+             return;
+         }
+ 
++        if( ct_pkg && ct_pkg->to >= 0 ) // second SIGSEGV Debian bug 477196
+         players[ct_pkg->to].net.flags &= (0xFF - NETF_firewall);
++        if( ct_pkg && ct_pkg->to >= 0 ) // second SIGSEGV Debian bug 477196
+         net_game_send_player (ct_pkg->to);
+     }
+ 
+@@ -1861,6 +1863,7 @@
+      * check if the packet is from a player in the game and not from someone else
+      * this exception is only for PKG_joingame, PKG_error */
+     addr->pl_nr = get_player_nr (addr->host, addr->port);
++    if( addr->pl_nr >= 0 ) // first SIGSEGV Debian bug 477196
+     if ((addr->pl_nr < 0 || addr->pl_nr >= MAX_PLAYERS) && packet->h.typ > PKG_joingame
+         && PS_IS_netplayer (players[addr->pl_nr].state)) {
+         d_printf ("do_pkg: error addr->pl_nr out of range\n");

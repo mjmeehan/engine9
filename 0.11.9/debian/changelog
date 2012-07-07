@@ -1,0 +1,108 @@
+bomberclone (0.11.9-3) unstable; urgency=low
+
+  * debian/patches/05_fix_gcc4.6_warning.diff: Added.  Closes: #625311.
+    Patch by peter green <plugwash@p10link.net>, thanks.
+
+ -- Bart Martens <bartm@debian.org>  Sat, 20 Aug 2011 00:48:59 +0000
+
+bomberclone (0.11.9-2) unstable; urgency=low
+
+  * debian/patches/04_no-add-needed.diff: Added.  Closes: #553970.
+
+ -- Bart Martens <bartm@debian.org>  Fri, 25 Feb 2011 20:04:35 +0000
+
+bomberclone (0.11.9-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Bart Martens <bartm@debian.org>  Tue, 15 Feb 2011 19:21:05 +0000
+
+bomberclone (0.11.8-2) unstable; urgency=low
+
+  * debian/patches/02_enter.diff: Fixes problem with enter key.
+  * debian/patches/03_sigsegv.diff: Fixes SIGSEGV's.  Closes: #477196.
+  * debian/control, debian/rules: Use docbook-to-man.
+  * debian/control: Fixed typo.  Closes: #466635.
+  * debian/bomberclone.desktop: Added.  Closes: #457720.
+  * debian/watch: Updated.
+
+ -- Bart Martens <bartm@debian.org>  Tue, 23 Dec 2008 22:52:36 +0100
+
+bomberclone (0.11.8-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/*: Now using cdbs.
+  * debian/control: Fixed not-binnmuable-any-depends-all.
+  * debian/copyright: Updated.
+  * debian/menu: Updated to fit newest menu policy.
+  * debian/patches/01_cementery.diff: Added.
+  * debian/source.lintian-overrides: Removed obsolete overrides.
+  * debian/watch: Updated.
+
+ -- Bart Martens <bartm@debian.org>  Thu, 20 Dec 2007 18:31:06 +0100
+
+bomberclone (0.11.7-1) unstable; urgency=low
+
+  * New maintainer.  Closes: #316569.
+  * New upstream release.  Closes: #382082.  That fixes CVE-2006-4005 and
+    CVE-2006-4006.
+  * debian/*: Repackaged with dh-make 0.41.
+  * debian/source.lintian-overrides: Added.
+  * debian/watch: Added.
+
+ -- Bart Martens <bartm@knars.be>  Sun, 20 Aug 2006 12:17:29 +0200
+
+bomberclone (0.11.6.2-1) unstable; urgency=high
+
+  * New upstream release 
+    + fixes serious network bugs (closes: #316232)
+  * Applied patch by Tim Yamin to fix potential remote arbitrary code
+    execution [src/menu.c, src/menulabels.c, CVE-2006-0460]
+  * Fixed URLs in debian/copyright (closes: #354377)
+
+ -- Eduard Bloch <blade@debian.org>  Wed,  1 Mar 2006 00:41:35 +0100
+
+bomberclone (0.11.6-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Eduard Bloch <blade@debian.org>  Thu, 31 Mar 2005 03:25:52 +0200
+
+bomberclone (0.11.5-1) unstable; urgency=low
+
+  * New upstream release
+  * added the icon, converted to XPM@32x32 (closes: #275633)
+
+ -- Eduard Bloch <blade@debian.org>  Tue, 28 Dec 2004 01:13:36 +0100
+
+bomberclone (0.11.3-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 20 Jun 2004 01:52:57 +0200
+
+bomberclone (0.11.2-1) unstable; urgency=low
+
+  * New upstream release
+  * data lookup working again, removed configuration.c hacks
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  3 Apr 2004 20:41:38 +0200
+
+bomberclone (0.10.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Eduard Bloch <blade@debian.org>  Fri, 19 Sep 2003 01:23:03 +0200
+
+bomberclone (0.10.0-2) unstable; urgency=low
+
+  * Re-added accidentaly removed dh_shlibdeps call, closes: #207282
+
+ -- Eduard Bloch <blade@debian.org>  Tue, 26 Aug 2003 09:13:34 +0200
+
+bomberclone (0.10.0-1) unstable; urgency=low
+
+  * Initial Release, closes: #206087
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 18 Aug 2003 19:49:22 +0200
+

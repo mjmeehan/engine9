@@ -1,0 +1,194 @@
+<!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+
+<!-- Process this file with docbook-to-man to generate an nroff manual
+     page: `docbook-to-man manpage.sgml > manpage.1'.  You may view
+     the manual page with: `docbook-to-man manpage.sgml | nroff -man |
+     less'.  A typical entry in a Makefile or Makefile.am is:
+
+manpage.1: manpage.sgml
+	docbook-to-man $< > $@
+
+    
+	The docbook-to-man binary is found in the docbook-to-man package.
+	Please remember that if you create the nroff version in one of the
+	debian/rules file targets (such as build), you will need to include
+	docbook-to-man in your Build-Depends control field.
+
+  -->
+
+  <!-- Fill in your name for FIRSTNAME and SURNAME. -->
+  <!ENTITY dhfirstname "<firstname>Eduard</firstname>">
+  <!ENTITY dhsurname   "<surname>Bloch</surname>">
+  <!-- Please adjust the date whenever revising the manpage. -->
+  <!ENTITY dhdate      "<date>August 18, 2003</date>">
+  <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
+       allowed: see man(7), man(1). -->
+  <!ENTITY dhsection   "<manvolnum>6</manvolnum>">
+  <!ENTITY dhemail     "<email>blade@debian.org</email>">
+  <!ENTITY dhusername  "VU">
+  <!ENTITY dhucpackage "<refentrytitle>BOMBERCLONE</refentrytitle>">
+  <!ENTITY dhpackage   "bomberclone">
+
+  <!ENTITY debian      "<productname>Debian</productname>">
+  <!ENTITY gnu         "<acronym>GNU</acronym>">
+  <!ENTITY gpl         "&gnu; <acronym>GPL</acronym>">
+]>
+
+<refentry>
+  <refentryinfo>
+    <address>
+      &dhemail;
+    </address>
+    <author>
+      &dhfirstname;
+      &dhsurname;
+    </author>
+    <copyright>
+      <year>2003</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    &dhdate;
+  </refentryinfo>
+  <refmeta>
+    &dhucpackage;
+
+    &dhsection;
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+
+    <refpurpose>free Bomberman-like game</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>DESCRIPTION</title>
+
+    <para>This manual page documents briefly the
+      <command>&dhpackage;</command> game.</para>
+
+    <para>This manual page was written for the &debian; distribution
+      because the original program does not have a manual page.
+      </para>
+
+      <para>
+      The goal of the game is to be the last one, who is alive. You can drop bombs which will explode after a certain time and destroy everything in horizontal and vertical direction. So you can remove stones or kill other players. But take care. Don't kill yourself otherwise the game will be over for you.
+      </para>
+<para>
+During the game you will find different powerups to raise your skills. If you are running faster than your opponent and you have many bombs, you can catch him within lots of bombs and he has no chance to escape.
+</para>
+<para>
+You will get points for every player you have killed. If you win the game, you can earn additional points depending on how many players played the game.
+</para>
+
+  </refsect1>
+  <refsect1>
+    <title>POWERUPS</title>
+
+    <variablelist>
+      <varlistentry>
+        <term><option>FIRE ICON</option>
+        </term>
+        <listitem>
+          <para>The Fire powerup gives your bombs more range. Maximum Range is 10.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>FIRE ICON</option>
+        </term>
+        <listitem>
+          <para>The Fire powerup gives your bombs more range. Maximum Range is 10.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>BOMB ICON</option>
+        </term>
+        <listitem>
+          <para>After picking up the Bomb item you can put one more bomb on the field. Maximum are 12 Bombs.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>SHOE ICON</option>
+        </term>
+        <listitem>
+          <para>After you collect this powerup you will walk a little bit faster.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>SPECIALS</title>
+
+    <variablelist>
+      <varlistentry>
+        <term><option>BOMB WITH FUSE ICON</option>
+        </term>
+        <listitem>
+          <para>You can trigger the explosion of all your bombs by pressing the Special Use key. Warning don't wait to long or your bombs will explode anyway.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>BOMB WITH ELASTIC BAND ICON</option>
+        </term>
+        <listitem>
+          <para>Push your and other bombs around the maze. But be carefull that the bomb is not going to explode
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>MULTIPLE BOMBS ICON</option>
+        </term>
+        <listitem>
+          <para>Lay a row of bombs in one direction to trap some players. To use this special, hold the Special use key and the direction key where you want to drop the row.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>SEE ALSO</title>
+
+    <para>http://www.bomberclone.de</para>
+
+  </refsect1>
+  <refsect1>
+    <title>AUTHOR</title>
+
+    <para>This manual page was written by &dhusername; &dhemail; for
+      the &debian; system (but may be used by others).  Permission is
+      granted to copy, distribute and/or modify this document under
+      the terms of the &gnu; Free Documentation
+      License, Version 1.1 or any later version published by the Free
+      Software Foundation; with no Invariant Sections, no Front-Cover
+      Texts and no Back-Cover Texts.</para>
+
+  </refsect1>
+</refentry>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:2
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->
+
+

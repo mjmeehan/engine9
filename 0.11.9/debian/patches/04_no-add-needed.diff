@@ -1,0 +1,17 @@
+--- bomberclone-0.11.8.orig/src/Makefile.am
++++ bomberclone-0.11.8/src/Makefile.am
+@@ -55,3 +55,4 @@
+ 	windres -i bc-res.rc -o bc-res.o
+ 	rm bomberclone.ico
+ endif
++bomberclone_LDADD += -lm
+--- bomberclone-0.11.8.orig/src/Makefile.in
++++ bomberclone-0.11.8/src/Makefile.in
+@@ -234,6 +234,7 @@
+ 	broadcast.c
+ 
+ @MINGW32_TRUE@bomberclone_LDADD = bc-res.o
++bomberclone_LDADD += -lm
+ all: all-am
+ 
+ .SUFFIXES:

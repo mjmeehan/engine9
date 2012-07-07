@@ -1,0 +1,96 @@
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/game.c ./src/game.c
+--- ../orig/bomberclone-0.11.8/src/game.c	2007-01-12 23:42:31.000000000 +0100
++++ ./src/game.c	2008-12-23 22:51:50.000000000 +0100
+@@ -904,7 +904,7 @@
+             bman.state = GS_startup;
+         }
+ 
+-        if ((keys[SDLK_RETURN] || keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) && (!keypressed)
++        if ((keys[SDLK_RETURN] || keys[SDLK_KP_ENTER] || keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) && (!keypressed)
+             && (event.type = SDL_KEYDOWN)) {
+             done = 1;
+             keypressed = 1;
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/keyb.c ./src/keyb.c
+--- ../orig/bomberclone-0.11.8/src/keyb.c	2005-08-07 19:46:21.000000000 +0200
++++ ./src/keyb.c	2008-12-23 22:52:14.000000000 +0100
+@@ -187,7 +187,7 @@
+ 	menu_displaytext ("Keyboard Config", "Please press the new key\nfor this function.");
+ 
+     keys = SDL_GetKeyState (NULL);
+-    if (keys[SDLK_RETURN] || keys[SDLK_ESCAPE])
++    if (keys[SDLK_RETURN] || keys[SDLK_KP_ENTER] || keys[SDLK_ESCAPE])
+         keypressed = 1;
+ 
+     timestamp = SDL_GetTicks (); // needed for time sync.
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/keybinput.c ./src/keybinput.c
+--- ../orig/bomberclone-0.11.8/src/keybinput.c	2003-12-26 01:56:17.000000000 +0100
++++ ./src/keybinput.c	2008-12-23 22:50:51.000000000 +0100
+@@ -65,7 +65,7 @@
+ 		ki->len = strlen (ki->text);
+ 	}
+ 	
+-	if (keybinput_oldkey == SDLK_RETURN && event->type == SDL_KEYUP)
++	if ((keybinput_oldkey == SDLK_RETURN || keybinput_oldkey == SDLK_KP_ENTER) && event->type == SDL_KEYUP)
+ 		keyu = 1;
+ 	else if (keybinput_oldkey == SDLK_ESCAPE && event->type == SDL_KEYUP)
+ 		keyu = -1;
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/menubools.c ./src/menubools.c
+--- ../orig/bomberclone-0.11.8/src/menubools.c	2004-05-20 18:55:30.000000000 +0200
++++ ./src/menubools.c	2008-12-23 22:49:01.000000000 +0100
+@@ -40,7 +40,7 @@
+ 				menu_focus_prev ((_menu *) mi->menu);
+ 			else if (event->key.keysym.sym == SDLK_RIGHT || event->key.keysym.sym == SDLK_DOWN) 
+ 				menu_focus_next ((_menu *) mi->menu);
+-			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_LCTRL || event->key.keysym.sym == SDLK_RCTRL) {
++			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_KP_ENTER || event->key.keysym.sym == SDLK_LCTRL || event->key.keysym.sym == SDLK_RCTRL) {
+ 				*(int *)mi->ptrdata = !(*(int *)mi->ptrdata);
+ 				menu_draw_bool (mi);
+ 			}
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/menubuttons.c ./src/menubuttons.c
+--- ../orig/bomberclone-0.11.8/src/menubuttons.c	2004-05-20 18:55:30.000000000 +0200
++++ ./src/menubuttons.c	2008-12-23 22:49:26.000000000 +0100
+@@ -95,7 +95,7 @@
+ 				menu_focus_prev ((_menu *)mi->menu);
+ 			else if (event->key.keysym.sym == SDLK_RIGHT || event->key.keysym.sym == SDLK_DOWN) 
+ 				menu_focus_next ((_menu *)mi->menu);
+-			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_LCTRL || event->key.keysym.sym == SDLK_RCTRL)
++			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_KP_ENTER || event->key.keysym.sym == SDLK_LCTRL || event->key.keysym.sym == SDLK_RCTRL)
+ 				return 1;
+ 			break;
+ 	}
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/menuentrys.c ./src/menuentrys.c
+--- ../orig/bomberclone-0.11.8/src/menuentrys.c	2004-05-20 18:55:30.000000000 +0200
++++ ./src/menuentrys.c	2008-12-23 22:49:51.000000000 +0100
+@@ -150,7 +150,7 @@
+ 				menu_focus_prev ((_menu *)mi->menu);
+ 			else if (event->key.keysym.sym == SDLK_DOWN) 
+ 				menu_focus_next ((_menu *)mi->menu);
+-			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_RCTRL || event->key.keysym.sym == SDLK_RCTRL)
++			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_KP_ENTER || event->key.keysym.sym == SDLK_RCTRL || event->key.keysym.sym == SDLK_RCTRL)
+ 				menu_entry_save (mi);
+ 			else if (event->key.keysym.sym == SDLK_ESCAPE)
+ 				menu_entry_restore (mi);
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/menulists.c ./src/menulists.c
+--- ../orig/bomberclone-0.11.8/src/menulists.c	2005-03-27 03:31:50.000000000 +0200
++++ ./src/menulists.c	2008-12-23 22:50:17.000000000 +0100
+@@ -296,7 +296,7 @@
+ 				menu_list_select_prev (mi);
+ 			else if (event->key.keysym.sym == SDLK_DOWN) 
+ 				menu_list_select_next (mi);
+-			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_RCTRL || event->key.keysym.sym == SDLK_RCTRL)
++			else if (event->key.keysym.sym == SDLK_RETURN || event->key.keysym.sym == SDLK_KP_ENTER || event->key.keysym.sym == SDLK_RCTRL || event->key.keysym.sym == SDLK_RCTRL)
+ 				return 1;
+ 			break;
+ 		case (SDL_KEYUP):
+diff -ruN -x '*.png' -x '*.jpg' -x '*.ogg' -x '*_image_archive' ../orig/bomberclone-0.11.8/src/playermenu.c ./src/playermenu.c
+--- ../orig/bomberclone-0.11.8/src/playermenu.c	2005-08-07 19:46:21.000000000 +0200
++++ ./src/playermenu.c	2008-12-23 22:48:17.000000000 +0100
+@@ -176,7 +176,7 @@
+ 				/*
+ 				 * select the current gfx if aviable
+ 				 */
+-				else if (event.key.keysym.sym == SDLK_RETURN
++				else if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_KP_ENTER
+ 					|| event.key.keysym.sym == SDLK_LCTRL || event.key.keysym.sym == SDLK_RCTRL 
+ 					|| event.key.keysym.sym == keyb_gamekeys.keycode[BCPK_drop] || event.key.keysym.sym == keyb_gamekeys.keycode[BCPK_special] 
+ 					|| event.key.keysym.sym == keyb_gamekeys.keycode[BCPK_max + BCPK_drop] || event.key.keysym.sym == keyb_gamekeys.keycode[BCPK_max + BCPK_special]) {

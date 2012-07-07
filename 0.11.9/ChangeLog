@@ -1,0 +1,917 @@
+$Id: ChangeLog,v 1.133 2010-12-11 21:27:55 steffen Exp $
+
+Version 0.11.9
+==============
+
+- changed: opengamecache had to move to my own server. New address: ogc.gulpe.de:11111
+
+- fixed: on certain networks, recvfrom hasen't returned. Even select
+         returns with data aviable recvfrom got stuck because of no data.
+         Added MSG_DONTWAIT here as flag. (only on linux)
+
+- fixed: counter pkg_lastid became > 32767 almost messages are lost 
+         in cache managment 
+         patch from: Michel Bernay
+
+- fixed: bug with selecting a player gfx.
+
+- got a big patch file from Michel Bernay which fixes:
+  fixed: bug about compute points of the winner in multiplayer mode
+  fixed: bug for server for coputing point (Suppress all process in
+         reception of playerdata)
+  fixed: bug in cache managment (lot of messages lost by function 
+         rscachedel)
+  added: function to find who player is owner of explosion to compute
+         the killer
+  added: function in debug for display player statistics
+  changed: display points on general menu
+  changed: scorring now a unique players wins a round add 1 point 
+           (bonus for victory) and numer of player killed by thge
+           winner
+
+- Added Warning if a game get startet with only one player selected
+  Patch send in by: Carles Pina i Estany
+
+- Added Joystick support - Patch send in by: Patrick Kirsch
+  Chenges i made to the patch: I open only once the joystick device.
+  Since after the patch the joystick got opened a few times without
+  closing it again. The setupmenu will display now the number of the
+  button which is selected for the function.
+
+- Fixed BUG found by Lars Poeschel
+  One player could join without problems and if a second player joined
+  this network game, the server crashed in do_contest() accessing
+  illegal memory. The problem is that a contest packet is received with
+  to -1 and from 1. Then in the line
+	players[ct_pkg->to].net.flags &= (0xFF - NETF_firewall);
+  obviously illegal memory is accessed.
+  Fixed the check of the to parameter from the contest packet. The 
+  server ignores now a to value of -1.
+
+
+Version 0.11.8
+================
+14.12.2007
+
+- Changed Docdir to $prefix/share/doc (Felipe Rafailov)
+
+- Added some more resolutions. (requested by some users)
+
+- Fixed BUG shown in: http://bugzilla.novell.com/show_bug.cgi?id=242031
+  (patch from: Petr Gajdos)
+  In network game i wanted to use all the time a different bomb 
+  instead of the first free aviable. In the code i forgot to modify
+  some values. This patch should fix it now.
+  (player.c:player_findfreebomb) changed i to nr.
+
+- Fixed some drawing issues with flying bombs.
+
+- The last special item use was lost on clients in a network game.
+  special.use (was reset during special_clean)
+  special.clean variable added to save the cleaning state.
+      tested and works.
+  
+- Fixed: kicked bombs can travel in time. (map.bfield was set too early)
+  rewrote full bomb kicked system.
+
+- Fixed: compile warning: packets.c(635): error #592: variable "s_mod" is
+  used before its value is set (reported by: David Binderman)
+
+- Fixed: Special settings will be saved into the config file.
+
+- Changed: all data will have thier own Makefile. So "make install" and
+  "make dist" won't copy the CVS dirs.
+
+- Fixed: Second Player Problem
+  this fix includes that if a second player was used the game got somehow
+  very instable, because there have been no reset of all the game data.
+  playerselection works now much better. There have been problems with 
+  some keys for the second player.
+
+- Fixed: problem on slow networks with the loop that the selected player
+  gfx gots selected and deselected. (infinite loop on the network)
+
+- Fixed: problem with overwriting the servers address on clients.
+  problem only seen on server who gets connected from two differen ip
+  addresses.
+
+Version 0.11.7
+==============
+2006-08-15
+
+- Added: BomberClone Icon to the bomberclone win32 binary.
+
+- Added: resolution 1280x800
+
+- Testing: Security Problems found by Luigi Auriemma
+  Bugs: A] memcpy crash in rscache_add
+        B] information disclosure in send_pkg
+        C] simple error message termination
+  for more informations look here:
+  http://aluigi.altervista.org/adv/bcloneboom-adv.txt
+  Solutions to 
+  A) rewrote the whole resend cache system, also send_mapinfo needed a
+     bad workaround for a bug i couldn't find out. (to disable the workaround
+     use ./configure CFLAGS=-DBUG_MAPINFO)
+  B) made sure that the size of a packet is set right before send over
+     the network. Found only the function (do_gameinfo) where something 
+     like this occured.
+	 do_pkg will also check the size of the incoming packet with the 
+	 p->h.len value.
+  C) accept the error packets only from the server of a game. Since only the
+     server will send such type of packets.
+
+- Fixed: Security Problem found by Stefan Cornelius.
+  For more information look here:
+  https://lists.uni-koeln.de/pipermail/sec-info/Week-of-Mon-20060313/006561.html
+    
+- Added: "more random" by Patrik Nilsson:
+  This map type is just a hacked version of "autogenerated",
+  and is as the name tells more random. Since both block, 
+  rock and nothing are placed randomly inside the border.
+
+- Fixed: High CPU usage in menus.
+  This fix was made by Chris E..
+ 
+- Fixed: Bug with more as 8 diffrent player graphics.
+  The window size hasen't changed if there where more as
+  8 different player graphics to choose from.
+
+- Removed the Dedicated Server Support from the game.
+  The whole bomberclone game is not desinged for a dedicated
+  server. The test shown that the whole game would have to
+  be rewritten. Also that the host can leave the game would
+  not work no more.
+
+Version 0.11.6.2
+- Client network player could die two times in a game.
+  After receiving the playerdata packet from a client did the
+  server first the player_set_gfx routine first. Which send a
+  playerid packet with a alife player back.
+  Changed: player_set_gfx routine will be called after setting 
+  the state of a player.
+  Also do_playerid will check if the game is not running 
+  or the player is still alife to set this value.
+- Dedicated server support (only testing).
+- Fixed do_quit and send_quit.
+- Fixed number of players in running games was always 
+  set to 0.
+
+Version 0.11.6.1
+- Display the number of players for each listed network game.
+- Ghost Player added.
+- Playername will not overlapped by the player gfx anymore.
+- Added menuswitch to enable/disable broadcast requests.
+
+
+Version 0.11.6
+==============
+
+2005-03-27
+
+- Fixed: pkg_resendcache, no right calaculation for the size of
+  the saved packet.
+
+- Changed: Version number and the ping time to each game 
+  (ver 0.11.6 or later) of network games will show up.
+
+- Added: Parameter -gamename to set the games name from the
+  command line.
+
+- Added: Network Join will find Local games without OGC.
+  Broadcasted UDP Packets will be send to find games.
+
+2005-02-20
+
+- Fixed: Network Player died in a game. All network
+  players will controll thier own dead. (needed on slow networks)
+
+- Added: 1600x1280 Resolution
+
+2005-01-30
+
+- Fixed: Makefile.am in datadir. Pixmap for the icon 
+  was not installed.
+
+2004-12-27
+
+- Fixed: moving and liquid bombs where not working right.
+  we checked the wrong map.bfield value.
+
+Version 0.11.5
+==============
+2004-12-26
+
+- Fixed: Multiplayer more as three players could not play.
+  There was a bug in the automatic firewall detection.
+
+- Added: Show a simple information of what keys are used in
+  the multiplayer screen.
+
+- Chagned: In Singleplayer you can select now 0 AI Players.
+
+- Fixed: Teamdata (as Names and Colors) will be send over the network.
+
+- Fixed: udp_send: bad file error fixed, in single mode we was
+  still sending the quit information to all clients.
+
+- Fixed: Alot other strange network bugs. I.e. the rejoin part
+  and that the server can leave part was not right.
+
+Version 0.11.4
+==============
+2004-12-12
+
+- Fixed: Teamdata wasn't send right, net_send_playerid changed,
+  send_playerdata and do_playerdata fixed.
+
+- Fixed: Problems with the second local player join and 
+  leaving. Also the second local player won't get 
+  informations which the first local player already had.
+  
+- Bombs will not explode right on slow computers.. it 
+  seems they jump one field to far. 
+  fixed: rewrote part of the do_explosion stuff and 
+  part of the explosion_restore function. Explosion 
+  was growing on slow PC more as one field per cycle.
+
+- AI: Player die on a slow computer because they move more 
+  as 1 Field. This might be also the problem Acidjnk told
+  me about.
+
+  Variable dir_change added so we won't have
+  anymore so many suicides.
+
+  little more work on the AI, there are still some kind of 
+  problems. Maybe i'll rewrite the whole AI again.
+
+- fixed: Server starts the game soo fast that the
+  client's ignore the gamestat for a running game.
+  Check if all players are ready.
+
+- Makefile.am in include and data changed so make dist will
+  work fine as well as make install won't install anymore
+  all the useless *.h files.
+
+- the firewall flag will be enabled and disabled automaticly.
+  Datapacket PKG_contest created to make it possible to work.
+
+- only players who are in the game will be able to send 
+  gamedata related packets to the game. (do_pkg() changed)
+
+- fixed: AI won't have anymore so many suicide deaths.
+
+- New Team menu Handling.
+
+- changed: Playermenu (F2 in the Playerselection screen).
+  You will see some details about the other players and
+  you can go to the teammenu from here.
+
+- fixed: udp_send:: Invalid argument Error Message
+  net_game_send_delplayer had a problem with the second 
+  local player.
+
+- changed: Chat Mode will always keep active if there is
+  only one player on one computer. If there are two player
+  we have to press F5 to activate the chatwindow.
+
+- fixed: Quit Game wasn't working from the in game menu
+
+- fixed: Network Version Error. There is no 
+  possible Escape.
+
+- fixed: Single Player Menu there was no ESC key working
+
+- fixed: Player Selection Screen (single player)
+  ESC key wasn't working and also closing the program
+  haven't worked.
+
+
+Version 0.11.3
+==============
+2004-06-15
+
+- ingame menus, like the "Quit Game" question, 
+  and a End Round menu.
+
+- menuhandling changed some internal things, 
+  so it is possible to create more menus at the time.
+  it is possible to write own menuloops. 
+  (this is used in the new playerselection screen and
+   playermenu screen.)
+
+- new playerselectionscreen, needed because of the second
+  local player.
+
+- password protection for own games so they can be 
+  listed, on the OGC but only people with the password
+  will be able to join.
+
+- userdefined keyboad settings. read the file
+  src/keyb.c for the current keyboard settings.
+
+- Added: the server can now kick players from the game
+
+- Added: programm parameters for automatic joining/hosting
+  a game, using ogc, port configuation and debug mode.
+  for more informations use the parameter "-help".
+
+- Fixed: respawning of the player will continue and 
+  finish when we go into Hurry Mode.
+
+- Fixed: bombs will start ticking when another special 
+  is taken or the player died.
+  
+- Fixed: statusbar will forced to update if a player 
+  finished respawning.
+
+- Fixed: number of items which have been dropped. If not 
+  all items could been set a debug message will be printed 
+  into the console or stdout.txt.
+  
+- Fixed: items can not anymore droped on bombs.
+
+- Fixes the issue of it making incorrect assumptions
+  about the initial range of bombs and placing players in
+  unsafe positions. by dcdillion
+
+
+Version 0.11.2
+==============
+2004-02-08
+
+- Fixed: forgot to put the Message F4 to start the game 
+  into the playerselection screen. I put this only into the
+  Gamescreen right before the game starts. Added even the
+  F4 Button into the Help Screen.
+
+- Fixed: DropItems haven't been resetted on dropping items.
+
+- Fixed: Firewall Flag wasn't set right on all clients for the 
+  players. The same with the pkg_fwd routine i not only needed
+  packets to the other clients. I send even some Serveronly 
+  packets.
+
+- Fixed: Redraw Menuitems only if changes were made.
+
+- Fixed: Logo is now shown after change of resolution.
+
+- Fixed: Bombtickingtime could not be read from the config 
+  file.
+
+- Fixed: If you select "Host a Netgame" nothing happened if 
+  firewall was enabled. Now a error message is displayed.
+
+- Fixed: Chat input in multiplayer wait menu is now smoother.
+
+- Changed: Download-Screen shows now a progress bar.
+  Additionally, every player can now see the download 
+  progress of all other players.
+
+- Fixed: Single Lost Fire on the field will be put now in
+  the animation list now which will check an decrease the
+  ex[*].count value as long as no specialy explosion was
+  found.
+
+- Fixed/Added: display messages enabled again (after disabling
+  for changing the menu style with version 0.11.0)
+
+- Changed: new player position placement, that works much
+  better as the old version (coded by dcdillon)
+ 
+- Changed: if no human players are left the game will end
+
+- Added: Manual Section into the Game. And the MENU_image
+  element to show some graphic in the menus.
+
+- Changed: Games with only AI Players left will end. As a 
+  draw game. So it won't get borring to keep watching the
+  ai players.
+
+
+Version 0.11.1
+==============
+2004-02-01
+
+- Added: Deathmatch mode.
+
+- Added: Kick Bombs special
+
+- Fixed: Network initialization at quit removed
+
+- Fixed: packets.c: do/send_playermove tunnelto wasn't
+  converted into network arch.
+
+- Fixed: packets.h: pkg_playermove speed changed to Sint16
+
+- Fixed: gfxpixelimage.c colors on bigendian Systems Red 
+  and Blue mask was switched
+
+- Fixed: network.h: NET_CANSEND fixed, didn't checked right 
+  for the server
+
+- Fixed: crash if no tileset was selected in the selection
+  menu. (error was in menu.c:menu_dir_select)
+
+- Fixed: (Network) three more stones will be restored if a new 
+  bombdata packet reaches the player.
+
+- Changed all Images to PNG. From now on there is alpha blending
+  supported too.
+
+- Added: Game Setting start_bombs, start_range, start_bombs and
+  bomb_tickingtime.
+
+- Added: Drop Items On Death element. You can collect now 
+  your opponents items if he died.
+
+- Fixed: Missing "Press F4 to Start" Screen Text in Multiplayer 
+
+- Fixed: Networking over IPv6 had a little network init problem
+
+- Fixed: Crash on Hosting games with OGC enabled and no internet
+  connection
+  
+- Fixed: player_move had a problem with the speed of the player
+  on slow systems.
+
+- Fixed: Major networking and packet handling problem. inpkg_check
+  fixed, strange crash fixed was reading from players[addr->pl_nr].*
+  where addr->pl_nr was set to -1. Function inpkg_delplayer added
+  so all inconig indexdata for double packets can be deleted. This
+  made a big problem when someone disconnected and tryed to rejoin
+
+
+Version 0.11.0
+==============
+2004-01-06
+
+- Added Programm options to the game. For more information
+  run BomberClone with -help.
+
+- Compiler Flag added for disabling debuging. Compiler
+  Flags -ggdb and -O0 won'T be set no more.
+     ./configure --disable-debug
+
+- Added smal help screen in the multiplayer selection
+  screen.
+
+- Fixed: If the player is move on a field where is 
+  currently an explosion then will the player die.
+
+- wrote new OpenGameCache Server for this game and 
+  other games. This server is working almost the same
+  way as BCMServ did. Except that there is no 
+  Broadcasted chat for now (but i will enable this 
+  soon again).
+  
+  OGC Link:
+   http://bomberclone.sourceforge.net/OpenGameCache/
+
+- Menuhandling complete rewritten and changed. 
+  GUI created for menus: lists, buttons, check boxes
+  labels and other things created.
+  -new menugraphics made by DJ Mirage.
+  -mapmenu written by Patty
+  -the bad response form the game to users action
+   should be fixed.
+
+- FullScreen switching from within the game
+  by pressing (F8 Works for some Reason only
+  in Linux)
+
+- Changed part of the Networkhandling to detect who
+  is the Game Server.
+
+- AI Players can join network games.
+
+- Changed all positions and framenumbers to float. 
+  Together with this i can drop the hard 20ms 
+  gameloop limitation. So the game will be able to
+  run on slower systems and compare the loss of 
+  frames.
+
+- some more music tracks added to the game.
+  DJ Mirage made a page where people could 
+  upload some songs.
+
+- BomberClone music file "cinderella_clown.mod"
+  thanks to Psycho (http://www.moods.2xs.de/)
+
+
+Version 0.10.1
+==============
+2003-09-13
+
+- accepted Solaris, .cvsignore and bzero patch
+  Patch from pak21 (https://sourceforge.net/users/pak21/)
+
+- BomberCloneMServ will have even a playerlist of 
+  a game, so you will know who have joined a game.
+
+- added big endian support, so non intel-style 
+  computers will be able to play over the network
+  now too.
+
+- added liquid and moving bombs special.
+
+- timer options, for how long the game will go.
+
+- added tunnels to the game so player can go through.
+  PKG_playermove changed and PGK_tunneldata added
+
+- the first music file added to the game made by
+  Digital_D <siggy_stardust@hotmail.com>
+  the music files will be played out of the music 
+  directory randomly
+ 
+- chat windows size will be bigger in multiplayer 
+  games and in single games the space for the chat 
+  window is used for the gamefield size.
+
+
+Version 0.10.0
+==============
+2003-07-27
+
+- Added: two ways the game can end now. the old Bomberman
+  style with getting the size of the gamefield down and
+  another one with putting in the game alot of powerups.
+  the game even has a timeout of 10 minutes + the 
+  2 minutes of the end game sequence.
+
+- Makefile.am fixed in the data direktory. Added 
+  ${prefix}/ and changed @PREFIX_PACKAGE_DATA_DIR@ to 
+  @NO_PREFIX_PACKAGE_DATA_DIR@ . So debian packages
+  can be generated easyly soon.
+
+- GFX: scaling routine speeded up a little bit. Using inline 
+  functions and much less "switch case".
+
+- TekKRat made two new players, the first two
+  tilesets with the pseudo 3D effect
+  (64x96 pixel tileset) and another tileset.
+  (cemetery, sheep, hell and farm)
+
+- caccola made another Tileset (supermario)
+
+- Added: Switch to enable/disable broadcasted chats.
+  So the confusing will stop why there are unknown people
+  talking. You can enable it in the Network Options.
+
+- Fixed: chat_findfreeline, there was a bug in the 
+  source and destination of copying the chatlines. 
+  Thats why the chat got mixed up after 255 lines.
+
+- Added: maps have more options to set and it will be
+  displayed in the multiplayer menu, this options can be
+  saved for every map seperated.
+
+- GFX: source cleanup. Player will now drawn in order they
+  stay tileset will change we can support 64x64pixel size 
+  and 64x92pixel size tilesets no sdl_blit* calls from 
+  game_loop for the game gfx.. working on a new engine with 
+  sorting the tiles and update rects.
+  
+  The new size tilesets filenames are block96.bmp for the 
+  block.bmp file stone96.bmp for the stone.bmp file. If in 
+  one directory are two files one stone.bmp and ston96.bmp
+  the game will always take the stone.bmp file.
+
+
+
+Version 0.9.9
+=============
+
+2003-07-13: fix2
+- special trigger over, all trigger bombs have to be 
+  set to normal bombs with max timeout 5 sec
+
+- pushing bombs and wrong directin illness
+
+- fixed: remove network flag from disconected players
+  so we won't send data to players in the game which
+  have already disconnected
+  
+- fixed: player_findfreebomb
+    - trigger bomb + bomblaying illness have
+      let explode always a bomb at your place.
+    - sometimes you can drop more bombs as 
+      allowed if you have to row-special
+
+2003-06-21: fix1
+- fixed: bombs can only dropped on an empty field. Bug 
+  came with version 0.9.9
+
+- the last bomb who explode from a player won't anymore be
+  used right away. We only use it if there is no other bomb
+  free.
+
+- bfield fixed on incoming bombdata packets
+
+- network packet timeout set down to 400ms
+
+- screen clipping of gfx_AddUpdateRect
+
+- draw_field, draw_player and restore player function fixed,
+  problems with position on the field is greater as the 
+  fieldsize. (SDL BadValue)
+
+
+2003-06-12
+- PowerUps will be painted diffrent now. Depend
+  on what it is.
+
+- Chat Input Box won't be deleted if a game is over or 
+  is going to start
+
+- New Font Drawing enginge, so we can draw in with 
+  diffrent fonts and colors.
+
+- Network Option added for people who are playing 
+  behind a firewall. Portforwarding should not anymore 
+  needed. Except you want to open a game.
+
+- Added Sound Support (thanks to Henrik Enqvist for 
+  the help and the sound files.)
+
+- Added new special powerups (Patty)
+
+- Fixed make install, so the source will be able to 
+  install correctly now with the data packages
+
+- AI Players are working now
+
+
+Version 0.9.8
+=============
+2003-05-12
+- Added: a new powerup and two new illnesses. (Patty)
+
+- Fixed: the gfx engine will not anymore take too much
+  CPU usage (Patty)
+  
+- Changed: the Background Fields can now have a bigger
+  texture, size 1x1 (64x64), 2x2(128x128), 3x3... 
+
+- Changed: You can now change the map settings even in the
+  Player selection menu. (kitutou)
+
+- Added: tileset support with random tileset selection
+  thanks to (thaphool) for the jungle tileset
+
+- Added: loadable maps. (ob1kenewb)
+  with random map selection (kitutou)
+
+- Changed: now the send packet option will be set for every 
+  player directly, so if a slow player joins, it should not
+  anymore slow down the whole network game.
+
+- Fixed: disconnected player are not anymore shown in the 
+  Player Selection screen.
+
+- Fixed/Add: first support for international keyboards, so the 
+  shift key will work. thanks to (ob1kenewb) !
+
+- Fixed: SuSe could not compile the game right. 
+  #include <sys/time.h> was needed. not only <time.h>
+
+- Fixed: Problem if the Server Quit.. the game haven't stopped
+  The whole network situation within the game got mixed up
+
+
+Version 0.9.7
+=============
+2003-04-27
+- Fixed: Problem when the server leaves the game. Got the
+  MasterServer a message that all the clients have opened a game.
+
+- Added: You can now choose between 16, 24 and 32 bits per pixel.
+
+- Fixed: PI_bomb illness.
+
+- Changed the way of how the speed gets increased.
+
+
+Version 0.9.6
+=============
+
+2003-04-23
+- better handling with the masterserver menu. If you want to join
+  a game you don't need anymore to refresh the list. 
+  Because the game will get some updates from the MasterServer.
+
+- You can finaly get more as only one illness. And you can get the
+  Ill now from another player.
+
+- Some work in the menu.
+
+- In the game you will see now the little Player Graphic left from
+  the name. It will help you to see who is who in the game.
+
+- Fixed Problem with PI_keys Illness. (that the one with the mixed 
+  up keys)
+
+
+Version 0.9.5
+=============
+
+2003-04-13
+- Add: Chatting you are able to chat now.. it's connecting all 
+  running games together into the chat. You will see Chats who
+  are not from your server beginning with BC: or IRC: depends
+  who this message come from.
+
+- Better Graphics
+
+- Better Network, the option for how many packets will be send
+  is chaning within the game. Depends on how much packets timed
+  out.
+
+
+4) 2003-04-06
+- You can no join into running games.
+
+- Fixed some network bugs. Which had to do with joining and
+  leaving running games
+
+0-3) 2003-03-29
+- internal change for the positions on the field to 16bit.
+  player moves smother now.
+
+- diffrent screen resolutions
+
+- random player start positions
+
+- the size of the field can be changed
+
+- playergraphic is better now.
+
+- menus are diffrent now.
+
+- configuration is saved in a special file.
+  on linux $HOME/.bomberclone.cfg
+  on windows bomberclone.cfg
+
+
+Version 0.8
+===========
+
+0-2) 2003-03-15
+- Added two more Powerups (diffrent speeds, and ilness)
+
+- Fixed some problems with the bombes which didn't wanted 
+  to explode.
+
+- Debug-Messages can now be switched off.
+  this improve the speed in the game on slow computers.
+
+
+Version 0.7
+===========
+
+1) 2003-03-06
+- Master GameServer Support, So everyone will see
+  running games. You don't need to deal anymore with the
+  Servernames.
+
+- GFX: New Playerfile now we have three diffrent Players
+
+
+Version 0.6
+===========
+
+12) 2003-02-27
+- Fixed: The ServerMode Packet will be send with the PKGF_ackreq Flag.
+  Because sometimes the clients haven't got the packet. And couldn't play
+  in the game.
+
+- Fixed: Single Player Problem after trying to open a Multiplayer server
+  is the Single Player mode not working right.. the Player could not die.
+
+- Fixed: Multiplayer, the game was counting the poinbts wrong and there 
+  was always a winner marked even if everybody died.
+
+11) 2003-02-24
+- Fixed: bombs which are exploding more times on slow networks.
+  I had some little misstake in the inpkg_check function.
+
+- I am sending now only needed packages, moving packages will be
+  only every second time maybe every third time. The user is able
+  to choose how often the package should be send.
+
+- Finaly there is a playerstatistic in the end of the game.
+  It will hold the points and who have won the game.
+
+- The game is not ending right there where the last player died.
+  I put a timeout in the game of 5 seconds. So the last few bombs 
+  will explode.
+
+- pkg_error: will be shown on the screen.
+
+- version controll: old bomberclone versions will be ignored and
+  they get a error message back.
+
+10) 2003-02-21
+- Some work on the Network Protocoll, because there are
+  still some problems with sending the Data
+
+
+Version 0.5
+===========
+
+9) 2003-02-14
+- In Multiplayergames, only the Server will let the
+  Bombs explode. Manny tests have shown that this 
+  is the best way to prevent some difficults in the
+  game with the field, bomb and explosion data.
+
+- code optimized in working with struct _sockaddr
+  because sockaddr_in6 is larger as sockaddr which is
+  usualy used for all/the most type of network 
+  connection.
+
+
+5-8) 2003-02-13
+- i made some experiments with sending bomb information
+  and field information over the network.
+
+- created a inpkg_index to check for incoming packets
+  which we have already got.
+
+4) 2003-02-12
+- bomb explosion will be send over the network
+
+3) 2003-02-12
+- Better Network Handling
+  Check for important packages (pkg_field, pkg_bomb)
+  and send them again. Created a resend_cache.
+
+- Windows: i put now WSAStartup and WASCleanup in the 
+  network_init and network_shutdown function. Windows
+  User should now able to join more times games without
+  restarting the game.
+
+- MSVC: moved the function "explosion_check_field"
+  in file bomb.c out of the function "do_explosion"
+  and the function "check_field" in file player.c 
+  out of the function "move_player".  The same i 
+  have done with "draw_netupdatestate" and 
+  "wait_draw_select". Because MSVC had some 
+  problems with function in function declaration.
+
+
+Version 0.4
+===========
+
+2) 2003-02-11:
+- if the server don't reply after a while we will
+  get back in the join menu.
+
+1) 2003-02-10:
+- mouse cursor is not anymore on the windows/screen.
+
+- Fixed: Bomb Under Player Bug
+
+- Build Number is now included.
+  It will show up in the Main Menu.
+
+2003-02-07:
+- Save every sockaddr in the in_pl struct so we don't have to look up 
+  them again and again
+
+- Making changes in the Data Download Sequence.
+
+- Chaning the Network Protocol from TCP to UDP. And putting 
+  everything inside what is needed for a basic work.
+
+- Linux supports IPv6 and IPv4, you can choose it in the settings
+
+- I have got the first animated player for the game. 
+  I hope the next will follow soon.
+
+
+Version 0.3
+===========
+
+- First Try to Compile everything on Windows and Linux.
+
+- Network doesn't work fine with more as two Players and a Windows Client
+  It works only with more as two players on Linux Systems.
+  
+
+Version 0.2
+===========
+
+- Added functions for animations.
+
+- Network Support does now work somehow on Linux
+
+
+Version 0.1
+===========
+
+- You can finally move your player 
+  the bombs are exploding.
+
+- Basic Graphics, just some experiments within the game

@@ -1,0 +1,157 @@
+
+Compilation
+===========
+
+Windows:
+  On Windows i used cygwin with mingw-gcc compiler. (http://www.cygwin.com) 
+  You will even need the Source from the "Simply DirectMedia Layer" Library.
+  (http://www.libsdl.org/index.php)
+  
+  1. Install Cygwin and Compile the SDL Library into it.
+  
+		  ./configure --prefix=/usr
+		  make
+		  make install
+	  
+	  The SDL.DLL file you will find under /usr/lib
+	  	  
+  2. Compile the Source of BomberClone
+  
+	  	  ./configure
+		  make
+	  
+	  if this doesn't work try
+	  
+		aclocal -f
+		autoheader -f
+		autoconf -f
+		automake -a
+		./configure
+		make
+	  
+	  then run the game with 
+	  
+		  src/bomberclone.exe
+  
+Linux:
+  if everything goes right, you only need to run 
+  
+	  ./configure 
+  	  make
+ 
+  if nothing goes right, you will need : 
+  
+	   aclocal
+	   autoheader
+	   autoconf
+	   automake
+	   ./configure
+	   make
+	   src/bomberclone
+
+
+Binary Versions
+===============
+
+Linux:
+  Untar the downloaded file and go into the game
+  directory. You need to have the following libs
+  installed to run this binary:
+	  SDL-1.2.7, SDL_mixer and SDL_image (with PNG support)
+
+  in the game dir just enter:
+	  ./bomberclone
+
+Windows:
+  The windows Binary Version will include eveything,
+  the SDL Librarys and all other stuff needed by
+  BomberClone. The game will come with an Installer.
+  So you won't have to do anything.
+
+
+
+Problems
+========
+
+1. Starting a networkgame in a LAN network isn't working.
+    - disable to notify the masterserver
+
+2. Players are jumping around, player are running thought walls
+   won't die.
+    - packet loss, network to slow
+	  right now the game tryes to send as much as possible,
+	  if it can't send anymore it will bring down the network
+	  traffic, but this only works for a while.
+				
+3. You start a server but noone can join it, even the other
+   people can see your game on the master server.
+    - the game needs in the current state always direct access to the
+	  UDP Port 11000, if you change it over the (-port) parameter you need 
+	  to open this port.
+	
+	- If you sit behind a firewall, make sure that the gameport is forwarded and 
+	  if you send something, your firewall won't change the source-port.
+	  The game and the masterserver need this information to identify your
+	  Game and Player later.
+	  (i have seen some games was logged by the gameserver with port numbers
+	   above 30000, which mostly indicates that there is some problem 
+	   with a firewall or router)
+
+
+If you have other problems, or just want to say something about the game, you 
+just need to send me an email to : steffen@bomberclone.de
+
+
+Network
+=======
+
+(Ver. 0.3)
+The Game uses TCP port 11000, and it needs that other clients can 
+connect to this port. So check your network configuration.
+
+(Ver. 0.4)
+This Version uses only UDP Port 11000, so check it again.. :o)
+
+
+Animations
+==========
+
+How to save the single frames into one big image for the animations
+The Dieing sequence will be in version 0.4
+
+Image:
+
+ left |  right | up   | down | dieing
+  F1  |   F1   |  F1  |  F1  |  F1     Frame 1
+  F2  |   F2   |  F2  |  F2  |  F2     Frame 2
+  F3  |   F3   |  F3  |  F3  |  F3     Frame 3
+  F4  |   F4   |  F4  |  F4  |  F4     Frame 4
+  F5  |   F5   |  F5  |  F5  |  F5     Frame 5
+
+
+Testers
+=======
+
+  Linux  : Marcus, Patty, x-coder, Steffen
+  Windows: boogieman, deadlock, acid
+
+
+Contact
+=======
+
+Steffen Pohle           steffen@bomberclone.de
+
+Or on our Project Page 
+	http://sourceforge.net/projects/bomberclone
+
+
+Thanks
+======
+Thanks to TekkRat who mage all the diffrent players for us.
+
+
+You can find us on : 
+  irc://irc.d-t-net.de #bomberclone
+
+
+http://www.bomberclone.de

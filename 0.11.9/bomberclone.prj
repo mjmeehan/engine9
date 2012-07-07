@@ -1,0 +1,186 @@
+# Anjuta Version 1.2.4a 
+Compatibility Level: 1 
+
+<PROJECT_DESCRIPTION_START>
+it's a Bomberman Clone<PROJECT_DESCRIPTION_END>
+<CONFIG_PROGS_START>
+<CONFIG_PROGS_END>
+<CONFIG_LIBS_START>
+dnl Check for SDL
+   AM_PATH_SDL(1.1.0,
+        :,
+        AC_MSG_ERROR(SDL not found. Make sure sdl-config is in your PATH, or specify with --with-sdl-prefix)
+    )
+    
+    CFLAGS="$SDL_CFLAGS $CFLAGS"
+    LIBS="$SDL_LIBS $LIBS"
+<CONFIG_LIBS_END>
+<CONFIG_HEADERS_START>
+<CONFIG_HEADERS_END>
+<CONFIG_CHARACTERISTICS_START>
+case "$target" in
+    *cygwin* | *mingw32* | *mingw32msvc* )
+        CFLAGS="$CFLAGS"
+        LIBS="$LIBS -liberty -lwsock32"
+        ;;
+esac
+	CFLAGS="$CFLAGS -Wall"
+
+echo "T $target H $host B $buid" >cross-target.txt
+<CONFIG_CHARACTERISTICS_END>
+<CONFIG_LIB_FUNCS_START>
+<CONFIG_LIB_FUNCS_END>
+<CONFIG_ADDITIONAL_START>
+<CONFIG_ADDITIONAL_END>
+<CONFIG_FILES_START>
+<CONFIG_FILES_END>
+<MAKEFILE_AM_START>
+<MAKEFILE_AM_END>
+
+props.file.type=project
+
+anjuta.version=1.2.4a
+anjuta.compatibility.level=1
+
+project.name=bomberclone
+project.type=GENERIC
+project.target.type=EXECUTABLE
+project.version=0.11
+project.author=steffen
+project.source.target=bomberclone
+project.has.gettext=0
+project.gui.command=
+project.programming.language=C
+project.excluded.modules=intl
+
+project.config.extra.modules.before=
+project.config.extra.modules.after=
+project.config.blocked=0
+project.config.disable.overwriting=1 1 1 1 1 1 1 1 1 
+
+project.menu.entry=bomberclone
+project.menu.group=Games
+project.menu.comment=bomberclone
+project.menu.icon=
+project.menu.need.terminal=0
+
+project.configure.options=
+anjuta.program.arguments=
+preferences.build.option.jobs=0
+preferences.build.option.silent=0
+preferences.build.option.autosave=1
+preferences.make=make
+preferences.build.option.keep.going=0
+preferences.build.option.warn.undef=0
+preferences.autoformat.custom.style=-br -brs -l100 -lc100 -lp -hnl -bc -nip -nce -ncdw -bli1 -i4 -ts1-bad -bap
+preferences.indent.opening=0
+preferences.autoformat.disable=0
+preferences.indent.automatic=1
+preferences.use.tabs=1
+preferences.indent.size=4
+preferences.tabsize=4
+preferences.indent.closing=0
+
+module.include.name=include
+module.include.type=
+module.include.files=\
+	basic.h\
+	bomberclone.h\
+	chat.h\
+	font.h\
+	gfx.h\
+	keybinput.h\
+	map.h\
+	network.h\
+	packets.h\
+	sound.h\
+	sysfunc.h\
+	menu.h\
+	menugui.h\
+	ogcache-client.h\
+	udp.h\
+	flyingitems.h\
+	keyb.h\
+	bomb.h\
+	player.h\
+	single.h\
+	broadcast.h
+
+module.source.name=src
+module.source.type=
+module.source.files=\
+	sysfunc.c\
+	udp.c\
+	tileset.c\
+	special.c\
+	sound.c\
+	configuration.c\
+	chat.c\
+	debug.c\
+	field.c\
+	font.c\
+	bomb.c\
+	game.c\
+	gfx.c\
+	gfxengine.c\
+	gfxpixelimage.c\
+	keybinput.c\
+	main.c\
+	map.c\
+	mapmenu.c\
+	menu.c\
+	multiwait.c\
+	netmenu.c\
+	network.c\
+	packets.c\
+	pkgcache.c\
+	player.c\
+	single.c\
+	menulabels.c\
+	menubuttons.c\
+	menubools.c\
+	menuentrys.c\
+	menulists.c\
+	ogcache-client.c\
+	netsrvlist.c\
+	flyingitems.c\
+	help.c\
+	menuimages.c\
+	playerinput.c\
+	keyb.c\
+	playermenu.c\
+	broadcast.c
+
+module.pixmap.name=pixmaps
+module.pixmap.type=
+module.pixmap.files=
+
+module.data.name=data
+module.data.type=
+module.data.files=
+
+module.help.name=help
+module.help.type=
+module.help.files=
+
+module.doc.name=doc
+module.doc.type=
+module.doc.files=
+
+module.po.files=
+
+compiler.options.supports=
+compiler.options.include.paths=
+compiler.options.library.paths=
+compiler.options.libraries=
+compiler.options.libraries.selected=
+compiler.options.defines=
+compiler.options.defines.selected=
+compiler.options.warning.buttons=0 0 1 1 1 1 1 1 1 1 1 0 1 0 0 1 
+compiler.options.optimize.buttons=0 1 0 0 
+compiler.options.other.buttons=1 0 
+compiler.options.other.c.flags=
+compiler.options.other.l.flags=
+compiler.options.other.l.libs=
+
+project.src.paths=

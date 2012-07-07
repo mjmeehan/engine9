@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+DEB_CONFIGURE_EXTRA_FLAGS += \
+		--prefix=/usr \
+		--bindir=/usr/games \
+		--mandir=\$${prefix}/share/man \
+		--infodir=\$${prefix}/share/info \
+		--datadir=/usr/share/games/bomberclone \
+
+update-config::
+	docbook-to-man debian/bomberclone.sgml > debian/bomberclone.6
+
+clean::
+	rm -f debian/bomberclone.6
+

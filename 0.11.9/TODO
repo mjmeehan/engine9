@@ -1,0 +1,11 @@
+$Id: TODO,v 1.47 2009-05-12 20:50:33 stpohle Exp $
+
+- explosions.. sometimes bombs can explode more times, slow networks (very slow)
+
+
+
+
+New Cross Compiling Toolchain is needed..
+
+rm cross-config.cache; LIBS="-static -ltiff -ljpeg -lpng12 -lz -lsmpeg -lSDL -logg -lpthread -lstdc++ -lwinmm" cross-configure.sh
+

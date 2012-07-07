@@ -1,0 +1,3 @@
+?package(bomberclone):needs="X11" section="Games/Action" \
+ title="BomberClone" command="/usr/games/bomberclone" \
+ icon="/usr/share/pixmaps/bomberclone.xpm"

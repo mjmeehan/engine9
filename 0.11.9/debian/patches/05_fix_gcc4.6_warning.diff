@@ -1,0 +1,295 @@
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/bomb.c bomberclone-0.11.9.new//src/bomb.c
+--- bomberclone-0.11.9//src/bomb.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/bomb.c	2011-08-11 20:12:48.000000000 +0000
+@@ -503,17 +503,12 @@
+  * the bomb was kicked.. so move the bomb in the right way..
+  */
+ void bomb_kicked (_bomb * bomb) {
+-	float dist, dX, dY, pX, pY;
++	float dX, dY, pX, pY;
+ 	
+ 	pX = dX = bomb->dest.x - bomb->source.x;
+ 	pY = dY = bomb->dest.y - bomb->source.y;
+ 	if (pX < 0.0f) pX = -dX;
+ 	if (pY < 0.0f) pY = -dY;
+-	if (pX == 0.0f) dist = pY;
+-	else if (pY == 0.0f) dist = pX;
+-	else {
+-		dist = sqrtf (powf (pX,2) + powf (pY,2));
+-	}
+ 	
+ 	bomb->fdata += timediff; // * (SPECIAL_KICK_MAXDIST / dist);
+ 	if (bomb->fdata >= 1.0f) {
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/gfx.c bomberclone-0.11.9.new//src/gfx.c
+--- bomberclone-0.11.9//src/gfx.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/gfx.c	2011-08-11 20:12:48.000000000 +0000
+@@ -37,8 +37,7 @@
+ void
+ gfx_load_players (int sx, int sy)
+ {
+-    float sfkt,
+-      ssfkt;
++    float sfkt;
+     char filename[255];
+     int i,
+       r,
+@@ -47,7 +46,6 @@
+     SDL_Surface *tmpimage,
+      *tmpimage1;
+     sfkt = ((float) sx) / ((float) GFX_IMGSIZE);
+-    ssfkt = ((float) GFX_SMALLPLAYERIMGSIZE_X) / ((float) GFX_IMGSIZE);
+ 
+ 	d_printf ("gfx_load_players (%d, %d)\n", sx, sy);
+ 	
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/gfxpixelimage.c bomberclone-0.11.9.new//src/gfxpixelimage.c
+--- bomberclone-0.11.9//src/gfxpixelimage.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/gfxpixelimage.c	2011-08-11 20:12:48.000000000 +0000
+@@ -285,10 +285,6 @@
+ SDL_Surface *
+ makegray_image (SDL_Surface * org)
+ {
+-    Uint32 rmask,
+-      gmask,
+-      bmask,
+-      amask;
+     Uint32 pixel,
+       transpixel = 0;
+     SDL_Surface *dest;
+@@ -300,18 +296,6 @@
+       b,
+       gray;
+ 
+-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+-    rmask = 0xff000000;
+-    gmask = 0x00ff0000;
+-    bmask = 0x0000ff00;
+-    amask = 0x000000ff;
+-#else /*  */
+-    rmask = 0x000000ff;
+-    gmask = 0x0000ff00;
+-    bmask = 0x00ff0000;
+-    amask = 0xff000000;
+-#endif /*  */
+-
+ 	dest = SDL_CreateRGBSurface (SDL_SWSURFACE, org->w, org->h, org->format->BitsPerPixel,
+                                  org->format->Rmask, org->format->Gmask,
+                                  org->format->Bmask, org->format->Amask);
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/keyb.c bomberclone-0.11.9.new//src/keyb.c
+--- bomberclone-0.11.9//src/keyb.c	2011-08-11 20:12:47.000000000 +0000
++++ bomberclone-0.11.9.new//src/keyb.c	2011-08-11 20:13:43.000000000 +0000
+@@ -180,8 +180,7 @@
+ void keyb_config_joypad (int key) {
+ 	unsigned int n = 0;
+ 	SDL_Event event;
+-	Uint8 *keys;
+-	int keypressed = 0,	done = 0, eventstate = 0, reorder = 0, i, j;
++	int done = 0, eventstate = 0, reorder = 0, i, j;
+ 
+ 	if (joy[0] == NULL || key < 0 || key >= BCK_max) return;
+ 	
+@@ -189,9 +188,6 @@
+ 	
+ 	menu_displaytext ("Joypad Config", "Please press the new key\nfor this function.");
+ 	
+-	keys = SDL_GetKeyState (NULL);
+-	if (keys[SDLK_RETURN] || keys[SDLK_ESCAPE])
+-		keypressed = 1;
+ 	
+ 	timestamp = SDL_GetTicks (); // needed for time sync.
+ 	
+@@ -245,9 +241,7 @@
+ void keyb_config_readkey (int key) {
+ 	int newkey;
+     SDL_Event event;
+-    Uint8 *keys;
+-    int keypressed = 0,
+-        done = 0,
++    int done = 0,
+         eventstate = 0,
+         reorder = 0;
+ 		newkey = 0;
+@@ -258,9 +252,6 @@
+ 	
+ 	menu_displaytext ("Keyboard Config", "Please press the new key\nfor this function.");
+ 
+-    keys = SDL_GetKeyState (NULL);
+-    if (keys[SDLK_RETURN] || keys[SDLK_KP_ENTER] || keys[SDLK_ESCAPE])
+-        keypressed = 1;
+ 
+     timestamp = SDL_GetTicks (); // needed for time sync.
+ 
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/mapmenu.c bomberclone-0.11.9.new//src/mapmenu.c
+--- bomberclone-0.11.9//src/mapmenu.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/mapmenu.c	2011-08-11 20:12:48.000000000 +0000
+@@ -174,15 +174,13 @@
+ {
+     _keybinput ki;
+     SDL_Event event;
+-    int x,
+-      y,
++    int y,
+       eventstate,
+       done = 0;
+     char text[255];
+ 
+ // draw_menubox (WIN_X, WIN_Y);
+ 
+-    x = gfx.res.x / 2;
+     y = gfx.res.y / 2 - WIN_Y / 2;
+ 
+     sprintf (text, "Map Settings");
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/menu.c bomberclone-0.11.9.new//src/menu.c
+--- bomberclone-0.11.9//src/menu.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/menu.c	2011-08-11 20:12:48.000000000 +0000
+@@ -591,11 +591,10 @@
+       menuselect;
+     _charlist *selfile = flist;
+     _menu *menu;
+-	_menuitem *dirmi;
+ 
+     flcnt = menu_create_dirlist (path, dirflags, flist, MAX_DIRENTRYS);
+     menu = menu_new (title, 300, 300);
+-    dirmi = menu_create_list (menu, "Dir", -1, 50, 200, 200, flist, &selfile, 1);
++    menu_create_list (menu, "Dir", -1, 50, 200, 200, flist, &selfile, 1);
+     menu_create_button (menu, "OK", -1, 270, 150, 0);
+ 	menu_focus_id (menu, 1);
+ 	
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/netsrvlist.c bomberclone-0.11.9.new//src/netsrvlist.c
+--- bomberclone-0.11.9//src/netsrvlist.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/netsrvlist.c	2011-08-11 20:12:48.000000000 +0000
+@@ -124,7 +124,6 @@
+ 	_charlist *sel_entry = &srvlst_text[0];
+ 	_menu *menu;
+ 	_menuitem *srvlst_listmenu;
+-	_menuitem *srvlst_entry;
+     SDL_Event event;
+ 	
+ 	d_printf ("net_getserver\n");
+@@ -137,7 +136,7 @@
+ 
+ 	menu = menu_new ("Join a Game", 500, 400);
+ 	srvlst_listmenu = menu_create_list (menu, "Host a Game", -1, 50, 475, 250, srvlst_text, &sel_entry, 1);
+-	srvlst_entry = menu_create_entry (menu, "IP :", -1, 320, 475, bman.servername, LEN_SERVERNAME+LEN_PORT + 2, MENU_entrytext, 2);	
++	menu_create_entry (menu, "IP :", -1, 320, 475, bman.servername, LEN_SERVERNAME+LEN_PORT + 2, MENU_entrytext, 2);	
+ 	menu_create_button (menu, "OK", -1, 350, 150, 0);
+ 	menu_focus_id (menu, 1);
+ 
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/network.c bomberclone-0.11.9.new//src/network.c
+--- bomberclone-0.11.9//src/network.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/network.c	2011-08-11 20:12:48.000000000 +0000
+@@ -460,7 +460,6 @@
+ net_transmit_gamedata ()
+ {
+     int done = 0,
+-        keypressed = 0,
+         x,
+         y,                      // network upload status for one step
+         p,
+@@ -621,12 +620,9 @@
+         if (keys[SDLK_ESCAPE] && event.type == SDL_KEYDOWN) {
+             done = 1;
+             bman.p_nr = -1;
+-            keypressed = 1;
+             bman.state = GS_startup;
+         }
+ 
+-        if (event.type == SDL_KEYUP)
+-            keypressed = 0;
+     }
+ 
+     timestamp = SDL_GetTicks (); // needed for time sync.
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/player.c bomberclone-0.11.9.new//src/player.c
+--- bomberclone-0.11.9//src/player.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/player.c	2011-08-11 20:12:48.000000000 +0000
+@@ -120,7 +120,6 @@
+ {
+     int i,
+       x,
+-      xs,
+       xe,
+       y,
+       ys,
+@@ -155,7 +154,6 @@
+                 if (ye >= map.size.y)
+                     ye = map.size.y - 1;
+ 				// redrawing of the stone
+-                xs = x;
+                 for (; x <= xe; x++)
+                     for (y = ys; y <= ye; y++)
+                         stonelist_add (x, y);
+@@ -445,7 +443,7 @@
+ void
+ player_move (int pl_nr)
+ {
+-    int oldd, coll_speed;
++    int oldd;
+     _player *p = &players[pl_nr];
+ 
+     if (p->tunnelto > 0.0f) {
+@@ -460,7 +458,6 @@
+             player_animation (p);
+     		oldd = p->d;
+             p->stepsleft = p->speed * timefactor;
+-			coll_speed = p->collect_shoes;
+             do {
+                 p->d = oldd;
+ 			} while ((p->stepsleft = stepmove_player (pl_nr)) > 0);
+@@ -677,9 +674,7 @@
+ player_calcpos ()
+ {
+     _player *pl;
+-    int oldm,
+-      oldd,
+-      p;
++    int p;
+ 	float oldspeed;
+ 
+     for (p = 0; p < MAX_PLAYERS; p++) {
+@@ -687,8 +682,6 @@
+         if (PS_IS_netplayer (pl->state) && PS_IS_alife (pl->state) && pl->m != 0) {
+ 		    player_animation (pl);
+ 			oldspeed = pl->speed;
+-            oldm = pl->m;
+-            oldd = pl->d;
+             if (pl->speed > 0.0) {
+ 				pl->speed *= timefactor;
+                 stepmove_player (p);
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/single.c bomberclone-0.11.9.new//src/single.c
+--- bomberclone-0.11.9//src/single.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/single.c	2011-08-11 20:12:48.000000000 +0000
+@@ -711,7 +711,6 @@
+     _charlist nrplayerlist[MAX_PLAYERS + 1];
+     _charlist *selnrplayer = &nrplayerlist[bman.ai_players];
+ 	_menu *menu;
+-	_menuitem *aiplayer = NULL;
+ 	SDL_Event event;
+ 
+     /* fill in the nrplayerlist */
+@@ -729,7 +728,7 @@
+ 	menu = menu_new ("Single Game", 380,240);
+ 	
+ 	menu_create_text (menu, "numpl", 20, 50, 12, 2, COLOR_yellow, "Number of\nAI Players");
+-	aiplayer = menu_create_list (menu, "AI Players", 40, 90, 50, 100, nrplayerlist, &selnrplayer, 3);
++	menu_create_list (menu, "AI Players", 40, 90, 50, 100, nrplayerlist, &selnrplayer, 3);
+ 	
+ 	menu_create_button (menu,"Change Playernames" ,160, 50, 210, 4);
+ 
+diff -Nur -x '*.orig' -x '*~' bomberclone-0.11.9//src/tileset.c bomberclone-0.11.9.new//src/tileset.c
+--- bomberclone-0.11.9//src/tileset.c	2011-08-11 20:12:41.000000000 +0000
++++ bomberclone-0.11.9.new//src/tileset.c	2011-08-11 20:12:48.000000000 +0000
+@@ -72,7 +72,6 @@
+     char tileset[LEN_TILESETNAME];
+     SDL_Surface *tmpimage,
+      *tmpimage1;
+-    float sfkt;
+ 
+     d_printf ("Loading Tileset: %s\n", tilesetname);
+     strncpy (tileset, tilesetname, LEN_TILESETNAME);
+@@ -101,7 +100,6 @@
+ 
+     /* create Table of points */
+     scale (gfx.postab, gfx.block.x, 256);
+-    sfkt = ((float) gfx.block.x) / ((float) GFX_IMGSIZE);
+ 
+     /* calculating the best offset for the field on the screen */
+     gfx.offset.x = (gfx.res.x - (gfx.block.x * map.size.x)) / 2;

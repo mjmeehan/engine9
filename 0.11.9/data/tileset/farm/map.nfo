@@ -1,0 +1,15 @@
+Farm-Tileset for BomberClone ( http://www.bomberclone.de/ )
+-----------------------------------------------------------
+
+Designer : teKkraT
+Rel.Date : 2003-07-02
+Name     : Farm_01
+
+working title : tekk_01_pawn_new-style
+
+-----------------------------------------------------------
+
+Short Description:
+
+Farm_01 is a bright tileset where you incinerate hay and scarecrows are blocking your way.
+This tileset is using the 3:2 aspect-ratio for blocks introduced with BomberClone 0.9.10 so be sure you have that or else get Farm_00 (which is the 1:1 aspect-ratio conversion .. but it doesn't look that cool :)).
