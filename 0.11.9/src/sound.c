@@ -8,39 +8,40 @@ _snd snd;
 
 /* display the sound options */
 void
-snd_options () {
-/*    int menuselect = 0;
-    _menu menu[] = {
-        {1, "Music Play"},
-        {1, "Sound Play"},
-        {2, "Return To Main Menu"},
-        {-1, ""}
-    };
+snd_options ()
+{
+    /*    int menuselect = 0;
+        _menu menu[] = {
+            {1, "Music Play"},
+            {1, "Sound Play"},
+            {2, "Return To Main Menu"},
+            {-1, ""}
+        };
 
-    while (menuselect != -1 && bman.state != GS_quit) {
-		if (snd.playmusic)
-	        sprintf (menu[0].text, "Music Play ON");
-		else
-			sprintf (menu[0].text, "Music Play OFF");
-		
-		if (snd.playsound)
-	        sprintf (menu[1].text, "Sound Play ON");
-		else
-			sprintf (menu[1].text, "Sound Play OFF");
-		
-        menuselect = menu_loop ("Audio Options", menu, menuselect);
-        switch (menuselect) {
-        case (0):              // Play Music
-            snd.playmusic = 1-snd.playmusic;
-            break;
-        case (1):              // Play Sound
-            snd.playsound = 1-snd.playsound;
-            break;
-		case (2):
-			menuselect = -1;
-			break;
-		}
-	} */
+        while (menuselect != -1 && bman.state != GS_quit) {
+    		if (snd.playmusic)
+    	        sprintf (menu[0].text, "Music Play ON");
+    		else
+    			sprintf (menu[0].text, "Music Play OFF");
+
+    		if (snd.playsound)
+    	        sprintf (menu[1].text, "Sound Play ON");
+    		else
+    			sprintf (menu[1].text, "Sound Play OFF");
+
+            menuselect = menu_loop ("Audio Options", menu, menuselect);
+            switch (menuselect) {
+            case (0):              // Play Music
+                snd.playmusic = 1-snd.playmusic;
+                break;
+            case (1):              // Play Sound
+                snd.playsound = 1-snd.playsound;
+                break;
+    		case (2):
+    			menuselect = -1;
+    			break;
+    		}
+    	} */
 };
 
 
@@ -100,14 +101,15 @@ snd_init ()
 
 
 void
-snd_shutdown () {
+snd_shutdown ()
+{
 #if HAVE_SDL_MIXER
-	if (snd.inited) {
-		snd.inited = 0;
-		Mix_CloseAudio ();
-	}
+    if (snd.inited) {
+        snd.inited = 0;
+        Mix_CloseAudio ();
+    }
 #endif
-	return;
+    return;
 };
 
 
@@ -118,7 +120,7 @@ snd_load (char *tilesetname)
 #if HAVE_SDL_MIXER
     char fullname[LEN_PATHFILENAME];
     char filename[LEN_FILENAME];
-	_direntry *destart, *de, *desel;
+    _direntry *destart, *de, *desel;
     int i, max, sel;
 
     // load samples
@@ -147,27 +149,27 @@ snd_load (char *tilesetname)
     }
 
 
-	/* random selection of an sound file */	
-	sprintf (fullname, "%s/music", bman.datapath);
-	desel = destart = s_getdir (fullname);
-	
-	for (max = 0, de = destart; de != NULL; de = de->next) 
-		if (de->name[0] != '.' && (de->flags & DF_file) == DF_file)
-			max++;
-	
-	sel = s_random (max);
-	for (max = 0, de = destart; max <= sel && de != NULL; de = de->next)
-		if (de->name[0] != '.' && (de->flags & DF_file) == DF_file) {
-			desel = de;
-			max++;
-	}
-	
+    /* random selection of an sound file */
+    sprintf (fullname, "%s/music", bman.datapath);
+    desel = destart = s_getdir (fullname);
+
+    for (max = 0, de = destart; de != NULL; de = de->next)
+        if (de->name[0] != '.' && (de->flags & DF_file) == DF_file)
+            max++;
+
+    sel = s_random (max);
+    for (max = 0, de = destart; max <= sel && de != NULL; de = de->next)
+        if (de->name[0] != '.' && (de->flags & DF_file) == DF_file) {
+            desel = de;
+            max++;
+        }
+
     /* try loading the music from the tileset or the default */
-	if (desel != NULL) {
-		sprintf (fullname, "%s/music/%s", bman.datapath, desel->name);
-		if ((snd.music = Mix_LoadMUS (fullname)) == NULL)
-        	d_printf ("Couldn't load %s: %s\n", fullname, SDL_GetError ());
-	}
+    if (desel != NULL) {
+        sprintf (fullname, "%s/music/%s", bman.datapath, desel->name);
+        if ((snd.music = Mix_LoadMUS (fullname)) == NULL)
+            d_printf ("Couldn't load %s: %s\n", fullname, SDL_GetError ());
+    }
 
 #endif
     return;

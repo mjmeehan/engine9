@@ -6,21 +6,21 @@
 #define BC_MAXREQUEST 3
 
 struct broadcast_entry {
-	char port[LEN_PORT];
-	char host[LEN_SERVERNAME];
-	char gamename[LEN_GAMENAME];
-	char version[LEN_VERSION];
-	int ping;
-	int password;
-	int curplayers;
-	int maxplayers;
-	int timestamp;
-	int try;
-	int lan;				// the broadcasted packet indicates a lan game
+    char port[LEN_PORT];
+    char host[LEN_SERVERNAME];
+    char gamename[LEN_GAMENAME];
+    char version[LEN_VERSION];
+    int ping;
+    int password;
+    int curplayers;
+    int maxplayers;
+    int timestamp;
+    int try;
+    int lan;				// the broadcasted packet indicates a lan game
 };
 
 extern struct broadcast_entry broadcast_list [];
-	
+
 extern void broadcast_send (char *host, char *port);
 void broadcast_init ();
 void broadcast_loop ();

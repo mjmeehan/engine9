@@ -6,18 +6,18 @@
 #define KEYBI_LINE_LEN 255
 
 enum _keybinputtype {
-	KEYBI_text = 0,
-	KEYBI_int,
-	KEYBI_float
+    KEYBI_text = 0,
+    KEYBI_int,
+    KEYBI_float
 };
 
 struct __keybinput {
-	char text[KEYBI_LINE_LEN];
-	short int curpos;
-	short int len;
-	char changed;
-	int type;
-	int maxlen;
+    char text[KEYBI_LINE_LEN];
+    short int curpos;
+    short int len;
+    char changed;
+    int type;
+    int maxlen;
 } typedef _keybinput;
 
 

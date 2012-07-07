@@ -12,8 +12,8 @@
 extern _point debug_field;
 extern int debug_lastping;
 
-static short int pkg_lastid;    /* the packet id, this will only counted 
-                                 * up nothing more.. if we are at 0x10000 
+static short int pkg_lastid;    /* the packet id, this will only counted
+                                 * up nothing more.. if we are at 0x10000
                                  * we will start at 0 */
 
 struct _resend_cache resend_cache;
@@ -26,14 +26,15 @@ int inpkg_index_pos = 0;
  * this function  does not indicate which player it is, this function only checks
  * if the packet comed from a known player
  */
-int get_player_nr (char *host, char *port) {
+int get_player_nr (char *host, char *port)
+{
     int i,
-      res;
+        res;
 
     for (i = 0, res = -1; (i < MAX_PLAYERS && res == -1); i++) {
         if (players[i].net.addr.host[0] != 0)
             if ((strcmp (players[i].net.addr.host, host) == 0)
-                && (strcmp (players[i].net.addr.port, port) == 0))
+                    && (strcmp (players[i].net.addr.port, port) == 0))
                 res = i;
     }
     return res;
@@ -43,7 +44,8 @@ int get_player_nr (char *host, char *port) {
 /*
  * Packettype: error
  */
-void send_error (_net_addr * addr, char *text) {
+void send_error (_net_addr * addr, char *text)
+{
     struct pkg_error p_err;
 
     d_printf ("Send Network Error : %s\n", text);
@@ -57,17 +59,18 @@ void send_error (_net_addr * addr, char *text) {
 };
 
 
-void do_error (struct pkg_error *data, _net_addr * addr) {
+void do_error (struct pkg_error *data, _net_addr * addr)
+{
     d_printf ("Network Error from %s:%s : '%s'\n", addr->host, addr->port, data->text);
 
-	/* check if the packet comes from the server, the server
-	 * never gets errormessages from a client, if a client has 
-	 * some trouble the client will just disconnect */
-	if (GT_MP_PTPS && addr->pl_nr == bman.p_servnr) {
-		menu_displaymessage ("Network Error", "Got Error from: %s:%s\nMessage:%s", addr->host,
-                addr->port, data->text);
-		network_shutdown ();
-	}
+    /* check if the packet comes from the server, the server
+     * never gets errormessages from a client, if a client has
+     * some trouble the client will just disconnect */
+    if (GT_MP_PTPS && addr->pl_nr == bman.p_servnr) {
+        menu_displaymessage ("Network Error", "Got Error from: %s:%s\nMessage:%s", addr->host,
+                             addr->port, data->text);
+        network_shutdown ();
+    }
 };
 
 
@@ -82,12 +85,13 @@ void do_error (struct pkg_error *data, _net_addr * addr) {
  * 2) find free playerslot and add the player there
  * 3) send to all players the new playerid
  */
-void do_joingame (struct pkg_joingame *p_jg, _net_addr * addr) {
+void do_joingame (struct pkg_joingame *p_jg, _net_addr * addr)
+{
     _player *pl;
     int i,
-      vma,
-      vmi,
-      vsu;
+        vma,
+        vmi,
+        vsu;
     char text[255];
 
     d_printf ("do_joingame (From:%s:%s Player(name:%s) addr:%p\n", addr->host, addr->port, p_jg->name, addr);
@@ -120,15 +124,15 @@ void do_joingame (struct pkg_joingame *p_jg, _net_addr * addr) {
     /* find a free place for the player and add the player to the game */
     if (GS_WAITRUNNING && GT_MP_PTPM) {
         int j,
-          freeslot;
+            freeslot;
         /* find a free playerslot and check if this player isn't already in the list */
         for (i = -1, freeslot = -1, j = 0; j < MAX_PLAYERS; j++) {
             if (!PS_IS_used (players[j].state) && freeslot == -1)
                 freeslot = j;
             if (strncmp (players[j].net.addr.host, addr->host, LEN_SERVERNAME) == 0
-                && strncmp (players[j].net.addr.port, addr->port, LEN_PORT) == 0
-                && ((p_jg->secondplayer && (players[j].net.flags & NETF_local2) != 0)
-                    || (!p_jg->secondplayer && (players[j].net.flags & NETF_local2) == 0)))
+                    && strncmp (players[j].net.addr.port, addr->port, LEN_PORT) == 0
+                    && ((p_jg->secondplayer && (players[j].net.flags & NETF_local2) != 0)
+                        || (!p_jg->secondplayer && (players[j].net.flags & NETF_local2) == 0)))
                 i = j;
         }
 
@@ -201,11 +205,12 @@ void do_joingame (struct pkg_joingame *p_jg, _net_addr * addr) {
 };
 
 
-void send_joingame (_net_addr * addr, char *name, int secondplayer) {
+void send_joingame (_net_addr * addr, char *name, int secondplayer)
+{
     struct pkg_joingame p_jg;
     int vmi,
-      vma,
-      vsu;
+        vma,
+        vsu;
 
     d_printf ("send_joingame SendTo: %s:%s (Name:%16s)\n", addr->host, addr->port, name);
 
@@ -239,22 +244,22 @@ do_contest (struct pkg_contest *ct_pkg, _net_addr * addr)
     d_printf ("do_contest (pl_nr = %d) from=%d to=%d\n", addr->pl_nr, ct_pkg->from, ct_pkg->to);
 
     if (addr->pl_nr >= MAX_PLAYERS
-        || (addr->pl_nr == -1 && PS_IS_netplayer (players[ct_pkg->from].state))) {
+            || (addr->pl_nr == -1 && PS_IS_netplayer (players[ct_pkg->from].state))) {
         d_printf ("     addr->pl_nr out of range (0-MAX_PLAYERS)\n");
         return;
     }
 
     /* master will have to change the firewall flag on a player */
     if (GT_MP_PTPM) {
-		if ((ct_pkg->from < 0 || ct_pkg->from >= MAX_PLAYERS
-			 || ct_pkg->to < -1 || ct_pkg->to >= MAX_PLAYERS
-			 || addr->pl_nr != ct_pkg->from)) {
-				 d_printf ("     from or to value out of range (0-MAX_PLAYERS)\n");
-				 return;
-		}
-		/* ignore packet it's just a workaround for 
-		 * some hardware router */
-		if (ct_pkg->to == -1) return; 
+        if ((ct_pkg->from < 0 || ct_pkg->from >= MAX_PLAYERS
+                || ct_pkg->to < -1 || ct_pkg->to >= MAX_PLAYERS
+                || addr->pl_nr != ct_pkg->from)) {
+            d_printf ("     from or to value out of range (0-MAX_PLAYERS)\n");
+            return;
+        }
+        /* ignore packet it's just a workaround for
+         * some hardware router */
+        if (ct_pkg->to == -1) return;
 
         players[ct_pkg->to].net.flags &= (0xFF - NETF_firewall);
         net_game_send_player (ct_pkg->to);
@@ -305,11 +310,11 @@ do_playerid (struct pkg_playerid *p_id, _net_addr * addr)
     int i;
 
     d_printf
-        ("do_playerid (From:%s:%s pl_nr=%d) Player(name:%s [%s:%s], pl_nr:%d state:%d,%d)\n",
-         addr->host, addr->port, addr->pl_nr, p_id->name, p_id->host, p_id->port, p_id->pl_nr, p_id->state, PS_IS_alife (p_id->state));
+    ("do_playerid (From:%s:%s pl_nr=%d) Player(name:%s [%s:%s], pl_nr:%d state:%d,%d)\n",
+     addr->host, addr->port, addr->pl_nr, p_id->name, p_id->host, p_id->port, p_id->pl_nr, p_id->state, PS_IS_alife (p_id->state));
 
     /*
-     * check if we have to send the whole playerlist to a client 
+     * check if we have to send the whole playerlist to a client
      */
     if (GT_MP_PTPM && p_id->pl_nr == -1 && addr->pl_nr >= 0 && addr->pl_nr < MAX_PLAYERS) {
         /* Send all connected players the new PlayerID, except to the new player */
@@ -355,40 +360,40 @@ do_playerid (struct pkg_playerid *p_id, _net_addr * addr)
                     sizeof (struct _sockaddr));
         }
 
-        /* Check if we have to make a network test.. only client to client 
+        /* Check if we have to make a network test.. only client to client
          * we won't check 2 players too because it won't be possible to send
-         * something to them. 
+         * something to them.
          *
          * Check only as long as pl->state is still not a network player */
         if (GT_MP_PTPS && !(PS_IS_netplayer (pl->state)) && (PS_IS_netplayer (p_id->state))
-            && p_id->pl_nr != bman.p_servnr && p_id->pl_nr != bman.p_nr
-            && !(pl->net.flags & NETF_local2) && p_id->pl_nr != bman.p2_nr) {
+                && p_id->pl_nr != bman.p_servnr && p_id->pl_nr != bman.p_nr
+                && !(pl->net.flags & NETF_local2) && p_id->pl_nr != bman.p2_nr) {
 
             send_contest (&pl->net.addr, bman.p_nr, -1, 0); // send contest without ackreq.
-            /* make sure we still get messages from the server, this is a 
+            /* make sure we still get messages from the server, this is a
              * work around for some hardware routers */
             send_contest (&players[bman.p_servnr].net.addr, bman.p_nr, -1, 1);
         }
-		
-		/* to make sure that in games the client won't reborn without a reason */
-		if (bman.state != GS_running || PS_IS_alife (pl->state) == 1)
-			pl->state = p_id->state;
-		else
-			pl->state = p_id->state & (0xFF - PSF_alife);
 
-		/* set the NETWORK flag for the network player.
-		 * this had to be done after the contest part. */
+        /* to make sure that in games the client won't reborn without a reason */
+        if (bman.state != GS_running || PS_IS_alife (pl->state) == 1)
+            pl->state = p_id->state;
+        else
+            pl->state = p_id->state & (0xFF - PSF_alife);
+
+        /* set the NETWORK flag for the network player.
+         * this had to be done after the contest part. */
         if (p_id->pl_nr != bman.p_nr && PS_IS_used (pl->state))
             pl->state |= PSF_net;
         else
             pl->state &= (0xff - PSF_net);
 
-		/* make sure we won't end up in an infinite loop, because of a slow network.
-		 * only accept the gfx data from other players. Our own we will not overwrite.*/
-		if ((bman.state != GS_wait
-			|| (p_id->pl_nr != bman.p_nr && p_id->pl_nr != bman.p2_nr))
-			&& pl->gfx_nr != p_id->gfx_nr)
-	            player_set_gfx (pl, p_id->gfx_nr);
+        /* make sure we won't end up in an infinite loop, because of a slow network.
+         * only accept the gfx data from other players. Our own we will not overwrite.*/
+        if ((bman.state != GS_wait
+                || (p_id->pl_nr != bman.p_nr && p_id->pl_nr != bman.p2_nr))
+                && pl->gfx_nr != p_id->gfx_nr)
+            player_set_gfx (pl, p_id->gfx_nr);
         strncpy (pl->name, p_id->name, LEN_PLAYERNAME);
 
         if (GT_MP_PTPS) {
@@ -463,8 +468,7 @@ send_playerid (_net_addr * addr, char *name, char *pladdr, char *plport,
             p_id.team_points = teams[team_nr].points;
             p_id.team_wins = teams[team_nr].wins;
         }
-    }
-    else {
+    } else {
         p_id.points = 0;
         p_id.wins = 0;
         p_id.nbrKilled = 0;
@@ -503,13 +507,11 @@ do_teamdata (struct pkg_teamdata *td, _net_addr * addr)
             teams[td->team_nr].wins = td->wins;
             bman.updatestatusbar = 1;
         }
-    }
-    else {
+    } else {
         if (td->team_nr < 0 || td->team_nr >= MAX_TEAMS) {
             for (i = 0; i < MAX_TEAMS; i++)
                 send_teamdata (addr, i);
-        }
-        else {
+        } else {
             send_teamdata (addr, td->team_nr);
         }
     }
@@ -532,8 +534,7 @@ send_teamdata (_net_addr * addr, int team_nr)
         strncpy (td.name, teams[team_nr].name, LEN_PLAYERNAME);
         td.wins = teams[team_nr].wins;
         td.col = teams[team_nr].col;
-    }
-    else {
+    } else {
         td.name[0] = 0;
         td.wins = 0;
         td.col = 0;
@@ -569,7 +570,7 @@ do_servermode (struct pkg_servermode *s_mod, _net_addr * addr)
 
         /* set now the new p_nr number */
         if (s_mod->p_nr >= 0 && s_mod->p_nr < MAX_PLAYERS && bman.p_nr == -1
-            && s_mod->lplayer2 == 0) {
+                && s_mod->lplayer2 == 0) {
             bman.p_nr = s_mod->p_nr;
             bman.firewall = 1;
             players[bman.p_nr].net.flags = NETF_firewall;
@@ -580,9 +581,8 @@ do_servermode (struct pkg_servermode *s_mod, _net_addr * addr)
              * do the same with the teamdata */
             send_playerid (addr, NULL, NULL, NULL, -1, -1, -1, 0);
             send_teamdata (addr, -1);
-        }
-        else if (s_mod->p_nr >= 0 && s_mod->p_nr < MAX_PLAYERS && bman.p2_nr == -1
-                 && s_mod->lplayer2 == 1) {
+        } else if (s_mod->p_nr >= 0 && s_mod->p_nr < MAX_PLAYERS && bman.p2_nr == -1
+                   && s_mod->lplayer2 == 1) {
             bman.p2_nr = s_mod->p_nr;
             players[bman.p2_nr].net.flags = NETF_firewall + NETF_local2;
             players[bman.p2_nr].state &= (0xFF - PSF_net);
@@ -616,7 +616,7 @@ void
 send_servermode (_net_addr * addr, int pl_nr)
 {
     struct pkg_servermode s_mod;
-	
+
     switch (bman.state) {
     case (GS_startup):
         d_printf ("Send ServerMode : startup");
@@ -640,8 +640,8 @@ send_servermode (_net_addr * addr, int pl_nr)
         d_printf ("Send ServerMode : mode %d", bman.state);
     }
 
-	d_printf ("Addr: %p\n", addr);
-	
+    d_printf ("Addr: %p\n", addr);
+
     s_mod.h.typ = PKG_servermode;
     s_mod.h.len = HTON16 (sizeof (struct pkg_servermode));
     s_mod.h.flags = PKGF_ackreq;
@@ -657,7 +657,7 @@ send_servermode (_net_addr * addr, int pl_nr)
     s_mod.maxplayer = bman.maxplayer;
     s_mod.p_nr = pl_nr;
     if (pl_nr >= 0 && pl_nr < MAX_PLAYERS
-        && (players[pl_nr].net.flags & NETF_local2) == NETF_local2)
+            && (players[pl_nr].net.flags & NETF_local2) == NETF_local2)
         s_mod.lplayer2 = 1;
     else
         s_mod.lplayer2 = 0;
@@ -852,8 +852,7 @@ do_playerdata (struct pkg_playerdata *p_dat, _net_addr * addr)
         pl->nbrKilled = NTOH16 (p_dat->nbrKilled);
         pl->dead_by = NTOH16 (p_dat->dead_by);
         pl->team_nr = p_dat->team_nr;
-    }
-    else if (bman.state != GS_running || bman.p_nr != p_dat->p_nr) {
+    } else if (bman.state != GS_running || bman.p_nr != p_dat->p_nr) {
         pl->pos.x = I16TOF (NTOH16 (p_dat->pos.x));
         pl->pos.y = I16TOF (NTOH16 (p_dat->pos.y));
         pl->dead_by = p_dat->dead_by;
@@ -875,8 +874,8 @@ do_playerdata (struct pkg_playerdata *p_dat, _net_addr * addr)
         /* check if the player just died */
         if (PS_IS_alife (pl->state) && PS_IS_dead (p_dat->state)) {
             /* player just died */
-                player_died (pl, p_dat->dead_by, 1);
-            }
+            player_died (pl, p_dat->dead_by, 1);
+        }
         pl->state = p_dat->state;
     }
 
@@ -894,7 +893,7 @@ do_playerdata (struct pkg_playerdata *p_dat, _net_addr * addr)
 
     if (players[bman.p_nr].net.net_istep == 1)
         players[bman.p_nr].net.net_status = p_dat->p_nr;
-	
+
     player_set_gfx (pl, p_dat->gfx_nr);
 }
 
@@ -906,7 +905,7 @@ void
 do_ill (struct pkg_ill *ill, _net_addr * addr)
 {
     int i,
-      old_to;
+        old_to;
 
     if (addr->pl_nr == -1)
         return;
@@ -997,7 +996,8 @@ do_playermove (struct pkg_playermove *p_dat, _net_addr * addr)
 /***
  *** Packettype: bombdata
  ***/
-void do_bombdata (struct pkg_bombdata *b_dat, _net_addr * addr) {
+void do_bombdata (struct pkg_bombdata *b_dat, _net_addr * addr)
+{
     _bomb *bomb;
 
     if (addr->pl_nr == -1)
@@ -1011,7 +1011,7 @@ void do_bombdata (struct pkg_bombdata *b_dat, _net_addr * addr) {
     if (b_dat->state == BS_off)
         return;                 // if there was a bomb let it explose don't delete the bomb
 
-	d_printf ("do_bombdata [%f,%f] Player: %d PlayerIgnition: %d Bomb: %d, ex_nr:%d\n",
+    d_printf ("do_bombdata [%f,%f] Player: %d PlayerIgnition: %d Bomb: %d, ex_nr:%d\n",
               I16TOF (NTOH16 (b_dat->x)), I16TOF (NTOH16 (b_dat->y)), b_dat->p_nr, b_dat->pi_nr, b_dat->b_nr, NTOH32 (b_dat->ex_nr));
 
     bomb = &players[b_dat->p_nr].bombs[b_dat->b_nr];
@@ -1022,7 +1022,7 @@ void do_bombdata (struct pkg_bombdata *b_dat, _net_addr * addr) {
     // Update player ignition
     bomb->id.pIgnition = b_dat->pi_nr;
     if ((bomb->pos.x != NTOH16 (b_dat->x) || bomb->pos.y != NTOH16 (b_dat->y))
-        && bomb->state == BS_exploding && b_dat->state != BS_exploding)
+            && bomb->state == BS_exploding && b_dat->state != BS_exploding)
         d_printf ("do_bombdata  WARNING : bomb explosion haven't finished\n");
 
     if (bomb->state != BS_off) { // handle push & kick special
@@ -1050,11 +1050,11 @@ void do_bombdata (struct pkg_bombdata *b_dat, _net_addr * addr) {
     bomb->r = b_dat->r;
     bomb->ex_nr = NTOH32 (b_dat->ex_nr);
     bomb->state = b_dat->state & 0x0F;
-	
-	if (bomb->mode != b_dat->state >> 4) {		// bombmode changed set source to current position
-		bomb->source.x = bomb->pos.x;
-		bomb->source.y = bomb->pos.y;
-	}
+
+    if (bomb->mode != b_dat->state >> 4) {		// bombmode changed set source to current position
+        bomb->source.x = bomb->pos.x;
+        bomb->source.y = bomb->pos.y;
+    }
     bomb->mode = b_dat->state >> 4;
     bomb->fdata = I16TOF (NTOH16 (b_dat->fdata));
     bomb->dest.x = I16TOF (NTOH16 (b_dat->destx));
@@ -1104,13 +1104,12 @@ do_tunneldata (struct pkg_tunneldata *tun_pkg, _net_addr * addr)
               NTOH16 (tun_pkg->target.x), NTOH16 (tun_pkg->target.y));
 
     if (addr->pl_nr != bman.p_servnr && GT_MP_PTPM && NTOH16 (tun_pkg->target.y) == -1
-        && NTOH16 (tun_pkg->target.x) == -1) {
+            && NTOH16 (tun_pkg->target.x) == -1) {
         send_tunneldata (addr, tun_pkg->tunnel_nr,
                          map.tunnel[tun_pkg->tunnel_nr].x, map.tunnel[tun_pkg->tunnel_nr].y);
         players[addr->pl_nr].net.net_status = tun_pkg->tunnel_nr;
         players[addr->pl_nr].net.net_istep = 3;
-    }
-    else if (addr->pl_nr == bman.p_servnr && tun_pkg->tunnel_nr < GAME_MAX_TUNNELS) {
+    } else if (addr->pl_nr == bman.p_servnr && tun_pkg->tunnel_nr < GAME_MAX_TUNNELS) {
         map.tunnel[tun_pkg->tunnel_nr].x = NTOH16 (tun_pkg->target.x);
         map.tunnel[tun_pkg->tunnel_nr].y = NTOH16 (tun_pkg->target.y);
         players[bman.p_nr].net.net_status = tun_pkg->tunnel_nr;
@@ -1169,9 +1168,9 @@ do_quit (struct pkg_quit *q_dat, _net_addr * addr)
 
     if (addr->pl_nr == -1)
         return;
-	
-	if (q_dat->pl_nr == -1)
-		q_dat->pl_nr = addr->pl_nr;
+
+    if (q_dat->pl_nr == -1)
+        q_dat->pl_nr = addr->pl_nr;
 
     bman.updatestatusbar = 1;
     player_delete (q_dat->pl_nr);
@@ -1191,8 +1190,7 @@ do_quit (struct pkg_quit *q_dat, _net_addr * addr)
 
             send_ogc_update ();
         }
-    }
-    else if (q_dat->pl_nr == bman.p_servnr && q_dat->new_server == bman.p_servnr)
+    } else if (q_dat->pl_nr == bman.p_servnr && q_dat->new_server == bman.p_servnr)
         menu_displaymessage ("Server Quit",
                              "The game closed because you are the only one who is left."
                              " Or the server could not find any other possible new server.");
@@ -1241,7 +1239,7 @@ void
 send_fieldline (_net_addr * addr, int line)
 {
     int i,
-      j;
+        j;
     struct pkg_fieldline f_dat;
 
     f_dat.h.typ = PKG_fieldline;
@@ -1270,7 +1268,7 @@ void
 do_fieldline (struct pkg_fieldline *f_dat, _net_addr * addr)
 {
     int i,
-      d;
+        d;
 
     if (addr->pl_nr == -1)
         return;
@@ -1475,7 +1473,7 @@ do_pkgack (struct pkg_pkgack *p_ack, _net_addr * addr)
 {
     d_printf ("do_pkgack pl_nr:%d type:%u id:%u\n", addr->pl_nr, p_ack->typ, p_ack->id);
     if ( ! rscache_del (addr, p_ack->typ, NTOH16 (p_ack->id)))
-		d_printf ("do_pkgack ERROR rscache_del data not found : pl_nr:%d type:%u id:%u\n", addr->pl_nr, p_ack->typ, p_ack->id);
+        d_printf ("do_pkgack ERROR rscache_del data not found : pl_nr:%d type:%u id:%u\n", addr->pl_nr, p_ack->typ, p_ack->id);
 };
 
 
@@ -1533,12 +1531,13 @@ do_dropitems (struct pkg_dropitem *di_pkg, _net_addr * addr)
 
 /***
  *** Packettype: special
- *** moves/bombs... whatever will be send as we use it 
+ *** moves/bombs... whatever will be send as we use it
  ***/
-void do_special (struct pkg_special *sp_pkg, _net_addr * addr) {
+void do_special (struct pkg_special *sp_pkg, _net_addr * addr)
+{
     d_printf ("do_special (addr %d, pl_nr %d, typ %d)\n", addr->pl_nr, sp_pkg->pl_nr, sp_pkg->typ);
     if (addr->pl_nr == -1 || sp_pkg->pl_nr == -1 || sp_pkg->pl_nr == bman.p_nr
-        || sp_pkg->pl_nr == bman.p2_nr)
+            || sp_pkg->pl_nr == bman.p2_nr)
         return;
 
     /* set or use special */
@@ -1577,7 +1576,7 @@ send_mapinfo (_net_addr * addr)
 {
     struct pkg_mapinfo map_pkg;
 #ifndef BUG_MAPINFO
-	_net_addr *test;			// VERY DIRTY WORKAROUND WHY IS HERE A BUG
+    _net_addr *test;			// VERY DIRTY WORKAROUND WHY IS HERE A BUG
 #endif
     map_pkg.h.typ = PKG_mapinfo;
     map_pkg.h.len = HTON16 (sizeof (struct pkg_mapinfo));
@@ -1605,13 +1604,13 @@ send_mapinfo (_net_addr * addr)
     strncpy (map_pkg.mapname, map.map, LEN_FILENAME);
     d_printf ("send_mapinfo: Tileset: %s\n", map.tileset);
 #ifndef BUG_MAPINFO
-	test = addr;				// VERY DIRTY WORKAROUND WHY IS HERE A BUG
+    test = addr;				// VERY DIRTY WORKAROUND WHY IS HERE A BUG
     send_pkg ((struct pkg *) &map_pkg, addr);
-	addr = test;				// VERY DIRTY WORKAROUND WHY IS HERE A BUG
+    addr = test;				// VERY DIRTY WORKAROUND WHY IS HERE A BUG
 #else
-	printf ("Addr before send: %p\n", addr);
+    printf ("Addr before send: %p\n", addr);
     send_pkg ((struct pkg *) &map_pkg, addr);
-	printf ("Addr after send: %p\n", addr);
+    printf ("Addr after send: %p\n", addr);
 #endif
 };
 
@@ -1628,8 +1627,7 @@ do_mapinfo (struct pkg_mapinfo *map_pkg, _net_addr * addr)
     if (map_pkg->tileset[0] == 0) {
         map.random_tileset = 1;
         map.tileset[0] = 0;
-    }
-    else {
+    } else {
         map.random_tileset = 0;
         strncpy (map.tileset, map_pkg->tileset, LEN_TILESETNAME);
     }
@@ -1687,8 +1685,7 @@ do_respawn (struct pkg_respawn *r_pkg, _net_addr * addr)
         players[r_pkg->pl_nr].state |= PSF_respawn;
         players[r_pkg->pl_nr].frame = 0.0f;
 
-    }
-    else if (r_pkg->state & (PSF_respawn + PSF_alife)) {
+    } else if (r_pkg->state & (PSF_respawn + PSF_alife)) {
         players[r_pkg->pl_nr].pos.x = r_pkg->x;
         players[r_pkg->pl_nr].pos.y = r_pkg->y;
         players[r_pkg->pl_nr].state |= PSF_alife;
@@ -1712,11 +1709,10 @@ do_gameinfo (struct pkg_gameinfo *pgi, _net_addr * addr)
         strncpy (pgi->version, VERSION, LEN_VERSION);
         pgi->maxplayers = bman.maxplayer;
         pgi->curplayers = bman.players_nr_s;
-		pgi->h.len = HTON16 (sizeof (struct pkg_gameinfo));
+        pgi->h.len = HTON16 (sizeof (struct pkg_gameinfo));
         strncpy (pgi->gamename, bman.gamename, LEN_GAMENAME);
         send_pkg ((struct pkg *) pgi, addr);
-    }
-    else if (pgi->password != -1)
+    } else if (pgi->password != -1)
         d_printf ("do_gameinfo (from: %s:%s) ** NO REQUEST **\n", addr->host, addr->port);
     else
         d_printf ("do_gameinfo (from: %s:%s) ** WE ARE NOT THE MASTER OF THIS GAME **\n",
@@ -1759,7 +1755,7 @@ int
 inpkg_check (unsigned char typ, short int id, _net_addr * addr)
 {
     int i,
-      pos;
+        pos;
 
     /* check if the player is still connected */
     if (!PS_IS_used (players[addr->pl_nr].state))
@@ -1768,7 +1764,7 @@ inpkg_check (unsigned char typ, short int id, _net_addr * addr)
     /* find packet */
     for (i = 0, pos = -1; (i < PKG_IN_INDEX_NUM && pos == -1); i++)
         if (inpkg_index[i].pl_nr == addr->pl_nr
-            && inpkg_index[i].typ == typ && inpkg_index[i].id == id)
+                && inpkg_index[i].typ == typ && inpkg_index[i].id == id)
             pos = i;
 
     if (pos == -1) {
@@ -1800,16 +1796,16 @@ inpkg_delplayer (int pl_nr)
 void
 send_pkg (struct pkg *packet, _net_addr * addr)
 {
-	d_printf ("send_pkg: plnr:%d, typ:%u id:%u\n", addr->pl_nr, packet->h.typ, packet->h.id);
+    d_printf ("send_pkg: plnr:%d, typ:%u id:%u\n", addr->pl_nr, packet->h.typ, packet->h.id);
 
     /* check if the packet would be send to
      * an AI_Player, so ignore it. */
     if ((addr->pl_nr >= 0 && addr->pl_nr < MAX_PLAYERS)
-        && PS_IS_aiplayer (players[addr->pl_nr].state))
+            && PS_IS_aiplayer (players[addr->pl_nr].state))
         return;
 
-    /* set the id for the packet and the network flags 
-     * the id is needed for the inpkg index to check for 
+    /* set the id for the packet and the network flags
+     * the id is needed for the inpkg index to check for
      * double reached packets
      * The id is limited to 32700 if */
     packet->h.id = HTON16 (pkg_lastid++ % 32767);
@@ -1819,8 +1815,8 @@ send_pkg (struct pkg *packet, _net_addr * addr)
 
     /* if PKGF_ackreq is set add the packet to the resendcache
      * so we can resend it if no PKF_ackreq returned for the packet. */
-    if (packet->h.flags & PKGF_ackreq) 
-		rscache_add (addr, packet);
+    if (packet->h.flags & PKGF_ackreq)
+        rscache_add (addr, packet);
 };
 
 
@@ -1836,18 +1832,17 @@ fwd_pkg (struct pkg *packet, _net_addr * addr)
     if (packet->h.typ >= PKG_field && packet->h.typ < PKG_quit) {
         for (pl = 0; pl < MAX_PLAYERS; pl++)
             if ((!PS_IS_aiplayer (players[pl].state)) && PS_IS_netplayer (players[pl].state)
-                && ((players[addr->pl_nr].net.flags & NETF_firewall) == NETF_firewall
-                    || (players[pl].net.flags & NETF_firewall) == NETF_firewall)
-                && pl != addr->pl_nr && (players[pl].net.flags & NETF_local2) == 0)
+                    && ((players[addr->pl_nr].net.flags & NETF_firewall) == NETF_firewall
+                        || (players[pl].net.flags & NETF_firewall) == NETF_firewall)
+                    && pl != addr->pl_nr && (players[pl].net.flags & NETF_local2) == 0)
                 send_pkg (packet, &players[pl].net.addr);
-    }
-    else if (packet->h.typ > PKG_quit)
+    } else if (packet->h.typ > PKG_quit)
         d_fatal ("fwd_pkg: not forwarding unknown packet From Player:%d (%s) Typ:%d Len:%d\n",
                  addr->pl_nr, players[addr->pl_nr].name, packet->h.typ, NTOH16 (packet->h.len));
 };
 
 
-/* entry point for all incoming network data. determinate packet type and 
+/* entry point for all incoming network data. determinate packet type and
    forward it to all needed functions, like inpkg_check()--> send answer if needed,
    if we are the server then forward the packet if needed
    and go into the do_PACKETTYP function */
@@ -1856,23 +1851,23 @@ do_pkg (struct pkg *packet, _net_addr * addr, int len)
 {
     d_printf ("do_pkg: plnr:%d, typ:%u id:%u\n", addr->pl_nr, packet->h.typ, packet->h.id);
     if (((packet->h.flags & PKGF_ipv6) == 0 && bman.net_ai_family != PF_INET)
-        || ((packet->h.flags & PKGF_ipv6) != 0 && bman.net_ai_family == PF_INET)) {
+            || ((packet->h.flags & PKGF_ipv6) != 0 && bman.net_ai_family == PF_INET)) {
         d_printf ("do_pkg: packet comes from the wrong network type\n");
         return;
     }
 
-	/* Check the size of the incoming packet */
-	if (len != NTOH16(packet->h.len)) {
+    /* Check the size of the incoming packet */
+    if (len != NTOH16(packet->h.len)) {
         d_printf ("do_pkg: len(%d) of the incoming packet is not the same as in pkg->h.len(%d)\n", len, NTOH16(packet->h.len));
         return;
-	}
+    }
 
     /* get the addr and set the ping timeout value
      * check if the packet is from a player in the game and not from someone else
      * this exception is only for PKG_joingame, PKG_error */
     addr->pl_nr = get_player_nr (addr->host, addr->port);
     if ((addr->pl_nr < 0 || addr->pl_nr >= MAX_PLAYERS) && packet->h.typ > PKG_joingame
-        && PS_IS_netplayer (players[addr->pl_nr].state)) {
+            && PS_IS_netplayer (players[addr->pl_nr].state)) {
         d_printf ("do_pkg: error addr->pl_nr out of range\n");
         return;
     }
@@ -1884,14 +1879,14 @@ do_pkg (struct pkg *packet, _net_addr * addr, int len)
         /* test if we have any important packet */
         if (packet->h.flags & PKGF_ackreq) {
 
-            /* we need to send an acknolege so the client 
-             * knows we have got this packet and delete 
+            /* we need to send an acknolege so the client
+             * knows we have got this packet and delete
              * it from the resend cache. */
             send_pkgack (addr, packet->h.typ, NTOH16 (packet->h.id));
 
-            /* check the packet with the index so we can 
-             * ignore packets we already have got 
-             * this is important to keep away from 
+            /* check the packet with the index so we can
+             * ignore packets we already have got
+             * this is important to keep away from
              * the bomb is dropped twice bug. */
             if (inpkg_check (packet->h.typ, NTOH16 (packet->h.id), addr) != -1) {
                 /* we have got this packet already */
@@ -1908,7 +1903,7 @@ do_pkg (struct pkg *packet, _net_addr * addr, int len)
     }
 
     switch (packet->h.typ) {
-    case (PKG_error): 
+    case (PKG_error):
         do_error ((struct pkg_error *) packet, addr);
         break;
     case (PKG_gameinfo):

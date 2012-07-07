@@ -13,24 +13,24 @@
 #include <time.h>
 #include <sys/time.h>
 #ifdef _WIN32
-	#include <winsock.h>
-	#include <io.h>
+#include <winsock.h>
+#include <io.h>
 #else
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <netdb.h>
-	#include <arpa/inet.h>
-	#include <unistd.h>
-	#include <sys/time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <sys/time.h>
 #endif
 
 #ifdef _WIN32
-	#define _sockaddr sockaddr
-	#ifndef MSG_DONTWAIT
-	#define MSG_DONTWAIT 0
-	#endif
+#define _sockaddr sockaddr
+#ifndef MSG_DONTWAIT
+#define MSG_DONTWAIT 0
+#endif
 #else
-	#define _sockaddr sockaddr_in6
+#define _sockaddr sockaddr_in6
 #endif
 
 extern char *dns_net_getip (char *host);

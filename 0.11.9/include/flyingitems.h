@@ -7,12 +7,12 @@
 #define FLITEMS_MAXITEMS 250
 
 struct __flyingitem {
-	_pointf pos;	// current position
-	_pointf from;	// position from where the items comes
-	_pointf to;		// position to where it is going
-	float step;		// step 0.0 is start 1.0 is end position
-	unsigned char type;	// type
-	struct __flyingitem *next;
+    _pointf pos;	// current position
+    _pointf from;	// position from where the items comes
+    _pointf to;		// position to where it is going
+    float step;		// step 0.0 is start 1.0 is end position
+    unsigned char type;	// type
+    struct __flyingitem *next;
 } typedef _flyingitem;
 
 extern void flitems_loop ();

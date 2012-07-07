@@ -14,24 +14,24 @@
 #include <sys/stat.h>
 #include <math.h>
 #ifdef _WIN32
-	#include <windows.h>
-	#include <winsock.h>
-	#include <sys/stat.h>
-	#ifndef S_ISDIR
-		#define S_ISDIR(a) ((a & _S_IFDIR) == _S_IFDIR)
-	#endif
-	#ifndef S_ISREG
-		#define S_ISREG(a) ((a & _S_IFREG) == _S_IFREG)
-	#endif
+#include <windows.h>
+#include <winsock.h>
+#include <sys/stat.h>
+#ifndef S_ISDIR
+#define S_ISDIR(a) ((a & _S_IFDIR) == _S_IFDIR)
+#endif
+#ifndef S_ISREG
+#define S_ISREG(a) ((a & _S_IFREG) == _S_IFREG)
+#endif
 #else
-	#include <sys/time.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <netdb.h>
-	#include <arpa/inet.h>
-	#include <unistd.h>
-	#include <sys/types.h>
-	#include <dirent.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 #endif
 #include <SDL.h>
 #include <SDL_image.h>
@@ -50,62 +50,62 @@
 #include "keybinput.h"
 
 struct {
-	char name[255];
+    char name[255];
 } typedef _serverlist;
 
 
 struct {
     char datapath[512];
-	
+
     int p_nr;                   // playernumber of the first local player
-	int p2_nr;					// playernumber of the second local player
-	int p_servnr;				// Playernumber of the Server
+    int p2_nr;					// playernumber of the second local player
+    int p_servnr;				// Playernumber of the Server
     int last_ex_nr;             // number of the last explosion
-	int updatestatusbar;		// 1 if statusbar has to be updated
+    int updatestatusbar;		// 1 if statusbar has to be updated
     unsigned char state;
-	int init_timeout;			// gametimeout init value
-	float timeout;				// game timeout
+    int init_timeout;			// gametimeout init value
+    float timeout;				// game timeout
     char playername[LEN_PLAYERNAME];
     char player2name[LEN_PLAYERNAME];
     int players_nr_s;           // number of players at the beginning
     int players_nr;             // number of player who are alife
-	signed char lastwinner;		// number of the last winnet
+    signed char lastwinner;		// number of the last winnet
 
     int maxplayer;              // number of max players for the server
-	int playnum;				// Number of play
+    int playnum;				// Number of play
     int sock;                   // the server socket
     int net_ai_family;
     char port[LEN_PORT];        // what port we're using
     char servername[LEN_SERVERNAME + LEN_PORT + 2]; // holds the name of the current server
     char gamename[LEN_GAMENAME]; // this will hold the game name
-	char ogcserver[LEN_SERVERNAME+LEN_PORT+2];
-	char password[LEN_PASSWORD]; // password for the game
-	int passwordenabled;		// if the server use the password
-	char ogc_port[LEN_PORT];
-	int firewall;
-	int notifygamemaster;
-	int broadcast;
-	int autostart;			// time for an autostart of the game
-	int minplayers;			// minimal number of players
-	
-	int askplayername;		// ask player for name at startup
-	
-	int start_bombs;		// start values
-	int start_range;
-	float start_speed;
-	float bomb_tickingtime;	// time before the bomb explodes
-    unsigned char gametype; // GT_* values type of the Game if Deathmatch or other
-	int dropitemsondeath;	// if a player should drop items when he die
+    char ogcserver[LEN_SERVERNAME+LEN_PORT+2];
+    char password[LEN_PASSWORD]; // password for the game
+    int passwordenabled;		// if the server use the password
+    char ogc_port[LEN_PORT];
+    int firewall;
+    int notifygamemaster;
+    int broadcast;
+    int autostart;			// time for an autostart of the game
+    int minplayers;			// minimal number of players
 
-	unsigned char ai_players;	// number of ai players
+    int askplayername;		// ask player for name at startup
+
+    int start_bombs;		// start values
+    int start_range;
+    float start_speed;
+    float bomb_tickingtime;	// time before the bomb explodes
+    unsigned char gametype; // GT_* values type of the Game if Deathmatch or other
+    int dropitemsondeath;	// if a player should drop items when he die
+
+    unsigned char ai_players;	// number of ai players
 } typedef _bomberclone;
 
 #define IS_LPLAYER2 (bman.p2_nr != bman.p_nr && bman.p2_nr >= 0 && bman.p2_nr < MAX_PLAYERS)
 
 
 struct {
-	signed char dir;
-	signed char bestdir;
+    signed char dir;
+    signed char bestdir;
 } typedef _airunaway;
 
 
@@ -115,7 +115,7 @@ extern float timefactor;
 extern float timediff;
 extern int debug;
 
-// Game routines.. 
+// Game routines..
 extern void game_draw_info ();
 extern void game_keys_loop ();
 extern void game_loop ();

@@ -8,16 +8,16 @@
 #include "bomb.h"
 
 enum _specials {
-	SP_nothing=0,				// 0 player has no special
-	SP_trigger,					// 1 triggered bomb
-	SP_row,						// 2 bomb row
-	SP_push,					// 3 push bombs
-	SP_moved,					// 4 moved bombs
-	SP_liquid,					// 5 liquid bombs
-	SP_kick,					// 6 kick bombs
-	
-	SP_max,						// 7 just to know how many types there are
-	SP_clear					// 8 needed to let the server know we removed the special
+    SP_nothing=0,				// 0 player has no special
+    SP_trigger,					// 1 triggered bomb
+    SP_row,						// 2 bomb row
+    SP_push,					// 3 push bombs
+    SP_moved,					// 4 moved bombs
+    SP_liquid,					// 5 liquid bombs
+    SP_kick,					// 6 kick bombs
+
+    SP_max,						// 7 just to know how many types there are
+    SP_clear					// 8 needed to let the server know we removed the special
 };
 
 
@@ -39,8 +39,8 @@ enum _playerstateflags {		//     not Set    |   Set
     PSF_net = 2,                // Local Player   | Network Player
     PSF_alife = 4,              // Player is Dead | Player is Alife
     PSF_playing = 8,            // Watching Player| Playing Player -- as long as one don't delete
-	PSF_ai = 16,				//                | AI Player
-	PSF_respawn = 32			//                | Player is Respawning
+    PSF_ai = 16,				//                | AI Player
+    PSF_respawn = 32			//                | Player is Respawning
 };
 
 
@@ -55,79 +55,79 @@ enum _playerstateflags {		//     not Set    |   Set
 #define PS_IS_aiplayer(__ps) ((((__ps) & (PSFM_used)) != 0) && (((__ps) & (PSF_ai)) == PSF_ai))
 
 struct {
-	int killedBy[MAX_PLAYERS];
-	int killed;
-	int unknown;
-	int isaplayer;
+    int killedBy[MAX_PLAYERS];
+    int killed;
+    int unknown;
+    int isaplayer;
 } typedef _gamestats;
 
 struct {
-	float to;  // if (to > 0) the ilness is still working
-	int datai;		// hold a integer data (like number of something..)
-	float dataf;	// hold a float data (speed and so on)
+    float to;  // if (to > 0) the ilness is still working
+    int datai;		// hold a integer data (like number of something..)
+    float dataf;	// hold a float data (speed and so on)
 } typedef _playerilness;
 
 
 struct {
-	int type; 					// type of the special
-	float to;						// timeout
-	int numuse;					// num of uses left
-	int use;					/* currently used set by special_use 
+    int type; 					// type of the special
+    float to;						// timeout
+    int numuse;					// num of uses left
+    int use;					/* currently used set by special_use
 								   and deleted in special_loop */
-	int clear;					// do we need to clear this special
+    int clear;					// do we need to clear this special
 } typedef _special;
 
 
 struct {
-	_gfxplayer *gfx;			// pointer to the gfx information
-	int gfx_nr;					// number of the player GFX
-	
+    _gfxplayer *gfx;			// pointer to the gfx information
+    int gfx_nr;					// number of the player GFX
+
     float frame;                // step of the animation (only integer part will shown)
-	float illframe;
+    float illframe;
 
     _pointf pos;                // position on the field
     _pointf old;				// the old position
-	float tunnelto;				/* timeout for dont show and move player
+    float tunnelto;				/* timeout for dont show and move player
 							   	   needed on the tunnel effect */
-	
+
     signed char d;              // direction
     signed char m;              // player is moving ?
     signed char old_m;          // to save the old state..
-	signed char keyf_bomb;		// flag for the bomb key
-	signed char keyf_special;	// flag for the special key
+    signed char keyf_bomb;		// flag for the bomb key
+    signed char keyf_special;	// flag for the special key
 
     int bombs_n;                // maximal number of bombs for the player
-	int bomb_lastex;			// number of the bomb which explode the last time
+    int bomb_lastex;			// number of the bomb which explode the last time
     _bomb bombs[MAX_BOMBS];     // number of bombs who are ticking.
     int range;                  // range of the bombs
-	float speed;				// how fast we can go (0 = slow, 1 = normal... 3 = fastest)
-	float stepsleft;			// distance to walk on the next stepmove_player
-	int collect_shoes;
-	_playerilness ill[PI_max];  // all possible types
-	_special special;			// special the player has
-	
+    float speed;				// how fast we can go (0 = slow, 1 = normal... 3 = fastest)
+    float stepsleft;			// distance to walk on the next stepmove_player
+    int collect_shoes;
+    _playerilness ill[PI_max];  // all possible types
+    _special special;			// special the player has
+
     char name[LEN_PLAYERNAME];  // name oder name[0] == 0
-	int team_nr;				// number of the team we are in or -1
+    int team_nr;				// number of the team we are in or -1
     unsigned char state;        // status of the player
-	int ready;					// only used in net games
+    int ready;					// only used in net games
     signed char in_nr;          // number of the connected player entry
 
     int points;                 // points
-	int nbrKilled;				// number of player killed during a round
-	int wins;					// wins
+    int nbrKilled;				// number of player killed during a round
+    int wins;					// wins
     signed char dead_by;        // player who killed this player
 
-	_net_player net;			// holds all important network data
-	_gamestats gamestats;
+    _net_player net;			// holds all important network data
+    _gamestats gamestats;
 } typedef _player;
 
 
 struct __team {
-	_player *players[MAX_PLAYERS];
-	char name[LEN_PLAYERNAME];
-	int col;		// color of the Teamname
-	int wins;
-	int points;
+    _player *players[MAX_PLAYERS];
+    char name[LEN_PLAYERNAME];
+    int col;		// color of the Teamname
+    int wins;
+    int points;
 } typedef _team;
 
 

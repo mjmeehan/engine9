@@ -15,57 +15,57 @@
 #include "basic.h"
 
 struct __gfxblit {
-	SDL_Rect srcr;
-	SDL_Surface *srci;
-	SDL_Rect destr;
-	SDL_Surface *desti;
+    SDL_Rect srcr;
+    SDL_Surface *srci;
+    SDL_Rect destr;
+    SDL_Surface *desti;
     int y;
 } typedef _gfxblit;
 
 
 struct __gfxani {
-	SDL_Surface *image;
+    SDL_Surface *image;
     int frames;                 // how many single frames (image -> heigh / (1.5 * gamestyle.height))
-	int w;						// size of a single frame
-	int h;
+    int w;						// size of a single frame
+    int h;
 } typedef _gfxani;
 
 
 struct __gfxplayer {
-	_gfxani ani;
+    _gfxani ani;
     _point offset;
-	SDL_Surface *small_image;			// small size of the player (single frame)
-	SDL_Surface *menu_image;			// menu image of the player (single frame)
+    SDL_Surface *small_image;			// small size of the player (single frame)
+    SDL_Surface *menu_image;			// menu image of the player (single frame)
 } typedef _gfxplayer;
 
 
 struct __gfx {
-	SDL_Surface *screen;
-	_point res;		// resolution
-	_point block;	// block size
-	short int bpp;  // bits per pixel
-	
+    SDL_Surface *screen;
+    _point res;		// resolution
+    _point block;	// block size
+    short int bpp;  // bits per pixel
+
     int fullscreen;
 
-	_point offset;    // where the game field starts
-	
-	_gfxplayer *players;
-	int player_gfx_count;
-	short int postab[256];  // table of points where we need to go to.
-	
-	_gfxani field[FT_max];  // the field animations
-	SDL_Surface *menu_field[FT_max];
-	_gfxani powerup[3];	// powerup field animation
-	_gfxani fire;       // fire (explostion)
-	_gfxani bomb;		// bomb animation
-	_gfxani ill;		// sick animation above the player
-	_gfxani dead;		// load the dead player animation
-	SDL_Surface *ghost;	// gfx of the ghost player.
-	SDL_Surface *ghost_small;	// small ghost player
-	_gfxani respawn;	// respawn image
-	
-	_gfxani menuselect; // The Menu Select GFX (the bomb ?)
-	
+    _point offset;    // where the game field starts
+
+    _gfxplayer *players;
+    int player_gfx_count;
+    short int postab[256];  // table of points where we need to go to.
+
+    _gfxani field[FT_max];  // the field animations
+    SDL_Surface *menu_field[FT_max];
+    _gfxani powerup[3];	// powerup field animation
+    _gfxani fire;       // fire (explostion)
+    _gfxani bomb;		// bomb animation
+    _gfxani ill;		// sick animation above the player
+    _gfxani dead;		// load the dead player animation
+    SDL_Surface *ghost;	// gfx of the ghost player.
+    SDL_Surface *ghost_small;	// small ghost player
+    _gfxani respawn;	// respawn image
+
+    _gfxani menuselect; // The Menu Select GFX (the bomb ?)
+
     SDL_Surface *logo;
 } typedef _gfx;
 

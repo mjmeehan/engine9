@@ -14,7 +14,7 @@
 
 SDL_Surface *menuimages[9];     // holds the gfx
 SDL_Surface *menulistimages[2][9]; // holds the gfx for the lists
-SDL_Surface *menubuttonimages[3][3]; // holds the images for the buttons 
+SDL_Surface *menubuttonimages[3][3]; // holds the images for the buttons
 SDL_Surface *menuentryimages[2][3]; // [PRESSED][Left|Center|Right]
 
 /* delete all informations and create a totally new menuscreen */
@@ -44,10 +44,10 @@ menu_new (char *title, int x, int y)
     menu->oldscreen = gfx_copyscreen (&menu->oldscreenpos);
     menu->focus = NULL;
     menu->looprunning = 0;
-	menu->focusto = MENU_FOCUSVIS_BLINKTO;
+    menu->focusto = MENU_FOCUSVIS_BLINKTO;
 
-	menu->oldkey = 1;
-	
+    menu->oldkey = 1;
+
     return menu;
 };
 
@@ -57,7 +57,7 @@ void
 menu_delete (_menu * menu)
 {
 
-	gfx_blitdraw ();   // to make sure nothing is left in the blitbuffer
+    gfx_blitdraw ();   // to make sure nothing is left in the blitbuffer
     gfx_restorescreen (menu->oldscreen, &menu->oldscreenpos);
     gfx_blitdraw ();
     SDL_FreeSurface (menu->oldscreen);
@@ -74,14 +74,14 @@ void
 menu_draw_background (_menu * menu, SDL_Rect * updaterect)
 {
     int x,
-      y,
-      dx,
-      dy;
+        y,
+        dx,
+        dy;
     SDL_Rect dest,
-      cdest,
-      src,
-      csrc,
-      window;
+             cdest,
+             src,
+             csrc,
+             window;
 
     y = 0;                      // start at the updaterect. start pos
     for (; y <= (menu->oldscreenpos.h - 2 * menuimages[0]->h - 1) / menuimages[4]->h; y++) {
@@ -118,7 +118,7 @@ menu_draw_background (_menu * menu, SDL_Rect * updaterect)
                     window.y += MENUOFFSET_Y (menu);
                     rect_clipping (&src, &dest, &window, &csrc, &cdest);
                     if (csrc.w < UINT16_HALF && csrc.h < UINT16_HALF && cdest.w < UINT16_HALF
-                        && cdest.h < UINT16_HALF)
+                            && cdest.h < UINT16_HALF)
                         gfx_blit (menuimages[4], &csrc, gfx.screen, &cdest, 10000);
                 }
             }
@@ -133,7 +133,7 @@ menu_draw_border (_menu * menu)
 {
     SDL_Rect dest;
     int i,
-      dx;
+        dx;
 
     // draw top left
     dest.x = menu->oldscreenpos.x;
@@ -208,7 +208,7 @@ menu_draw (_menu * menu)
 
     for (m = menu->items; m != NULL; m = m->next) {
         menu_draw_menuitem (m);
-	}
+    }
 };
 
 
@@ -222,8 +222,8 @@ menu_draw_menuitem (_menuitem * m)
     if (m == NULL)
         return;
 
-	menu = (_menu *) m->menu;
-	
+    menu = (_menu *) m->menu;
+
     if (!menu->looprunning)
         return;
     switch (m->type) {
@@ -253,12 +253,13 @@ menu_draw_menuitem (_menuitem * m)
 
 
 /* delete the menuitem from the list, mark it as not used */
-void menu_del_menuitem (_menuitem *m) {
-	m->type = MENU_none;
-	m->id = -1;
-	m->changed = 0;
-	m->ptrdata = NULL;
-	m->list = NULL;
+void menu_del_menuitem (_menuitem *m)
+{
+    m->type = MENU_none;
+    m->id = -1;
+    m->changed = 0;
+    m->ptrdata = NULL;
+    m->list = NULL;
 };
 
 
@@ -314,7 +315,7 @@ _menuitem *
 menu_get_firstid (_menu * menu)
 {
     _menuitem *result = NULL,
-        *mi = menu->items;
+               *mi = menu->items;
     for (mi = menu->items; mi != NULL; mi = mi->next)
         if ((result == NULL || mi->id < result->id) && mi->id != -1)
             result = mi;
@@ -325,7 +326,7 @@ _menuitem *
 menu_get_lastid (_menu * menu)
 {
     _menuitem *result = NULL,
-        *mi = menu->items;
+               *mi = menu->items;
     for (mi = menu->items; mi != NULL; mi = mi->next)
         if ((result == NULL || mi->id > result->id) && mi->id != -1)
             result = mi;
@@ -374,12 +375,12 @@ void
 menu_focus_next (_menu * menu)
 {
     _menuitem *newmi = menu->focus,
-        *mi,
-        *oldmi = menu->focus;
+               *mi,
+               *oldmi = menu->focus;
 
     for (mi = menu->items; mi != NULL; mi = mi->next)
         if (mi->id != oldmi->id && mi->id > menu->focus->id
-            && (mi->id < newmi->id || newmi == oldmi))
+                && (mi->id < newmi->id || newmi == oldmi))
             newmi = mi;
     if (newmi == oldmi)
         menu_change_focus (menu_get_firstid (menu));
@@ -393,12 +394,12 @@ void
 menu_focus_prev (_menu * menu)
 {
     _menuitem *newmi = menu->focus,
-        *mi,
-        *oldmi = menu->focus;
+               *mi,
+               *oldmi = menu->focus;
 
     for (mi = menu->items; mi != NULL; mi = mi->next)
         if (mi->id != -1 && mi->id != oldmi->id && mi->id < oldmi->id
-            && (mi->id > newmi->id || newmi == oldmi))
+                && (mi->id > newmi->id || newmi == oldmi))
             newmi = mi;
     if (newmi == oldmi)
         menu_change_focus (menu_get_lastid (menu));
@@ -412,7 +413,7 @@ void
 menu_focus_id (_menu * menu, int id)
 {
     _menuitem *mi,
-     *oldmi = menu->focus;
+              *oldmi = menu->focus;
 
     for (mi = menu->items; mi != NULL; mi = mi->next)
         if (mi->id == id)
@@ -439,12 +440,12 @@ menu_event_loop (_menu * menu, SDL_Event * event, int eventstate)
 {
     Uint8 *keys;
     int done = 0;
-	
+
     if (eventstate >= 1) {
-		
-		/* make sure no old key is disturbing us */
-		if (event->type != SDL_KEYDOWN)
-			menu->oldkey = 0;
+
+        /* make sure no old key is disturbing us */
+        if (event->type != SDL_KEYDOWN)
+            menu->oldkey = 0;
 
         switch (event->type) {
         case (SDL_QUIT):
@@ -460,8 +461,7 @@ menu_event_loop (_menu * menu, SDL_Event * event, int eventstate)
                 else
                     menu_focus_next (menu);
                 break;
-            }
-            else if (menu->oldkey == 0 && event->key.keysym.sym == SDLK_ESCAPE) {
+            } else if (menu->oldkey == 0 && event->key.keysym.sym == SDLK_ESCAPE) {
                 return -1;
                 break;
             }
@@ -486,9 +486,8 @@ menu_event_loop (_menu * menu, SDL_Event * event, int eventstate)
                 break;
             }
         }
-    }
-	else 
-		menu->oldkey = 0;
+    } else
+        menu->oldkey = 0;
 
     menu->focusto -= timediff;
     if (menu->focusto <= 0.0f) {
@@ -540,7 +539,7 @@ menu_loop (_menu * menu)
 
         eventstate = s_fetchevent (&event);
 
-	done = menu_event_loop (menu, &event, eventstate);
+        done = menu_event_loop (menu, &event, eventstate);
 
         s_calctimesync ();
     }
@@ -555,7 +554,7 @@ menu_loop (_menu * menu)
 };
 
 
-/* create a list with all directory entrys, 
+/* create a list with all directory entrys,
  * except we can't put everything in the list because the list is too smal.
  * Return: number of entrys, Pointers will be set*/
 int
@@ -563,7 +562,7 @@ menu_create_dirlist (char *path, signed char dirflags, _charlist * cl, int maxen
 {
     int cnt;
     _direntry *destart,
-     *de;
+              *de;
 
     destart = s_getdir (path);
     destart = s_dirfilter (destart, dirflags);
@@ -580,7 +579,7 @@ menu_create_dirlist (char *path, signed char dirflags, _charlist * cl, int maxen
 };
 
 
-/* displays a file selectionmenu and 
+/* displays a file selectionmenu and
  * returns the name of the file */
 static char menu_dir_name[LEN_PATHFILENAME];
 char *
@@ -588,17 +587,17 @@ menu_dir_select (char *title, char *path, signed char dirflags)
 {
     _charlist flist[MAX_DIRENTRYS];
     int flcnt,
-      menuselect;
+        menuselect;
     _charlist *selfile = flist;
     _menu *menu;
-	_menuitem *dirmi;
+    _menuitem *dirmi;
 
     flcnt = menu_create_dirlist (path, dirflags, flist, MAX_DIRENTRYS);
     menu = menu_new (title, 300, 300);
     dirmi = menu_create_list (menu, "Dir", -1, 50, 200, 200, flist, &selfile, 1);
     menu_create_button (menu, "OK", -1, 270, 150, 0);
-	menu_focus_id (menu, 1);
-	
+    menu_focus_id (menu, 1);
+
     menuselect = menu_loop (menu);
 
     menu_delete (menu);
@@ -647,11 +646,11 @@ menu_displaymessage (char *title, char *fmt, ...)
 };
 
 /* format messages to seperated lines
- * input - input text 
+ * input - input text
  * out   - outtext all lines will be hold in here seperated my \0
  * start - array of pointer to each line saved in out
  * lines - returns number of lines saved (start must hold one pointer more as in lines defined)
- * maxlinelen - returen the max lenght of chars used in one line 
+ * maxlinelen - returen the max lenght of chars used in one line
  * max_chars  - max number of chars in one line
  * max_lines  - max number of lines to use (start must olh one pointer more) */
 void
@@ -659,10 +658,10 @@ menu_formattext (char *input, char *out, char **start, int *lines, int *maxlinel
                  int max_lines)
 {
     int i,
-      pos,
-      outpos;
+        pos,
+        outpos;
     char *tmpchar1,
-     *tmpchar2;
+         *tmpchar2;
     *maxlinelen = i = pos = outpos = *lines = 0;
     start[0] = out;
 
@@ -683,19 +682,16 @@ menu_formattext (char *input, char *out, char **start, int *lines, int *maxlinel
                 if (pos > *maxlinelen)
                     *maxlinelen = pos;
                 pos = 0;
-            }
-            else                /* add this to the line */
+            } else              /* add this to the line */
                 out[outpos++] = input[i];
             pos++;
-        }
-        else if (input[i] == '\n') {
+        } else if (input[i] == '\n') {
             out[outpos++] = 0;
             start[++(*lines)] = &out[outpos];
             if (pos > *maxlinelen)
                 *maxlinelen = pos;
             pos = 0;
-        }
-        else {                  /* copy the text */
+        } else {                /* copy the text */
             out[outpos++] = input[i];
             pos++;
         }
@@ -759,17 +755,15 @@ menuitem_findfree (_menu * menu)
         menuitems = menu->items;
         menuitems->type = MENU_none;
         menuitems->next = NULL;
-    }
-    else {
+    } else {
         /* find first empty element or the last one */
         for (;
-             (menuitems->type != MENU_none) && (menuitems->next != NULL)
-             && ((menuitems - menu->items) < MENU_MAXENTRYS); menuitems++);
+                (menuitems->type != MENU_none) && (menuitems->next != NULL)
+                && ((menuitems - menu->items) < MENU_MAXENTRYS); menuitems++);
         if (menuitems - menu->items >= MENU_MAXENTRYS) {
             d_fatal ("menu_create_label: MENU_MAXENTRYS reached. Item Ignored\n");
             return NULL;
-        }
-        else if (menuitems->type != MENU_none) {
+        } else if (menuitems->type != MENU_none) {
             /* letzte Element */
             menuitems->next = menuitems + 1;
             menuitems++;

@@ -5,22 +5,22 @@
 
 extern int UpdateRects_nr;
 
-const char *ft_filenames[] = { 
-	"background",
-	"stone",
-	"block",
-	"tunnel" ,
-	"pwdeath",
-	"pwfire",
-	"pwbomb",
-	"pwshoe",
-	NULL,
-	"sptrigger",
-	"sprow",
-	"sppush",
-	"spmoved",
-	"spliquid",
-	"spkick"
+const char *ft_filenames[] = {
+    "background",
+    "stone",
+    "block",
+    "tunnel" ,
+    "pwdeath",
+    "pwfire",
+    "pwbomb",
+    "pwshoe",
+    NULL,
+    "sptrigger",
+    "sprow",
+    "sppush",
+    "spmoved",
+    "spliquid",
+    "spkick"
 };
 
 
@@ -29,11 +29,11 @@ void
 tileset_random ()
 {
     _direntry *destart,
-     *de,
-     *desel;
+              *de,
+              *desel;
     char path[LEN_PATHFILENAME];
     int max,
-      sel;
+        sel;
 
     sprintf (path, "%s/tileset", bman.datapath);
     desel = destart = s_getdir (path);
@@ -64,14 +64,14 @@ void
 tileset_load (char *tilesetname, int dx, int dy)
 {
     int i,
-      r,
-      g,
-      b;
+        r,
+        g,
+        b;
     char fullname[LEN_PATHFILENAME];
     char filename[LEN_FILENAME];
     char tileset[LEN_TILESETNAME];
     SDL_Surface *tmpimage,
-     *tmpimage1;
+                *tmpimage1;
     float sfkt;
 
     d_printf ("Loading Tileset: %s\n", tilesetname);
@@ -93,8 +93,7 @@ tileset_load (char *tilesetname, int dx, int dy)
             gfx.block.y = gfx.block.x;
         else
             gfx.block.x = gfx.block.y;
-    }
-    else {
+    } else {
         gfx.block.x = dx;
         gfx.block.y = dy;
     }

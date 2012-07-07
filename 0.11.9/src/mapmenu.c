@@ -10,7 +10,7 @@ mapmenu ()
 {
     int menuselect = 0;
     char *mapname = NULL,
-        pathname[LEN_PATHFILENAME];
+          pathname[LEN_PATHFILENAME];
     _charlist maptypes[] = {
         {"selected file", NULL},
         {"random file", NULL},
@@ -18,15 +18,21 @@ mapmenu ()
         {"more random", NULL}
     }, tiletypes[] = {
         {
-        "random"}, {
-        "selected"}
+            "random"
+        }, {
+            "selected"
+        }
     }, tunneltypes[] = {
         {
-        "normal"}, {
-        "tunnel"}, {
-    "random"},}, *selmt = NULL, *selts = NULL, *seltt = NULL;
+            "normal"
+        }, {
+            "tunnel"
+        }, {
+            "random"
+        },
+    }, *selmt = NULL, *selts = NULL, *seltt = NULL;
     char mname[100];
-	_menu *menu;
+    _menu *menu;
 
     charlist_fillarraypointer (maptypes, 4);
     charlist_fillarraypointer (tiletypes, 2);
@@ -61,9 +67,9 @@ mapmenu ()
             break;
         }
         if (map.random_tileset)
-			selts = &tiletypes[0];
-		else
-			selts = &tiletypes[1];
+            selts = &tiletypes[0];
+        else
+            selts = &tiletypes[1];
         if (map.tileset[0] == 0)
             sprintf (mname, "< undefined >");
         else
@@ -103,7 +109,7 @@ mapmenu ()
 
         menu_create_button (menu, "Game Options", -1, 350, 150, 16);
 
-		menu_create_button (menu, "Ok", -1, 380, 150, 0);
+        menu_create_button (menu, "Ok", -1, 380, 150, 0);
 
         menuselect = menu_loop (menu);
         menu_delete (menu);
@@ -117,8 +123,7 @@ mapmenu ()
             if (mapname == NULL) {
                 map.map[0] = 0;
                 map.map_selection = 2;
-            }
-            else
+            } else
                 sprintf (map.map, "%s/maps/%s", bman.datapath, mapname);
             break;
 
@@ -128,24 +133,23 @@ mapmenu ()
             if (mapname == NULL) {
                 map.tileset[0] = 0;
                 map.random_tileset = 1;
-            }
-            else
+            } else
                 strcpy (map.tileset, mapname);
             break;
-			
-		case (16): /* Game Settings */
-			mapgamesetting ();
-			break;
+
+        case (16): /* Game Settings */
+            mapgamesetting ();
+            break;
         }
 
-		/* map type */
+        /* map type */
         map.type = seltt - &tunneltypes[0];
         if (map.type == 2)
             map.type = -1;
         d_printf ("Tunnel:%d\n", map.type);
 
-		/* tileset mode and map mode */
-		map.random_tileset = 1-(selts - &tiletypes[0]);
+        /* tileset mode and map mode */
+        map.random_tileset = 1-(selts - &tiletypes[0]);
         map.map_selection = selmt - &maptypes[0];
     }
     map.size.x = map.size.x | 1;
@@ -159,8 +163,8 @@ mapmenu ()
     if (map.size.y > MAX_FIELDSIZE_Y)
         map.size.y = MAX_FIELDSIZE_Y;
 
-	config_write ();
-	if (GT_MP_PTPM)  net_send_servermode ();
+    config_write ();
+    if (GT_MP_PTPM)  net_send_servermode ();
 }
 
 
@@ -175,9 +179,9 @@ mapinfo ()
     _keybinput ki;
     SDL_Event event;
     int x,
-      y,
-      eventstate,
-      done = 0;
+        y,
+        eventstate,
+        done = 0;
     char text[255];
 
 // draw_menubox (WIN_X, WIN_Y);
@@ -276,7 +280,7 @@ mapinfo ()
 // font_setcolor (255,255,255,0);
 // font_draw (3 + x - (WIN_X / 2) ,1 + y, text, 0);
 
-    /* Special FREE 
+    /* Special FREE
        sprintf (text, "Push Specials: %d", map.sp_push);
        font_setcolor (128,128,128,0);
        font_draw (x , y, text, 0);
@@ -306,8 +310,7 @@ mapinfo ()
         if (GT_MP && bman.sock != -1) {
             network_loop ();
             eventstate = s_fetchevent (&event);
-        }
-        else
+        } else
             eventstate = SDL_WaitEvent (&event);
 
         if (eventstate != 0)
@@ -327,42 +330,43 @@ mapinfo ()
 
 
 /* change start settings for the game */
-void mapgamesetting () {
+void mapgamesetting ()
+{
     int menuselect = 0;
-	_charlist gametype [] = {
-		{"Bomberman", NULL},
+    _charlist gametype [] = {
+        {"Bomberman", NULL},
         {"Deathmatch", NULL},
-		{"Teammode", NULL}
-	};
-	_charlist *gametype_sel = &gametype[bman.gametype];
-	_menu *menu;
-	
-	charlist_fillarraypointer (gametype, 3);
-	
+        {"Teammode", NULL}
+    };
+    _charlist *gametype_sel = &gametype[bman.gametype];
+    _menu *menu;
+
+    charlist_fillarraypointer (gametype, 3);
+
     while (menuselect != -1 && bman.state != GS_quit) {
         menu = menu_new ("Game Options", 420, 400);
-		
-		menu_create_label (menu, "Start Values", 25, 50, 0, COLOR_brown);
-		menu_create_entry (menu, "Bombs:", 25, 80, 150, &bman.start_bombs, MAX_BOMBS, MENU_entryint32, 1);
-		menu_create_entry (menu, "Speed:", 25,110, 150, &bman.start_speed, MAX_SPEED, MENU_entryfloat, 2);
-		menu_create_entry (menu, "Range:", 25,140, 150, &bman.start_range, MAX_RANGE, MENU_entryint32, 3);
-		
-		menu_create_label (menu, "Other Values", 200, 50, 0, COLOR_brown);
+
+        menu_create_label (menu, "Start Values", 25, 50, 0, COLOR_brown);
+        menu_create_entry (menu, "Bombs:", 25, 80, 150, &bman.start_bombs, MAX_BOMBS, MENU_entryint32, 1);
+        menu_create_entry (menu, "Speed:", 25,110, 150, &bman.start_speed, MAX_SPEED, MENU_entryfloat, 2);
+        menu_create_entry (menu, "Range:", 25,140, 150, &bman.start_range, MAX_RANGE, MENU_entryint32, 3);
+
+        menu_create_label (menu, "Other Values", 200, 50, 0, COLOR_brown);
         menu_create_entry (menu, "Gametime:", 200, 80, 150, &bman.init_timeout, 1200, MENU_entryint32, 4);
 
-		menu_create_label (menu, "Game Parameter", 25, 180, 1, COLOR_brown);
+        menu_create_label (menu, "Game Parameter", 25, 180, 1, COLOR_brown);
         menu_create_entry (menu, "Bomb Time:", 25, 220, 200, &bman.bomb_tickingtime, 1200, MENU_entryfloat, 5);
-		menu_create_label (menu, "Gametype", 25, 250, 0, COLOR_brown);
-		menu_create_list (menu, "GameType", 25, 280, 150, 60, gametype, &gametype_sel, 6);
-		menu_create_bool (menu, "Drop Items", 200, 280, 150, &bman.dropitemsondeath, 7);	
-		
+        menu_create_label (menu, "Gametype", 25, 250, 0, COLOR_brown);
+        menu_create_list (menu, "GameType", 25, 280, 150, 60, gametype, &gametype_sel, 6);
+        menu_create_bool (menu, "Drop Items", 200, 280, 150, &bman.dropitemsondeath, 7);
+
         menu_create_button (menu, "Ok", -1, 380, 150, 0);
         menuselect = menu_loop (menu);
-		menu_delete (menu);
-		
-		if (menuselect == 0) {
-			bman.gametype = gametype_sel- &gametype[0];
-			menuselect = -1;
-		}
-    }	
+        menu_delete (menu);
+
+        if (menuselect == 0) {
+            bman.gametype = gametype_sel- &gametype[0];
+            menuselect = -1;
+        }
+    }
 };

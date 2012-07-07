@@ -5,28 +5,28 @@
 #include "basic.h"
 
 enum _color {
-	COLOR_white = 0,
-	COLOR_red,
-	COLOR_green,
-	COLOR_blue,
-	COLOR_yellow,
-	COLOR_brown,
-	COLOR_gray,
-	COLOR_black,
-	
-	COLOR_max
+    COLOR_white = 0,
+    COLOR_red,
+    COLOR_green,
+    COLOR_blue,
+    COLOR_yellow,
+    COLOR_brown,
+    COLOR_gray,
+    COLOR_black,
+
+    COLOR_max
 };
 
 
 struct __font {
-	SDL_Surface *image[COLOR_max];
-	_point size;
+    SDL_Surface *image[COLOR_max];
+    _point size;
 } typedef _font;
 
 
-struct _key_codes { 
-		int code; 
-		char *text;
+struct _key_codes {
+    int code;
+    char *text;
 };
 
 extern _point font_lastsize;

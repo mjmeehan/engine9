@@ -12,7 +12,7 @@
 #define LEN_GAME 32
 
 #ifndef LEN_VERSION
-	#define LEN_VERSION 20
+#define LEN_VERSION 20
 #endif
 
 #define LEN_STATUS 6
@@ -20,11 +20,11 @@
 #define BUF_SIZE 1024
 
 struct game_entry {
-	int serial;
+    int serial;
     char host[LEN_OGCHOST];
     char port[LEN_OGCPORT];
-	char game[LEN_GAME];
-	char version [LEN_VERSION];
+    char game[LEN_GAME];
+    char version [LEN_VERSION];
     char gamename[LEN_GAMENAME];
     int curplayers;
     int maxplayers;
@@ -39,7 +39,7 @@ int ogc_init (char *localport, char *server, char *port, char *game, int ai_fami
 void ogc_shutdown ();
 int ogc_loop ();
 int ogc_sendgamestatus (int sock, char *game, char *version, char *gamename,
-						int curplayers, int maxplayers, char *status);
+                        int curplayers, int maxplayers, char *status);
 int ogc_sendgamequit (int sock); /* send that the game quitted */
 void ogc_browsestart ();
 void ogc_browsestop ();

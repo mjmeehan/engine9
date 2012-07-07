@@ -7,37 +7,37 @@
 #include "menu.h"
 
 enum _bcplayerkeys {
-	BCPK_up = 0,
-	BCPK_down,
-	BCPK_left,
-	BCPK_right,
-	BCPK_drop,
-	BCPK_special,
-	
-	BCPK_max 
+    BCPK_up = 0,
+    BCPK_down,
+    BCPK_left,
+    BCPK_right,
+    BCPK_drop,
+    BCPK_special,
+
+    BCPK_max
 };
 
 enum _bckeys {
-	BCK_help = BCPK_max * 3,
-	BCK_esc,
-	BCK_fullscreen,
-	BCK_chat,
-	BCK_pause,
-	BCK_playermenu,
-	BCK_mapmenu,
+    BCK_help = BCPK_max * 3,
+    BCK_esc,
+    BCK_fullscreen,
+    BCK_chat,
+    BCK_pause,
+    BCK_playermenu,
+    BCK_mapmenu,
 
-	BCK_max
+    BCK_max
 };
 
 struct {
-	Uint8 state [BCK_max];	// current state
-	Uint8 old [BCK_max];	// old state
-	int keycode [BCK_max];	// keycode
+    Uint8 state [BCK_max];	// current state
+    Uint8 old [BCK_max];	// old state
+    int keycode [BCK_max];	// keycode
 } typedef BCGameKeys;
 
 struct {
-	int drop;
-	int special;
+    int drop;
+    int special;
 } typedef BCGameJoystick;
 
 extern BCGameKeys keyb_gamekeys;

@@ -18,53 +18,53 @@
 #define MENUOFFSET_Y(_m_) _m_->oldscreenpos.y + menuimages[0]->h
 
 enum _menu_type {
-	MENU_label = 0,
-	MENU_none,			/* deleted item */
-	MENU_button,
-	MENU_entrytext,
-	MENU_entryint32,
-	MENU_entryint16,
-	MENU_entryfloat,
-	MENU_bool,
-	MENU_list,
-	MENU_image
+    MENU_label = 0,
+    MENU_none,			/* deleted item */
+    MENU_button,
+    MENU_entrytext,
+    MENU_entryint32,
+    MENU_entryint16,
+    MENU_entryfloat,
+    MENU_bool,
+    MENU_list,
+    MENU_image
 };
 
 
 struct __menuitem {
-	SDL_Rect pos;
-	int type;
-	int len;
-	int id;
-	char changed;
-	char label[MENU_TITLELEN];
-	_keybinput keybi;
-	int state;
-	char *ptrdata;			// pointer to some data
-	SDL_Rect rect;			// only used for images
-	_charlist *list;
-	void *menu;				// parent menu
-	struct __menuitem *next;
+    SDL_Rect pos;
+    int type;
+    int len;
+    int id;
+    char changed;
+    char label[MENU_TITLELEN];
+    _keybinput keybi;
+    int state;
+    char *ptrdata;			// pointer to some data
+    SDL_Rect rect;			// only used for images
+    _charlist *list;
+    void *menu;				// parent menu
+    struct __menuitem *next;
 } typedef _menuitem;
 
 
 struct {
-	char title[MENU_TITLELEN];
-	_menuitem *items;
-	_menuitem *focus;
-	SDL_Surface *oldscreen; // hold old screendata
-	SDL_Rect oldscreenpos;
-	int oldkey;
-	float focusto;
-	int focusvis;
-	_menuitem menuitems[MENU_MAXENTRYS];
-	int looprunning;
+    char title[MENU_TITLELEN];
+    _menuitem *items;
+    _menuitem *focus;
+    SDL_Surface *oldscreen; // hold old screendata
+    SDL_Rect oldscreenpos;
+    int oldkey;
+    float focusto;
+    int focusvis;
+    _menuitem menuitems[MENU_MAXENTRYS];
+    int looprunning;
 } typedef _menu;
 
 
 extern SDL_Surface *menuimages[9]; // holds the gfx
 extern SDL_Surface *menulistimages[2][9]; // holds the gfx for the lists
-extern SDL_Surface *menubuttonimages[3][3]; // holds the images for the buttons 
+extern SDL_Surface *menubuttonimages[3][3]; // holds the images for the buttons
 extern SDL_Surface *menuentryimages[2][3];  // [PRESSED][Left|Center|Right]
 
 extern SDL_Surface *menu_players[MAX_PLAYERS];	// holds playergfx of a single frame

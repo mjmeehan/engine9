@@ -57,9 +57,9 @@ config_init (int argc, char **argv)
 {
     SDL_Surface *icon_img;
     char text[255],
-      icon[255];
+         icon[255];
     int i,
-      j;
+        j;
 
     config_get_datapath ();
 
@@ -181,8 +181,8 @@ config_read ()
     FILE *config;
     char buf[1024];
     char *findit,
-     *keyword,
-     *value;
+         *keyword,
+         *value;
     int i;
     char filename[512];
 
@@ -229,8 +229,8 @@ config_read ()
         if (!strcmp (keyword, "playername")) {
             if (strlen (value) > LEN_PLAYERNAME) {
                 d_printf
-                    ("*** Error - playername too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_PLAYERNAME);
+                ("*** Error - playername too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_PLAYERNAME);
             }
             value[LEN_PLAYERNAME - 1] = 0;
             strcpy (bman.playername, value);
@@ -239,8 +239,8 @@ config_read ()
         if (!strcmp (keyword, "player2name")) {
             if (strlen (value) > LEN_PLAYERNAME) {
                 d_printf
-                    ("*** Error - playername too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_PLAYERNAME);
+                ("*** Error - playername too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_PLAYERNAME);
             }
             value[LEN_PLAYERNAME - 1] = 0;
             strcpy (bman.player2name, value);
@@ -249,8 +249,8 @@ config_read ()
         if (!strcmp (keyword, "gamename")) {
             if (strlen (value) > LEN_GAMENAME) {
                 d_printf
-                    ("*** Error - servername too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_GAMENAME);
+                ("*** Error - servername too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_GAMENAME);
             }
             value[LEN_GAMENAME - 1] = 0;
             strcpy (bman.gamename, value);
@@ -261,8 +261,8 @@ config_read ()
         if (!strcmp (keyword, "password")) {
             if (strlen (value) > LEN_PASSWORD) {
                 d_printf
-                    ("*** Error - Password is too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_PASSWORD);
+                ("*** Error - Password is too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_PASSWORD);
             }
             value[LEN_PASSWORD - 1] = 0;
             strcpy (bman.password, value);
@@ -282,8 +282,8 @@ config_read ()
         if (!strcmp (keyword, "mapname")) {
             if (strlen (value) > LEN_PATHFILENAME) {
                 d_printf
-                    ("*** Error - fieldpath too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_PATHFILENAME);
+                ("*** Error - fieldpath too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_PATHFILENAME);
             }
             value[511] = 0;
             strcpy (map.map, value);
@@ -291,8 +291,8 @@ config_read ()
         if (!strcmp (keyword, "udpport")) {
             if (strlen (value) > LEN_PORT) {
                 d_printf
-                    ("*** Error - servername too long (maximum size permitted is %d characters)!\n\n",
-                     LEN_PORT);
+                ("*** Error - servername too long (maximum size permitted is %d characters)!\n\n",
+                 LEN_PORT);
             }
             value[LEN_PORT - 1] = 0;
             strcpy (bman.port, value);
@@ -461,16 +461,16 @@ config_read ()
         if (!strcmp (keyword, "key_fullscreen"))
             keyb_gamekeys.keycode[BCK_fullscreen] = atoi (value);
         /*
-         * joypad config 
+         * joypad config
          */
         if (!strcmp (keyword, "joy_1_drop"))
-   	        joy_keys[0].drop = atoi (value);
+            joy_keys[0].drop = atoi (value);
         if (!strcmp (keyword, "joy_1_special"))
-   	        joy_keys[0].special = atoi (value);
+            joy_keys[0].special = atoi (value);
         if (!strcmp (keyword, "joy_2_drop"))
-   	        joy_keys[1].drop = atoi (value);
+            joy_keys[1].drop = atoi (value);
         if (!strcmp (keyword, "joy_2_special"))
-   	        joy_keys[1].special = atoi (value);
+            joy_keys[1].special = atoi (value);
     }
     fclose (config);
     return 0;
@@ -532,13 +532,13 @@ config_write ()
     fprintf (config, "special_itemshoes=%d\n", map.shoes);
     fprintf (config, "special_itemmixed=%d\n", map.mixed);
     fprintf (config, "special_itemdeath=%d\n", map.death);
-	fprintf (config, "special_trigger=%d\n", map.sp_trigger);
-	fprintf (config, "special_row=%d\n", map.sp_row);
-	fprintf (config, "special_push=%d\n", map.sp_push);
-	fprintf (config, "special_kick=%d\n", map.sp_kick);
+    fprintf (config, "special_trigger=%d\n", map.sp_trigger);
+    fprintf (config, "special_row=%d\n", map.sp_row);
+    fprintf (config, "special_push=%d\n", map.sp_push);
+    fprintf (config, "special_kick=%d\n", map.sp_kick);
 
     fprintf (config, "bomb_ticking=%f\n", bman.bomb_tickingtime);
-	fprintf (config, "dropitemsondeath=%d\n",bman.dropitemsondeath);
+    fprintf (config, "dropitemsondeath=%d\n",bman.dropitemsondeath);
 
     for (i = 0; i < MAX_TEAMS; i++) {
         fprintf (config, "teamcol%d=%d\n", i, teams[i].col);
@@ -593,10 +593,10 @@ config_video ()
         {"1024x768", NULL},
         {"1280x800", NULL},
         {"1280x1024", NULL},
-		{"1600x1200", NULL},
+        {"1600x1200", NULL},
         {"1920x1080", NULL},
-        {"1920x1200", NULL},        
-		{"1280x800", NULL}
+        {"1920x1200", NULL},
+        {"1280x800", NULL}
     };
     _charlist screenbpp[] = {
         {"16", NULL},
@@ -702,7 +702,7 @@ config_menu ()
             else
                 menuselect = -1;
             break;
-        case (1):              // player screen 
+        case (1):              // player screen
             playernamemenu ();
             break;
         case (2):              // keyboard settings
@@ -711,7 +711,7 @@ config_menu ()
         case (3):              // Screen Options
             config_video ();
             break;
-       case (4):              // joypad Options
+        case (4):              // joypad Options
             joypad_config ();
             break;
 
@@ -726,7 +726,7 @@ void
 ReadPrgArgs (int argc, char **argv)
 {
     int i = 0;
-	char s;
+    char s;
     while (argv[++i] != NULL) {
         if (!strcmp (argv[i], "-h")||!strcmp (argv[i], "-help")||!strcmp (argv[i], "--help")) {
             printf ("BomberClone Version " VERSION "\n");
@@ -750,82 +750,82 @@ ReadPrgArgs (int argc, char **argv)
             printf (" -autostart SECONDS - time before a game starts\n");
             exit (0);
         }
-	}
-	i=0;
-	while (argv[++i] != NULL) {
-		if (argv[i][0]=='-') {
-			if (argv[i+1] != NULL) 
-				s=argv[i+1][0];
-			else 
-				s='-';
-        	if (!strcmp (argv[i], "-port")) {
-            	if (s!='-') 
-					strncpy (bman.port, argv[++i], LEN_PORT);
-					else {
-						printf("Error: Parameter required for -port\n");
-						exit(1);
-					}
-				}
-        	if (!strcmp (argv[i], "-ogcport")) {
-				if (s!='-')
-					strncpy (bman.ogc_port, argv[++i], LEN_PORT);
-					else {
-						printf("Error: Parameter required for -ogcport\n");
-						exit(1);
-					}
-				}
-        	if (!strcmp (argv[i], "-name")) {
-				if (s!='-')
-					strncpy (bman.playername, argv[++i], LEN_PLAYERNAME);
-					else {
-						printf("Error: Parameter required for -name\n");
-						exit(1);
-					}
-				}
-    	    if (!strcmp (argv[i], "-name2")) {
-				if (s!='-')
-					strncpy (bman.player2name, argv[++i], LEN_PLAYERNAME);
-					else {
-						printf("Error: Parameter required for -name2\n");
-						exit(1);
-					}
-				}
-        	if (!strcmp (argv[i], "-gamename")) {
-				if (s!='-') 
-					strncpy (bman.gamename, argv[++i], LEN_GAMENAME);
-					else {
-						printf("Error: Parameter required for -gamename\n");
-						exit(1);
-					}
-				}
-			if (!strcmp (argv[i], "-autostart")) {
-				if (s!='-')
-    	    		bman.autostart = atoi (argv[++i]);
-				else {
-					printf("Error: Parameter required for -autostart\n");
-					exit(1);
-					}
-				}
-        	if (!strcmp (argv[i], "-ogc")) {
-				if (s!='-')
-            		bman.notifygamemaster = atoi (argv[++i]);
-				else
-					bman.notifygamemaster = 1;
-			}
-        	if (!strcmp (argv[i], "-broadcast")) {
-				if (s!='-')
-            		bman.broadcast = atoi (argv[++i]);
-				else
-					bman.broadcast = 1;
-			}
-        	if (!strcmp (argv[i], "-debug")) {
-				if (s!='-')
-            		debug = atoi (argv[++i]);
-				else
-					debug = 1;
-	    	}
-		}
-	}
+    }
+    i=0;
+    while (argv[++i] != NULL) {
+        if (argv[i][0]=='-') {
+            if (argv[i+1] != NULL)
+                s=argv[i+1][0];
+            else
+                s='-';
+            if (!strcmp (argv[i], "-port")) {
+                if (s!='-')
+                    strncpy (bman.port, argv[++i], LEN_PORT);
+                else {
+                    printf("Error: Parameter required for -port\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-ogcport")) {
+                if (s!='-')
+                    strncpy (bman.ogc_port, argv[++i], LEN_PORT);
+                else {
+                    printf("Error: Parameter required for -ogcport\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-name")) {
+                if (s!='-')
+                    strncpy (bman.playername, argv[++i], LEN_PLAYERNAME);
+                else {
+                    printf("Error: Parameter required for -name\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-name2")) {
+                if (s!='-')
+                    strncpy (bman.player2name, argv[++i], LEN_PLAYERNAME);
+                else {
+                    printf("Error: Parameter required for -name2\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-gamename")) {
+                if (s!='-')
+                    strncpy (bman.gamename, argv[++i], LEN_GAMENAME);
+                else {
+                    printf("Error: Parameter required for -gamename\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-autostart")) {
+                if (s!='-')
+                    bman.autostart = atoi (argv[++i]);
+                else {
+                    printf("Error: Parameter required for -autostart\n");
+                    exit(1);
+                }
+            }
+            if (!strcmp (argv[i], "-ogc")) {
+                if (s!='-')
+                    bman.notifygamemaster = atoi (argv[++i]);
+                else
+                    bman.notifygamemaster = 1;
+            }
+            if (!strcmp (argv[i], "-broadcast")) {
+                if (s!='-')
+                    bman.broadcast = atoi (argv[++i]);
+                else
+                    bman.broadcast = 1;
+            }
+            if (!strcmp (argv[i], "-debug")) {
+                if (s!='-')
+                    debug = atoi (argv[++i]);
+                else
+                    debug = 1;
+            }
+        }
+    }
 };
 
 
@@ -840,11 +840,9 @@ ReadPrgArgs_Jump (int argc, char **argv)
         /* check for commands which will put us into a certain menu */
         if (!strcmp (argv[i], "-host")) {
             host_multiplayer_game ();
-        }
-        else if (!strcmp (argv[i], "-join")) {
+        } else if (!strcmp (argv[i], "-join")) {
             join_multiplayer_game ();
-        }
-        else if (!strcmp (argv[i], "-connect")) {
+        } else if (!strcmp (argv[i], "-connect")) {
             strncpy (bman.servername, argv[++i], LEN_SERVERNAME + LEN_PORT + 2);
             join_multiplayer_game ();
         }
@@ -857,9 +855,9 @@ int
 check_version (int ma, int mi, int su, char *ver)
 {
     int v1,
-      v2,
-      v3,
-      res = 0;
+        v2,
+        v3,
+        res = 0;
 
     sscanf (ver, "%d.%d.%d", &v1, &v2, &v3);
     if (v1 < ma)

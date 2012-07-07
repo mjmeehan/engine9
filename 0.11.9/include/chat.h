@@ -11,18 +11,18 @@
 #define CHAR_NETCOLOR COLOR_blue
 
 struct __chat {
-	SDL_Rect window;
-	signed char changed;	// if the chat windows has to redarwn after chat_loop
-	SDL_Surface *oldscreen;	// old screen
-	short int curline;		// current line
-	short int active;		// if the chat window is active
-	short int keepactive;	// keep chat active after pressing enter
-	struct {
-		char text[KEYBI_LINE_LEN];
-		int color;			// color of the line
-		int end;			// mark the end of one line
-	} lines[CHAT_MAX_LINES];
-	_keybinput input;
+    SDL_Rect window;
+    signed char changed;	// if the chat windows has to redarwn after chat_loop
+    SDL_Surface *oldscreen;	// old screen
+    short int curline;		// current line
+    short int active;		// if the chat window is active
+    short int keepactive;	// keep chat active after pressing enter
+    struct {
+        char text[KEYBI_LINE_LEN];
+        int color;			// color of the line
+        int end;			// mark the end of one line
+    } lines[CHAT_MAX_LINES];
+    _keybinput input;
 } typedef _chat;
 
 extern _chat chat;

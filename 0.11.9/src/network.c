@@ -14,7 +14,7 @@ int
 network_server_port (char *server, char *host, int hostlen, char *port, int portlen)
 {
     char *pos,
-     *pos2;
+         *pos2;
 
     if (host == NULL)
         return -1;
@@ -36,12 +36,10 @@ network_server_port (char *server, char *host, int hostlen, char *port, int port
                 sprintf (port, "11000");
             else
                 strcpy (port, pos + 1);
-        }
-        else {
+        } else {
             return -1;
         }
-    }
-    else {
+    } else {
         // Portangabe wurde nicht gefunden und wird auf 0 gesetzt
         strncpy (host, server, hostlen);
         sprintf (port, "11000");
@@ -72,7 +70,7 @@ net_dyn_pkgoption ()
             }
 
             if ((timestamp - npkg->to_timestamp > 2000)
-                && npkg->to_2sec <= DYN_PKG_MIN_MISSING) {
+                    && npkg->to_2sec <= DYN_PKG_MIN_MISSING) {
                 if (npkg->send_set > PKG_SENDSETOPT)
                     npkg->send_set--;
                 npkg->to_2sec = 0;
@@ -93,7 +91,7 @@ network_init ()
     char host[LEN_SERVERNAME];
     char port[LEN_PORT];
 
-/*   we need it for the windows winsock */
+    /*   we need it for the windows winsock */
 #ifdef _WIN32
     WSADATA wsaData;
 
@@ -133,8 +131,8 @@ network_init ()
     }
 
     // we have got our socket..
-	rscache_init ();
-	
+    rscache_init ();
+
     return 0;
 };
 
@@ -155,7 +153,7 @@ network_shutdown ()
         /* find new server */
         for (i = 0; i < MAX_PLAYERS; i++) {
             if (PS_IS_used (players[i].state) && PS_IS_netplayer (players[i].state)
-                && i != bman.p_servnr && players[i].net.flags == 0)
+                    && i != bman.p_servnr && players[i].net.flags == 0)
                 new_server = i;
         }
 
@@ -163,10 +161,9 @@ network_shutdown ()
 
         for (i = 0; i < MAX_PLAYERS; i++)
             if (i != bman.p_servnr && PS_IS_netplayer (players[i].state)
-                && !PS_IS_aiplayer (players[i].state))
+                    && !PS_IS_aiplayer (players[i].state))
                 send_quit (&players[i].net.addr, bman.p_servnr, new_server);
-    }
-    else if (players[bman.p_servnr].net.addr.host[0] != 0) {
+    } else if (players[bman.p_servnr].net.addr.host[0] != 0) {
         send_quit (&players[bman.p_servnr].net.addr, bman.p_nr, bman.p_servnr);
         if (IS_LPLAYER2)
             send_quit (&players[bman.p_servnr].net.addr, bman.p2_nr, bman.p_servnr);
@@ -193,9 +190,9 @@ net_check_timeout (int pl_nr)
     int timeout = UDP_TIMEOUT;
 
     if ((players[pl_nr].state & (PSF_net + PSF_used + PSF_ai)) == (PSF_used + PSF_net)
-        && ((players[pl_nr].net.flags & NETF_local2) == 0)
-        && timestamp - players[pl_nr].net.timestamp > timeout
-        && players[pl_nr].net.pingreq != players[pl_nr].net.pingack) {
+            && ((players[pl_nr].net.flags & NETF_local2) == 0)
+            && timestamp - players[pl_nr].net.timestamp > timeout
+            && players[pl_nr].net.pingreq != players[pl_nr].net.pingack) {
         d_printf ("net_check_timeout pl_nr=%d, ack=%d, req=%d, timediff=%d\n", pl_nr,
                   players[pl_nr].net.pingack, players[pl_nr].net.pingreq,
                   timestamp - players[pl_nr].net.timestamp);
@@ -204,9 +201,9 @@ net_check_timeout (int pl_nr)
         send_ping (&players[pl_nr].net.addr, players[pl_nr].net.pingack + 100, PKG_pingreq);
     }
     if ((players[pl_nr].state & (PSF_net + PSF_used + PSF_ai)) == (PSF_used + PSF_net)
-        && ((players[pl_nr].net.flags & NETF_local2) == 0)
-        && timestamp - players[pl_nr].net.timestamp > timeout
-        && players[pl_nr].net.pingreq == players[pl_nr].net.pingack) {
+            && ((players[pl_nr].net.flags & NETF_local2) == 0)
+            && timestamp - players[pl_nr].net.timestamp > timeout
+            && players[pl_nr].net.pingreq == players[pl_nr].net.pingack) {
         d_printf ("net_check_timeout pl_nr=%d, ack=%d, req=%d, timediff=%d\n", pl_nr,
                   players[pl_nr].net.pingack, players[pl_nr].net.pingreq,
                   timestamp - players[pl_nr].net.timestamp);
@@ -226,14 +223,14 @@ network_loop ()
     char data[MAX_UDPDATA];
     struct pkg *packet = (struct pkg *) data;
     int inlen,
-      i;
+        i;
 
     _net_addr addr;
 
     if (bman.state != GS_running && bman.state != GS_ready)
         timestamp = SDL_GetTicks ();
 
-    /* 
+    /*
        as long as we get any new data, work with them
      */
     inlen = udp_get (bman.sock, data, MAX_UDPDATA, &addr.sAddr, bman.net_ai_family);
@@ -262,8 +259,7 @@ network_loop ()
                 d_printf ("Server Timed Out\n");
                 bman.state = GS_startup;
             }
-        }
-        else if (GT_MP_PTPM) {
+        } else if (GT_MP_PTPM) {
             for (i = 1; i < MAX_PLAYERS; i++)
                 if (i != bman.p_nr && net_check_timeout (i)) {
                     d_printf ("Player %d Timed Out\n", i);
@@ -273,7 +269,7 @@ network_loop ()
     }
 
     /*
-       resend_cache.... 
+       resend_cache....
      */
     rscache_loop ();
 
@@ -287,7 +283,7 @@ network_loop ()
 
 
 /*
-   this is needed to draw the whole uppdate of everything 
+   this is needed to draw the whole uppdate of everything
 */
 void
 draw_netupdatestate (char st)
@@ -302,7 +298,7 @@ draw_netupdatestate (char st)
         j,
         s = map.size.y + MAX_PLAYERS + GAME_MAX_TUNNELS;
     SDL_Rect src,
-      dest;
+             dest;
     z = gfx.res.x - zx - 30 - 8;
     for (i = 0; i < MAX_PLAYERS; i++)
         if (PS_IS_used (players[i].state)) {
@@ -354,7 +350,7 @@ draw_netupdatestate (char st)
                 sprintf (text, "%s", players[i].name);
                 font_draw (80, y, text, 0, 4);
             }
-            // calc percentage, this a range from 0 to 255)   
+            // calc percentage, this a range from 0 to 255)
             switch (players[i].net.net_istep) {
             case 3:
                 sprintf (text, "Getting Tunnel Data %d.", players[i].net.net_status);
@@ -394,7 +390,7 @@ draw_netupdatestate (char st)
                     dest.w = menubuttonimages[2][1]->w;
                     dest.h = menubuttonimages[2][1]->h;
                     for (j = menubuttonimages[2][0]->w;
-                         j < b1 - menubuttonimages[2][2]->w; j += menubuttonimages[2][1]->w) {
+                            j < b1 - menubuttonimages[2][2]->w; j += menubuttonimages[2][1]->w) {
                         dest.x = j + zx + 4;
                         gfx_blit (menubuttonimages[2][1], NULL, gfx.screen, &dest, 10000);
                     }
@@ -433,8 +429,7 @@ net_send_playerid (int pl_nr)
                                players[pl_nr].net.addr.port, pl_nr,
                                players[pl_nr].gfx_nr, players[pl_nr].team_nr,
                                players[pl_nr].net.flags);
-    }
-    else {
+    } else {
         /*
            Send only to the Server the update and only if pn_nr == bman.p_nr
          */
@@ -446,7 +441,7 @@ net_send_playerid (int pl_nr)
     }
 
     if ((players[pl_nr].gfx_nr >= 0 && players[pl_nr].gfx != &gfx.players[players[pl_nr].gfx_nr])
-        || (players[pl_nr].gfx_nr == -1 && players[pl_nr].gfx != NULL))
+            || (players[pl_nr].gfx_nr == -1 && players[pl_nr].gfx != NULL))
         player_set_gfx (&players[pl_nr], players[pl_nr].gfx_nr);
 };
 
@@ -477,14 +472,14 @@ net_transmit_gamedata ()
     else
         font_draw (100, 0, "Downloading Data", 1, 0);
 
-    /* 
-       prepare everything for the loop 
+    /*
+       prepare everything for the loop
      */
     for (x = 0; x < MAX_PLAYERS; x++) {
         players[x].net.timestamp = 0;
         players[x].net.net_status = -1;
         if ((PS_IS_aiplayer (players[x].state)) || (x == bman.p_servnr) || (x == bman.p2_nr)
-            || (players[x].net.flags & NETF_local2) == NETF_local2)
+                || (players[x].net.flags & NETF_local2) == NETF_local2)
             players[x].net.net_istep = 0;
         else
             players[x].net.net_istep = 3;
@@ -513,7 +508,7 @@ net_transmit_gamedata ()
             }
             for (p = 0, i = 1; p < MAX_PLAYERS; p++)
                 if (PS_IS_playing (players[p].state)
-                    && players[p].net.net_istep != 0)
+                        && players[p].net.net_istep != 0)
                     i = 0;
             if (i == 1) {       /* all players are ready */
                 done = 1;
@@ -524,22 +519,20 @@ net_transmit_gamedata ()
         /* if PTPS get all data */
         if (GT_MP_PTPS) {
             if (net_istep == 3) {
-                /* 
-                   get tunneldata 
+                /*
+                   get tunneldata
                  */
                 if ((y < GAME_MAX_TUNNELS - 1 && y == players[bman.p_nr].net.net_status)
-                    || y == -1) {
+                        || y == -1) {
                     y++;
                     downtimestamp = timestamp;
                     send_tunneldata (&players[bman.p_servnr].net.addr, y, -1, -1);
-                }
-                else if (y < GAME_MAX_TUNNELS
-                         && y != players[bman.p_nr].net.net_status && y >= 0
-                         && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
+                } else if (y < GAME_MAX_TUNNELS
+                           && y != players[bman.p_nr].net.net_status && y >= 0
+                           && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
                     /* we have got no tunnel data */
                     y--;
-                }
-                else if (y == GAME_MAX_TUNNELS - 1 && players[bman.p_nr].net.net_status == y) {
+                } else if (y == GAME_MAX_TUNNELS - 1 && players[bman.p_nr].net.net_status == y) {
                     /* we have got all tunnel data */
                     y = -1;
                     players[bman.p_nr].net.net_istep = --net_istep;
@@ -548,22 +541,20 @@ net_transmit_gamedata ()
             }
 
             if (net_istep == 2) {
-                /* 
+                /*
                    get field data
                  */
                 if ((y < map.size.y - 1 && y == players[bman.p_nr].net.net_status)
-                    || y == -1) {
+                        || y == -1) {
                     /* send field data req */
                     y++;
                     downtimestamp = timestamp;
                     send_getfield (&players[bman.p_servnr].net.addr, y);
-                }
-                else if (y < map.size.y && y != players[bman.p_nr].net.net_status
-                         && y >= 0 && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
+                } else if (y < map.size.y && y != players[bman.p_nr].net.net_status
+                           && y >= 0 && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
                     /* getdata timed out - we have got no field data */
                     y--;
-                }
-                else if (y == map.size.y - 1 && players[bman.p_nr].net.net_status == y) {
+                } else if (y == map.size.y - 1 && players[bman.p_nr].net.net_status == y) {
                     /* we have got all field data */
                     y = -1;
                     players[bman.p_nr].net.net_istep = --net_istep;
@@ -576,14 +567,14 @@ net_transmit_gamedata ()
                    get player data
                  */
                 if ((y < MAX_PLAYERS - 1 && y == players[bman.p_nr].net.net_status)
-                    || y == -1) {
+                        || y == -1) {
                     /* send player date req */
                     y++;
                     downtimestamp = timestamp;
                     send_getplayerdata (&players[bman.p_servnr].net.addr, y);
                 }
                 if (y < MAX_PLAYERS && y != players[bman.p_nr].net.net_status
-                    && y >= 0 && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
+                        && y >= 0 && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
                     /* we have got no player data */
                     y--;
                 }
@@ -598,7 +589,7 @@ net_transmit_gamedata ()
             }
 
             if (net_istep == 0 && players[bman.p_nr].net.net_status == -1
-                && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
+                    && timestamp - downtimestamp > DOWNLOAD_TIMEOUT) {
                 /* server did not send informations back */
                 downtimestamp = timestamp;
                 send_playerstatus (&players[bman.p_servnr].net.addr, bman.p_nr, 0, 0);
@@ -653,10 +644,9 @@ net_game_send_player (int p_nr)
     if (GT_MP_PTPM) {
         for (p = 0; p < MAX_PLAYERS; p++)
             if (PS_IS_netplayer (players[p].state) && p != bman.p_nr && p != bman.p2_nr
-                && p != p_nr)
+                    && p != p_nr)
                 send_playerdata (&players[p].net.addr, p_nr, &players[p_nr]);
-    }
-    else if (p_nr == bman.p_nr || p_nr == bman.p2_nr) {
+    } else if (p_nr == bman.p_nr || p_nr == bman.p2_nr) {
         for (p = 0; p < MAX_PLAYERS; p++)
             if (NET_CANSEND (p))
                 send_playerdata (&players[p].net.addr, p_nr, &players[p_nr]);
@@ -691,7 +681,7 @@ net_game_send_bomb (int p, int b)
 
     /* check if we are slave and send something else as dropping a bomb */
     if (GT_MP_PTPS && players[p].bombs[b].state != BS_ticking
-        && players[p].bombs[b].state != BS_trigger)
+            && players[p].bombs[b].state != BS_trigger)
         return;
 
     d_printf ("Send BombData %d, %d\n", p, b);
@@ -738,8 +728,8 @@ net_game_send_delplayer (int pl_nr)
         if (pl_nr == bman.p_servnr) {
             for (i = 0; i < MAX_PLAYERS; i++) {
                 if (PS_IS_used (players[i].state)
-                    && PS_IS_netplayer (players[i].state) && i != bman.p_servnr
-                    && players[i].net.flags == 0)
+                        && PS_IS_netplayer (players[i].state) && i != bman.p_servnr
+                        && players[i].net.flags == 0)
                     new_server = i;
             }
             d_printf ("new_game_send_delplayer: new server set to: %d\n", new_server);
@@ -775,7 +765,7 @@ net_game_fillsockaddr ()
 
     for (i = 0; i < MAX_PLAYERS; i++)
         if (!PS_IS_aiplayer (players[i].state) && players[i].net.addr.host[0] != 0
-            && players[i].net.addr.host[0] != 0)
+                && players[i].net.addr.host[0] != 0)
             dns_filladdr (players[i].net.addr.host, LEN_SERVERNAME,
                           players[i].net.addr.port, LEN_PORT, bman.net_ai_family,
                           &players[i].net.addr.sAddr);
@@ -801,7 +791,7 @@ void
 net_send_players ()
 {
     int i,
-      j;
+        j;
 
     for (j = 0; j < MAX_PLAYERS; j++)
         if (NET_CANSEND (j))
@@ -874,7 +864,8 @@ net_game_send_dropitems (int pl_nr, _flyingitem ** fiptr, int cnt)
    this routine will set up some things for the network game
    after this the data should be transfered to the other clients.
 */
-void net_new_game () {
+void net_new_game ()
+{
     int p;
 
     /* set all multiplayer depending datas */
@@ -894,10 +885,11 @@ void net_new_game () {
 
 
 
-/* send special use elements into the network, 
+/* send special use elements into the network,
    to make sure nothing bad happens with explosions
    we send the ex_nr number too */
-void net_game_send_special (int pl_nr, int ex_nr, int type) {
+void net_game_send_special (int pl_nr, int ex_nr, int type)
+{
     int pl;
 
     d_printf ("Send Special Data pl_nr:%d ex_nr:%d type:%d\n", pl_nr, ex_nr, type);
@@ -951,7 +943,7 @@ void
 send_ogc_update ()
 {
     int i,
-      j;
+        j;
     char status[10];
 
     if (!bman.notifygamemaster || GT_MP_PTPS)

@@ -48,7 +48,7 @@
 #define MIN_FIELDSIZE_X 15
 #define MIN_FIELDSIZE_Y 9
 #define MAX_FIELDANIMATION 2048 /* number of points on the field to be animated exploding 
-                                   stoned or powerups */
+stoned or powerups */
 
 #define EXPLOSIONTIMEOUT 0.5
 #define ANI_FIRETIMEOUT 2
@@ -91,119 +91,119 @@
 
 #include <SDL.h>
 
-enum _backgound {               // to load some diffrent logos.. 
-        BG_start = 0,
-        BG_net,
-        BG_conf
+enum _backgound {               // to load some diffrent logos..
+    BG_start = 0,
+    BG_net,
+    BG_conf
 };
 
 
 enum _gametype {
-        GT_bomberman = 0,
-        GT_deathmatch,
-        GT_team
+    GT_bomberman = 0,
+    GT_deathmatch,
+    GT_team
 };
 
 
 enum _gamestate {
-        GS_startup = 0,
-        GS_quit,
-        GS_wait,                // waiting for players to join
-        GS_update,
-        GS_ready,
-        GS_running
+    GS_startup = 0,
+    GS_quit,
+    GS_wait,                // waiting for players to join
+    GS_update,
+    GS_ready,
+    GS_running
 };
 
 
 enum _maptype {
-        MAPT_random = -1,       // random map
-        MAPT_normal = 0,        // a normal map
-        MAPT_tunnel,            // a map with tunnels
+    MAPT_random = -1,       // random map
+    MAPT_normal = 0,        // a normal map
+    MAPT_tunnel,            // a map with tunnels
 
-        MAPT_max
+    MAPT_max
 };
 
 
 enum _fieldtype {
-        FT_nothing = 0,         // Nothing in here
-        FT_stone,               // Stones you can bomb away
-        FT_block,               // Stones which can't bomb away
-        FT_tunnel,              // the tunnel item
-        FT_death,               // The bad Powerup
-        FT_fire,                // The fire Powerup
-        FT_bomb,                // The bomb Powerup
-        FT_shoe,                // The shoe Powerup
-        FT_mixed,               // The mixed Powerup
-        FT_sp_trigger,          // The Triggered bomb Special
-        FT_sp_row,              // The bomb-row special
-        FT_sp_push,             // The push-boms special
-        FT_sp_moved,            // The moved-boms special
-        FT_sp_liquid,           // The liquid-bomb special
-        FT_sp_kick,             // The kick-bomb special
-        FT_max                  // just to know how many types there are
+    FT_nothing = 0,         // Nothing in here
+    FT_stone,               // Stones you can bomb away
+    FT_block,               // Stones which can't bomb away
+    FT_tunnel,              // the tunnel item
+    FT_death,               // The bad Powerup
+    FT_fire,                // The fire Powerup
+    FT_bomb,                // The bomb Powerup
+    FT_shoe,                // The shoe Powerup
+    FT_mixed,               // The mixed Powerup
+    FT_sp_trigger,          // The Triggered bomb Special
+    FT_sp_row,              // The bomb-row special
+    FT_sp_push,             // The push-boms special
+    FT_sp_moved,            // The moved-boms special
+    FT_sp_liquid,           // The liquid-bomb special
+    FT_sp_kick,             // The kick-bomb special
+    FT_max                  // just to know how many types there are
 };
 
 
 extern const char *ft_filenames[]; // declared in tileset.c
 
 enum _poweruptypes {
-        PWUP_good = 0,
-        PWUP_bad,
-        PWUP_special,
-        PWUP_max
+    PWUP_good = 0,
+    PWUP_bad,
+    PWUP_special,
+    PWUP_max
 };
 
 
 enum _direction {               // to handle directions better
-        left = 0,
-        right,
-        up,
-        down
+    left = 0,
+    right,
+    up,
+    down
 };
 
 enum _mapselection {
-        MAPS_select = 0,
-        MAPS_randmap,
-        MAPS_randgen,
-        MAPS_morerand
+    MAPS_select = 0,
+    MAPS_randmap,
+    MAPS_randgen,
+    MAPS_morerand
 };
 
 enum _mstatus {
-        MS_normal = 0,
-        MS_hurrywarn,
-        MS_hurry,               // mapsize will go down
-        MS_dropitems,           // alot of items will be droppen randomly into the game
+    MS_normal = 0,
+    MS_hurrywarn,
+    MS_hurry,               // mapsize will go down
+    MS_dropitems,           // alot of items will be droppen randomly into the game
 
-        MS_max
+    MS_max
 };
 
 enum _help_page {
-        HP_howto0 = 0,
-        HP_powerup0,
-        HP_powerup1,
-        HP_powerup2,
-        HP_keyboard0,
-        HP_credit0,
-        HP_credit1,
-        HP_max
+    HP_howto0 = 0,
+    HP_powerup0,
+    HP_powerup1,
+    HP_powerup2,
+    HP_keyboard0,
+    HP_credit0,
+    HP_credit1,
+    HP_max
 };
 
 
 struct {
-        Sint16 x;
-        Sint16 y;
+    Sint16 x;
+    Sint16 y;
 } __attribute__((packed)) typedef _point;
 
 
 struct {
-        float x;
-        float y;
+    float x;
+    float y;
 } typedef _pointf;
 
 
 struct __charlist {
-        char text[LEN_CHARENTRY];
-        struct __charlist *next;
+    char text[LEN_CHARENTRY];
+    struct __charlist *next;
 } typedef _charlist;
 
 extern _point dir_change[];

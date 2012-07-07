@@ -47,7 +47,7 @@ _stonelist_add (int x, int y, int recursive)
 
     for (i = 0, slentry = NULL; i < MAX_STONESTODRAW && slentry == NULL; i++)
         if (stonelist[i].x == -1 || stonelist[i].y == -1
-            || (stonelist[i].x == x && stonelist[i].y == y))
+                || (stonelist[i].x == x && stonelist[i].y == y))
             slentry = &stonelist[i];
 
     if (slentry == NULL)        // no space left
@@ -75,10 +75,10 @@ draw_stone (int x, int y)
 {
     _field *stone = &map.field[x][y];
     SDL_Rect dest,
-      src;
+             src;
     SDL_Surface *srcimg = NULL;
     int i,
-      d;
+        d;
 
     if (x < 0 || y < 0 || x >= map.size.x || y >= map.size.y) {
         d_fatal ("Draw Stone out of range [%d,%d]\n", x, y);
@@ -109,8 +109,7 @@ draw_stone (int x, int y)
         i = stone->mixframe;
         if (i < FT_death || i >= FT_mixed)
             i = FT_death;
-    }
-    else
+    } else
         i = stone->type;
 
     /* animate the stone if needed only for exploding stone */
@@ -122,8 +121,7 @@ draw_stone (int x, int y)
             dest.h = src.h = gfx.field[FT_stone].h;
             dest.y -= (gfx.field[stone->type].h - gfx.field[stone->type].w);
             srcimg = gfx.field[FT_stone].image;
-        }
-        else {
+        } else {
             src.y = 0;
             srcimg = gfx.field[FT_nothing].image;
         }
@@ -154,23 +152,23 @@ draw_stone (int x, int y)
 
     if (srcimg != NULL && stone->type != FT_tunnel)
         gfx_blit (srcimg, &src, gfx.screen, &dest, (y*256) + 1);
-	else if (srcimg != NULL && stone->type == FT_tunnel)
+    else if (srcimg != NULL && stone->type == FT_tunnel)
         gfx_blit (srcimg, &src, gfx.screen, &dest, (y*256) - 1);
-		
+
     if (i >= FT_death) {        /* draw now the powerup itself */
         srcimg = gfx.field[i].image;
         src.y = 0;
         gfx_blit (srcimg, &src, gfx.screen, &dest, (y*256) + 2);
     }
 
-    /* if the current field is half hidden by the lower 
+    /* if the current field is half hidden by the lower
        field (y+1) draw this little part too */
     if (y < map.size.y - 1
-        && gfx.field[map.field[x][y + 1].type].h > gfx.field[map.field[x][y + 1].type].w) {
+            && gfx.field[map.field[x][y + 1].type].h > gfx.field[map.field[x][y + 1].type].w) {
         src.x = 0;
         src.y = (int)map.field[x][y + 1].frame * gfx.field[map.field[x][y + 1].type].h;
         dest.h = src.h =
-            gfx.field[map.field[x][y + 1].type].h - gfx.field[map.field[x][y + 1].type].w;
+                     gfx.field[map.field[x][y + 1].type].h - gfx.field[map.field[x][y + 1].type].w;
         dest.w = src.w = gfx.field[map.field[x][y + 1].type].w;
         dest.y =
             gfx.offset.y + ((gfx.block.y * (y + 1)) -
@@ -183,22 +181,22 @@ draw_stone (int x, int y)
     for (d = 0; d < 4; d++)
         if (stone->ex[d].count > 0) {
             stone_drawfire (x, y, -1);
-			break;
+            break;
         }
 
-	if (debug) {
-		char txt[64];
-		/* ex numbers..
-		sprintf (txt, "%d,%d%d", map.field[x][y].ex[0].count, map.field[x][y].ex[0].bomb_p, map.field[x][y].ex[0].bomb_b); font_gfxdraw (dest.x, dest.y, txt, 0, COLOR_white, (y*256) + 10);
-		sprintf (txt, "%d,%d%d", map.field[x][y].ex[1].count, map.field[x][y].ex[1].bomb_p, map.field[x][y].ex[1].bomb_b); font_gfxdraw (dest.x, dest.y+10, txt, 0, COLOR_white, (y*256) + 10);
-		sprintf (txt, "%d,%d%d", map.field[x][y].ex[2].count, map.field[x][y].ex[2].bomb_p, map.field[x][y].ex[2].bomb_b); font_gfxdraw (dest.x, dest.y+20, txt, 0, COLOR_white, (y*256) + 10);
-		sprintf (txt, "%d,%d%d", map.field[x][y].ex[3].count, map.field[x][y].ex[3].bomb_p, map.field[x][y].ex[3].bomb_b); font_gfxdraw (dest.x, dest.y+30, txt, 0, COLOR_white, (y*256) + 10);
-		*/
-	
-		/* number of bombs.. */		
-		sprintf (txt, "%d", map.bfield[x][y]); 
-		font_gfxdraw (dest.x, dest.y+30, txt, 0, COLOR_white, (y*256) + 10);
-	}
+    if (debug) {
+        char txt[64];
+        /* ex numbers..
+        sprintf (txt, "%d,%d%d", map.field[x][y].ex[0].count, map.field[x][y].ex[0].bomb_p, map.field[x][y].ex[0].bomb_b); font_gfxdraw (dest.x, dest.y, txt, 0, COLOR_white, (y*256) + 10);
+        sprintf (txt, "%d,%d%d", map.field[x][y].ex[1].count, map.field[x][y].ex[1].bomb_p, map.field[x][y].ex[1].bomb_b); font_gfxdraw (dest.x, dest.y+10, txt, 0, COLOR_white, (y*256) + 10);
+        sprintf (txt, "%d,%d%d", map.field[x][y].ex[2].count, map.field[x][y].ex[2].bomb_p, map.field[x][y].ex[2].bomb_b); font_gfxdraw (dest.x, dest.y+20, txt, 0, COLOR_white, (y*256) + 10);
+        sprintf (txt, "%d,%d%d", map.field[x][y].ex[3].count, map.field[x][y].ex[3].bomb_p, map.field[x][y].ex[3].bomb_b); font_gfxdraw (dest.x, dest.y+30, txt, 0, COLOR_white, (y*256) + 10);
+        */
+
+        /* number of bombs.. */
+        sprintf (txt, "%d", map.bfield[x][y]);
+        font_gfxdraw (dest.x, dest.y+30, txt, 0, COLOR_white, (y*256) + 10);
+    }
 
     return;
 };
@@ -208,7 +206,7 @@ void
 draw_field ()
 {
     int x,
-      y;
+        y;
 
     for (x = 0; x < map.size.x; x++)
         for (y = 0; y < map.size.y; y++)
@@ -218,13 +216,14 @@ draw_field ()
 
 /* will check all direction without the field on pos x,y
    for the fieldtype */
-int field_check_alldirs (int x, int y, int type) {
-	if (x <= 0 || y <= 0 || x >= map.size.x-1 || y >= map.size.y-1)
-		return 0;
-	if (map.field[x-1][y].type == type || map.field[x+1][y].type == type || map.field[x][y-1].type == type || map.field[x][y+1].type == type)
-		return 1;
-	else 
-		return 0;
+int field_check_alldirs (int x, int y, int type)
+{
+    if (x <= 0 || y <= 0 || x >= map.size.x-1 || y >= map.size.y-1)
+        return 0;
+    if (map.field[x-1][y].type == type || map.field[x+1][y].type == type || map.field[x][y-1].type == type || map.field[x][y+1].type == type)
+        return 1;
+    else
+        return 0;
 }
 
 // clear field and send this to all netplayers
@@ -242,23 +241,22 @@ void
 field_animation ()
 {
     int i,
-      j,
-	  oldframe;
+        j,
+        oldframe;
     _field *stone;
 
     for (i = 0; i < MAX_FIELDANIMATION; i++)
         if (fieldani[i].x >= 0 && fieldani[i].x < map.size.x && fieldani[i].y >= 0
-            && fieldani[i].y < map.size.y) {
+                && fieldani[i].y < map.size.y) {
             /* check if there is a need to animate this */
             stone = &map.field[fieldani[i].x][fieldani[i].y];
 
             if ((stone->type == FT_stone && stone->frame > 0.0f) || (stone->type >= FT_death)) {
                 /* animate this stone */
                 if (stone->type == FT_stone) {
-                    if (stone->frame < gfx.field[FT_stone].frames) 
-	                    stone->frame += ((timefactor/4.0f) * ANI_STONETIMEOUT);
-                }
-                else {          /* animation is a powerup */
+                    if (stone->frame < gfx.field[FT_stone].frames)
+                        stone->frame += ((timefactor/4.0f) * ANI_STONETIMEOUT);
+                } else {        /* animation is a powerup */
                     /* select right powerup animation */
                     if (stone->type == FT_death)
                         j = PWUP_bad;
@@ -268,7 +266,7 @@ field_animation ()
                         j = PWUP_good;
 
                     /* do the animation of the FT_mixed */
-					oldframe = (int)stone->frame;
+                    oldframe = (int)stone->frame;
                     stone->frame += ((timefactor/4.0f) * ANI_POWERUPTIMEOUT);
                     if ((int)stone->frame != oldframe && stone->type == FT_mixed) {
                         stone->mixframe++;
@@ -280,22 +278,20 @@ field_animation ()
                         stone->frame = 0;
                 }
                 stonelist_add (fieldani[i].x, fieldani[i].y);
+            } else {
+                /* check for a fire, and if so add to the drawing if not delete */
+                unsigned int d;
+
+                for (d = 0; d < 4; d++)
+                    if (map.field[fieldani[i].x][fieldani[i].y].ex[d].count > 0)
+                        break;
+
+                if (d >= 4)
+                    fieldani[i].y = fieldani[i].x = -1;
+                else
+                    stonelist_add (fieldani[i].x, fieldani[i].y);
             }
-            else {
-				/* check for a fire, and if so add to the drawing if not delete */
-				unsigned int d;
-				
-				for (d = 0; d < 4; d++) 
-					if (map.field[fieldani[i].x][fieldani[i].y].ex[d].count > 0)
-						break;
-				
-				if (d >= 4)
-					fieldani[i].y = fieldani[i].x = -1;
-				else 
-					stonelist_add (fieldani[i].x, fieldani[i].y);
-			}
-        }
-        else                    /* delete this entry */
+        } else                  /* delete this entry */
             fieldani[i].y = fieldani[i].x = -1;
 };
 
@@ -305,8 +301,8 @@ void
 field_animation_add (int x, int y)
 {
     int i,
-      j = -1,
-      d = -1;
+        j = -1,
+        d = -1;
 
     for (i = 0; i < MAX_FIELDANIMATION; i++) {
         if (fieldani[i].x == x && fieldani[i].y == y)
@@ -333,7 +329,7 @@ int
 field_checkisempty ()
 {
     register int x,
-      y;
+             y;
     int empty = 1;
 
     for (x = 1; (x < (map.size.x - 1) && empty); x++)
@@ -355,28 +351,28 @@ field_loop ()
     if ((GT_MP_PTPM || GT_SP) && bman.state == GS_running) {
 
         /* timeout for rechecking every 5 secs the field */
-		fieldcheck_to -= timediff;
+        fieldcheck_to -= timediff;
         if (map.state == MS_normal && map.map_selection == MAPS_randgen
-            && (fieldcheck_to > FIELDCHECK_TIMEOUT || fieldcheck_to <= 0)
-		    && bman.timeout > FIELDHURRYTIMEOUT) {
+                && (fieldcheck_to > FIELDCHECK_TIMEOUT || fieldcheck_to <= 0)
+                && bman.timeout > FIELDHURRYTIMEOUT) {
             if (field_checkisempty ())
                 bman.timeout = FIELDHURRYTIMEOUT; // let the hurry time begin
-			fieldcheck_to = FIELDCHECK_TIMEOUT;
+            fieldcheck_to = FIELDCHECK_TIMEOUT;
         }
 
-		/* set the map_state to the right setting and send the information to all clients */
-		if (map.state == MS_normal 
-			&& bman.timeout <= FIELDHURRYTIMEOUT 
-			&& bman.timeout > (FIELDHURRYTIMEOUT-FIELDHURRYWARN)) {
-			map.state = MS_hurrywarn;
-			bman.updatestatusbar = 1;
-			if (GT_MP_PTPM)
-				net_send_servermode ();
-		}
-		
+        /* set the map_state to the right setting and send the information to all clients */
+        if (map.state == MS_normal
+                && bman.timeout <= FIELDHURRYTIMEOUT
+                && bman.timeout > (FIELDHURRYTIMEOUT-FIELDHURRYWARN)) {
+            map.state = MS_hurrywarn;
+            bman.updatestatusbar = 1;
+            if (GT_MP_PTPM)
+                net_send_servermode ();
+        }
+
         /* after the end of the warning set the new flag */
-        if (map.state == MS_hurrywarn 
-			&& bman.timeout <= (FIELDHURRYTIMEOUT-FIELDHURRYWARN)) {
+        if (map.state == MS_hurrywarn
+                && bman.timeout <= (FIELDHURRYTIMEOUT-FIELDHURRYWARN)) {
             int rndmax;
 
             if (map.map_selection == MAPS_randgen)
@@ -389,8 +385,8 @@ field_loop ()
 
             fieldhurrypos.x = fieldhurrypos.y = 0;
 
-			if (GT_MP_PTPM)
-				net_send_servermode ();
+            if (GT_MP_PTPM)
+                net_send_servermode ();
         }
 
         /* check if we need to small down the map */
@@ -400,7 +396,7 @@ field_loop ()
             field_hurrydropitems ();
     }
 
-	field_animation ();
+    field_animation ();
 };
 
 
@@ -409,18 +405,18 @@ void
 field_hurrydropitems ()
 {
     int x = 0,
-      y = 0,
-      try = 100;
+        y = 0,
+        try = 100;
 
-	fieldhurry_to -= timediff;
+    fieldhurry_to -= timediff;
 
     if (fieldhurry_to <= 0 || fieldhurry_to > FIELDHURRYDROPTO) {
         fieldhurry_to = FIELDHURRYDROPTO;
 
         while (map.field[x][y].type != FT_nothing && (try--)) {
-            x = s_random (map.size.x - 2) + 1;
-            y = s_random (map.size.y - 2) + 1;
-        }
+                x = s_random (map.size.x - 2) + 1;
+                y = s_random (map.size.y - 2) + 1;
+            }
 
         if (try) {
             map.field[x][y].type = s_random (FT_mixed - FT_tunnel) + FT_tunnel+1;
@@ -437,147 +433,140 @@ field_hurrydropitems ()
 void
 field_hurrysize ()
 {
-	int i;
-	_point old;
+    int i;
+    _point old;
 
-	old.x = old.y = 0;
+    old.x = old.y = 0;
 
-	fieldhurry_to -= timediff;
-	if (fieldhurry_to <= 0 || fieldhurry_to > FIELDHURRYSIZE) {
-        	fieldhurry_to = FIELDHURRYSIZE;
-	
-		if (fieldhurrypos.x == 0) {
-			fieldhurrypos.x = fieldhurrypos.y = 1;
-			fieldhurryd = right;
-		} 
-		else if (fieldhurrypos.x > 0) {
-			old = fieldhurrypos; /* save old value in case that there 
+    fieldhurry_to -= timediff;
+    if (fieldhurry_to <= 0 || fieldhurry_to > FIELDHURRYSIZE) {
+        fieldhurry_to = FIELDHURRYSIZE;
+
+        if (fieldhurrypos.x == 0) {
+            fieldhurrypos.x = fieldhurrypos.y = 1;
+            fieldhurryd = right;
+        } else if (fieldhurrypos.x > 0) {
+            old = fieldhurrypos; /* save old value in case that there
 									is an explosion or a bomb */
-			switch (fieldhurryd) {
-				case (right):
-					if (fieldhurrypos.x + 1 >= map.size.x - fieldhurrypos.y) {
-						fieldhurryd = down;
-						fieldhurrypos.y++;
-					}
-					else 
-						fieldhurrypos.x++;
-					break;
-				case (down):
-					if (fieldhurrypos.y >= map.size.y - (map.size.x - fieldhurrypos.x)) {
-						fieldhurryd = left;
-						fieldhurrypos.x--;
-					}
-					else
-						fieldhurrypos.y++;
-					break;
-				case (left):
-					if (fieldhurrypos.x <= (map.size.y - fieldhurrypos.y)-1) {
-						fieldhurryd = up;
-						fieldhurrypos.y--;
-					}
-					else
-						fieldhurrypos.x--;
-					break;
-				default:
-					if (fieldhurrypos.y-1 <= fieldhurrypos.x) {
-						/* check if this is the end */
-						i = map.size.x - (2 * fieldhurrypos.x);
-						if (i > FIELDHURRYSIZEMIN)
-							i = map.size.y - (2 * fieldhurrypos.y);
-						if (i <= FIELDHURRYSIZEMIN)
-							fieldhurrypos.x = fieldhurrypos.y = -1;
-						else {
-							fieldhurryd = right;
-							fieldhurrypos.x++;
-						}
-					}
-					else
-						fieldhurrypos.y--;
-					break;
-				}
-		}
-		
-		/* check if we have finished sizing down everything */
-		if (fieldhurrypos.x > 0) {
-			_point bombs[MAX_PLAYERS*MAX_BOMBS];
-			int i, d;
+            switch (fieldhurryd) {
+            case (right):
+                if (fieldhurrypos.x + 1 >= map.size.x - fieldhurrypos.y) {
+                    fieldhurryd = down;
+                    fieldhurrypos.y++;
+                } else
+                    fieldhurrypos.x++;
+                break;
+            case (down):
+                if (fieldhurrypos.y >= map.size.y - (map.size.x - fieldhurrypos.x)) {
+                    fieldhurryd = left;
+                    fieldhurrypos.x--;
+                } else
+                    fieldhurrypos.y++;
+                break;
+            case (left):
+                if (fieldhurrypos.x <= (map.size.y - fieldhurrypos.y)-1) {
+                    fieldhurryd = up;
+                    fieldhurrypos.y--;
+                } else
+                    fieldhurrypos.x--;
+                break;
+            default:
+                if (fieldhurrypos.y-1 <= fieldhurrypos.x) {
+                    /* check if this is the end */
+                    i = map.size.x - (2 * fieldhurrypos.x);
+                    if (i > FIELDHURRYSIZEMIN)
+                        i = map.size.y - (2 * fieldhurrypos.y);
+                    if (i <= FIELDHURRYSIZEMIN)
+                        fieldhurrypos.x = fieldhurrypos.y = -1;
+                    else {
+                        fieldhurryd = right;
+                        fieldhurrypos.x++;
+                    }
+                } else
+                    fieldhurrypos.y--;
+                break;
+            }
+        }
 
-			/* check if a bomb is at this position, if so let the bomb explode
-			   and wait untill the explosion is over */
-		    for (i = 0, d = 0; d < 4; d++)
-        		if (map.field[fieldhurrypos.x][fieldhurrypos.y].ex[d].count > 0)
-            		i++;	
+        /* check if we have finished sizing down everything */
+        if (fieldhurrypos.x > 0) {
+            _point bombs[MAX_PLAYERS*MAX_BOMBS];
+            int i, d;
 
-			get_bomb_on (fieldhurrypos.x, fieldhurrypos.y, bombs);
-			if (i)
-				fieldhurrypos = old;
-			else if (bombs[0].y != -1 && bombs[0].x != -1) {
-				fieldhurrypos = old;
-				bomb_explode (&players[bombs[0].x].bombs[bombs[0].y], 1);
-			}
-			else {
-				/* set the block on the position */
-				map.field[fieldhurrypos.x][fieldhurrypos.y].type = FT_block;
-				map.field[fieldhurrypos.x][fieldhurrypos.y].special = FT_nothing;
-				map.field[fieldhurrypos.x][fieldhurrypos.y].frame = 0;
-        		stonelist_add (fieldhurrypos.x, fieldhurrypos.y);
-        		if (GT_MP_PTPM)
-            		net_game_send_field (fieldhurrypos.x, fieldhurrypos.y);
-			}
-		}
-	}
+            /* check if a bomb is at this position, if so let the bomb explode
+               and wait untill the explosion is over */
+            for (i = 0, d = 0; d < 4; d++)
+                if (map.field[fieldhurrypos.x][fieldhurrypos.y].ex[d].count > 0)
+                    i++;
+
+            get_bomb_on (fieldhurrypos.x, fieldhurrypos.y, bombs);
+            if (i)
+                fieldhurrypos = old;
+            else if (bombs[0].y != -1 && bombs[0].x != -1) {
+                fieldhurrypos = old;
+                bomb_explode (&players[bombs[0].x].bombs[bombs[0].y], 1);
+            } else {
+                /* set the block on the position */
+                map.field[fieldhurrypos.x][fieldhurrypos.y].type = FT_block;
+                map.field[fieldhurrypos.x][fieldhurrypos.y].special = FT_nothing;
+                map.field[fieldhurrypos.x][fieldhurrypos.y].frame = 0;
+                stonelist_add (fieldhurrypos.x, fieldhurrypos.y);
+                if (GT_MP_PTPM)
+                    net_game_send_field (fieldhurrypos.x, fieldhurrypos.y);
+            }
+        }
+    }
 };
 
 
-/* draw the fire on one field 
- * if frame == -1 we will draw the framenumber in the field.ex data 
+/* draw the fire on one field
+ * if frame == -1 we will draw the framenumber in the field.ex data
  * Add stone to the animation list, draw the fire and then check if
  * the bomb in the ex field is still showing on a explosion
  */
 void stone_drawfire (int x, int y, int frame)
 {
     SDL_Rect src,
-      dest;
-	int d;
-	_field *stone = &map.field[x][y];
-	
-	/* add to the animation list */
-	field_animation_add (x ,y);
-	
-	/* draw the stone */
-   	dest.w = src.w = gfx.block.x;
-	dest.h = src.h = gfx.block.y;
+             dest;
+    int d;
+    _field *stone = &map.field[x][y];
 
-	dest.x = gfx.offset.x + x * gfx.block.x;
-	dest.y = gfx.offset.y + y * gfx.block.y;
+    /* add to the animation list */
+    field_animation_add (x ,y);
 
-	for (d = 0; d < 4; d++) 
-		if (stone->ex[d].count > 0)	{
-			if (frame == -1)            // no giving frame
-    	    	frame = map.field[x][y].ex[d].frame;
+    /* draw the stone */
+    dest.w = src.w = gfx.block.x;
+    dest.h = src.h = gfx.block.y;
 
-	    	src.y = frame * src.w;
-   		 	src.x = d * src.w;
+    dest.x = gfx.offset.x + x * gfx.block.x;
+    dest.y = gfx.offset.y + y * gfx.block.y;
 
-    		gfx_blit (gfx.fire.image, &src, gfx.screen, &dest, (y * 100));
-		}
-	
-	/* check if the last explosion is still right */
-	for (d = 0; d < 4; d++)
-		if (stone->ex[d].count > 0) {
-			/* check if the bombid is right */
-			if (stone->ex[d].bomb_p >= 0 && stone->ex[d].bomb_p < MAX_PLAYERS
-				&& stone->ex[d].bomb_b >= 0 && stone->ex[d].bomb_b < MAX_BOMBS) {
-				/* check if the bomb explosion finished already */
-				if (players[stone->ex[d].bomb_p].bombs[stone->ex[d].bomb_b].state != BS_exploding) {
-					stone->ex[d].count--;
-					stone->ex[d].bomb_b = -1;
-					stone->ex[d].bomb_p = -1;
-				}
-			}
-			else {
-				/* bombid is not right, set: count-1  */
-				stone->ex[d].count--;
-			}
-		}
+    for (d = 0; d < 4; d++)
+        if (stone->ex[d].count > 0)	{
+            if (frame == -1)            // no giving frame
+                frame = map.field[x][y].ex[d].frame;
+
+            src.y = frame * src.w;
+            src.x = d * src.w;
+
+            gfx_blit (gfx.fire.image, &src, gfx.screen, &dest, (y * 100));
+        }
+
+    /* check if the last explosion is still right */
+    for (d = 0; d < 4; d++)
+        if (stone->ex[d].count > 0) {
+            /* check if the bombid is right */
+            if (stone->ex[d].bomb_p >= 0 && stone->ex[d].bomb_p < MAX_PLAYERS
+                    && stone->ex[d].bomb_b >= 0 && stone->ex[d].bomb_b < MAX_BOMBS) {
+                /* check if the bomb explosion finished already */
+                if (players[stone->ex[d].bomb_p].bombs[stone->ex[d].bomb_b].state != BS_exploding) {
+                    stone->ex[d].count--;
+                    stone->ex[d].bomb_b = -1;
+                    stone->ex[d].bomb_p = -1;
+                }
+            } else {
+                /* bombid is not right, set: count-1  */
+                stone->ex[d].count--;
+            }
+        }
 };

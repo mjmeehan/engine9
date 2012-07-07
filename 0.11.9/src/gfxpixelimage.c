@@ -8,8 +8,8 @@ getRGBpixel (SDL_Surface * surface, int x, int y, int *R, int *G, int *B)
 {
     Uint32 pixel = 0;
     Uint8 r,
-      g,
-      b;
+          g,
+          b;
 
     /* Lock the screen for direct access to the pixels */
     if (SDL_MUSTLOCK (surface))
@@ -69,9 +69,9 @@ getpixel24 (SDL_Surface * surface, int x, int y)
     /* Here p is the address to the pixel we want to retrieve */
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * surface->format->BytesPerPixel;;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-        return p[0] << 16 | p[1] << 8 | p[2];
+    return p[0] << 16 | p[1] << 8 | p[2];
 #else
-        return p[0] | p[1] << 8 | p[2] << 16;
+    return p[0] | p[1] << 8 | p[2] << 16;
 #endif
 };
 
@@ -105,8 +105,7 @@ putpixel (SDL_Surface * surface, int x, int y, Uint32 pixel)
             p[0] = (pixel >> 16) & 0xff;
             p[1] = (pixel >> 8) & 0xff;
             p[2] = pixel & 0xff;
-        }
-        else {
+        } else {
             p[0] = pixel & 0xff;
             p[1] = (pixel >> 8) & 0xff;
             p[2] = (pixel >> 16) & 0xff;
@@ -137,7 +136,7 @@ putpixel24 (SDL_Surface * surface, int x, int y, Uint32 pixel)
     p[0] = (pixel >> 16) & 0xff;
     p[1] = (pixel >> 8) & 0xff;
     p[2] = pixel & 0xff;
-#else 
+#else
     p[0] = pixel & 0xff;
     p[1] = (pixel >> 8) & 0xff;
     p[2] = (pixel >> 16) & 0xff;
@@ -158,8 +157,8 @@ void
 scale (short int *dpattern, short int x, short int y)
 {
     int a,
-      dx,
-      dy;
+        dx,
+        dy;
     if (x >= SCALE_MAXRES || y >= SCALE_MAXRES) {
         for (x = 0; x < SCALE_MAXRES; x++)
             dpattern[x] = 0;
@@ -202,13 +201,13 @@ SDL_Surface *
 scale_image (SDL_Surface *orginal, int newx, int newy)
 {
     Uint32 rmask,
-      gmask,
-      bmask,
-      amask;
+           gmask,
+           bmask,
+           amask;
     SDL_Surface *surface;
     int y,
-      x;
-	int bpp = orginal->format->BytesPerPixel;
+        x;
+    int bpp = orginal->format->BytesPerPixel;
     short int xpattern[SCALE_MAXRES];
     short int ypattern[SCALE_MAXRES];
 
@@ -246,31 +245,31 @@ scale_image (SDL_Surface *orginal, int newx, int newy)
         }
 
     /* do the scaling work */
-	scale (xpattern, orginal->w - 1, newx);
-	scale (ypattern, orginal->h - 1, newy);
-	
-	switch (bpp) {
-		case (2):
-			for (x = newx - 1; x >= 0; x--)
-				for (y = newy - 1; y >= 0; y--)
-					putpixel16 (surface, x, y, getpixel16 (orginal, xpattern[x], ypattern[y]));
-			break;
-		case (3):
-			for (x = newx - 1; x >= 0; x--)
-				for (y = newy - 1; y >= 0; y--)
-					putpixel24 (surface, x, y, getpixel24 (orginal, xpattern[x], ypattern[y]));
-			break;
-		case (4):
-			for (x = newx - 1; x >= 0; x--)
-				for (y = newy - 1; y >= 0; y--)
-					putpixel32 (surface, x, y, getpixel32 (orginal, xpattern[x], ypattern[y]));
-			break;
-		default:
-			printf ("scale_image, wrong bpp value (%d).\n", bpp);
-			exit (1);
-			break;
-	}
-			
+    scale (xpattern, orginal->w - 1, newx);
+    scale (ypattern, orginal->h - 1, newy);
+
+    switch (bpp) {
+    case (2):
+        for (x = newx - 1; x >= 0; x--)
+            for (y = newy - 1; y >= 0; y--)
+                putpixel16 (surface, x, y, getpixel16 (orginal, xpattern[x], ypattern[y]));
+        break;
+    case (3):
+        for (x = newx - 1; x >= 0; x--)
+            for (y = newy - 1; y >= 0; y--)
+                putpixel24 (surface, x, y, getpixel24 (orginal, xpattern[x], ypattern[y]));
+        break;
+    case (4):
+        for (x = newx - 1; x >= 0; x--)
+            for (y = newy - 1; y >= 0; y--)
+                putpixel32 (surface, x, y, getpixel32 (orginal, xpattern[x], ypattern[y]));
+        break;
+    default:
+        printf ("scale_image, wrong bpp value (%d).\n", bpp);
+        exit (1);
+        break;
+    }
+
     if (SDL_MUSTLOCK (orginal)) {
         SDL_UnlockSurface (orginal);
     }
@@ -286,19 +285,19 @@ SDL_Surface *
 makegray_image (SDL_Surface * org)
 {
     Uint32 rmask,
-      gmask,
-      bmask,
-      amask;
+           gmask,
+           bmask,
+           amask;
     Uint32 pixel,
-      transpixel = 0;
+           transpixel = 0;
     SDL_Surface *dest;
-	int bpp = org->format->BytesPerPixel,
-	  y,
-      x;
+    int bpp = org->format->BytesPerPixel,
+        y,
+        x;
     Uint8 r,
-      g,
-      b,
-      gray;
+          g,
+          b,
+          gray;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
@@ -312,7 +311,7 @@ makegray_image (SDL_Surface * org)
     amask = 0xff000000;
 #endif /*  */
 
-	dest = SDL_CreateRGBSurface (SDL_SWSURFACE, org->w, org->h, org->format->BitsPerPixel,
+    dest = SDL_CreateRGBSurface (SDL_SWSURFACE, org->w, org->h, org->format->BitsPerPixel,
                                  org->format->Rmask, org->format->Gmask,
                                  org->format->Bmask, org->format->Amask);
     if (dest == NULL) {
@@ -335,54 +334,54 @@ makegray_image (SDL_Surface * org)
             return NULL;
         }
 
-	switch (bpp) {
-		case (2):
-			for (x = 0; x < org->w; x++)
-				for (y = 0; y < org->h; y++) {
-					pixel = getpixel16 (org, x, y);
-					if (x == 0 && y == 0)
-						transpixel = pixel;
-					if (pixel != transpixel) {
-						SDL_GetRGB (pixel, org->format, &r, &g, &b);
-						gray = (r / 3 + g / 3 + b / 3);
-						pixel = SDL_MapRGB (dest->format, gray, gray, gray);
-					}
-					putpixel16 (dest, x, y, pixel);
-				}
-			break;
-		case (3):
-			for (x = 0; x < org->w; x++)
-				for (y = 0; y < org->h; y++) {
-					pixel = getpixel24 (org, x, y);
-					if (x == 0 && y == 0)
-						transpixel = pixel;
-					if (pixel != transpixel) {
-						SDL_GetRGB (pixel, org->format, &r, &g, &b);
-						gray = (r / 3 + g / 3 + b / 3);
-						pixel = SDL_MapRGB (dest->format, gray, gray, gray);
-					}
-					putpixel24 (dest, x, y, pixel);
-				}
-			break;
-		case (4):
-			for (x = 0; x < org->w; x++)
-				for (y = 0; y < org->h; y++) {
-					pixel = getpixel32 (org, x, y);
-					if (x == 0 && y == 0)
-						transpixel = pixel;
-					if (pixel != transpixel) {
-						SDL_GetRGB (pixel, org->format, &r, &g, &b);
-						gray = (r / 3 + g / 3 + b / 3);
-						pixel = SDL_MapRGB (dest->format, gray, gray, gray);
-					}
-					putpixel32 (dest, x, y, pixel);
-				}
-			break;
-		default:
-			printf ("gray_image, wrong bpp value (%d).\n", bpp);
-			exit (1);
-			break;
-	}
+    switch (bpp) {
+    case (2):
+        for (x = 0; x < org->w; x++)
+            for (y = 0; y < org->h; y++) {
+                pixel = getpixel16 (org, x, y);
+                if (x == 0 && y == 0)
+                    transpixel = pixel;
+                if (pixel != transpixel) {
+                    SDL_GetRGB (pixel, org->format, &r, &g, &b);
+                    gray = (r / 3 + g / 3 + b / 3);
+                    pixel = SDL_MapRGB (dest->format, gray, gray, gray);
+                }
+                putpixel16 (dest, x, y, pixel);
+            }
+        break;
+    case (3):
+        for (x = 0; x < org->w; x++)
+            for (y = 0; y < org->h; y++) {
+                pixel = getpixel24 (org, x, y);
+                if (x == 0 && y == 0)
+                    transpixel = pixel;
+                if (pixel != transpixel) {
+                    SDL_GetRGB (pixel, org->format, &r, &g, &b);
+                    gray = (r / 3 + g / 3 + b / 3);
+                    pixel = SDL_MapRGB (dest->format, gray, gray, gray);
+                }
+                putpixel24 (dest, x, y, pixel);
+            }
+        break;
+    case (4):
+        for (x = 0; x < org->w; x++)
+            for (y = 0; y < org->h; y++) {
+                pixel = getpixel32 (org, x, y);
+                if (x == 0 && y == 0)
+                    transpixel = pixel;
+                if (pixel != transpixel) {
+                    SDL_GetRGB (pixel, org->format, &r, &g, &b);
+                    gray = (r / 3 + g / 3 + b / 3);
+                    pixel = SDL_MapRGB (dest->format, gray, gray, gray);
+                }
+                putpixel32 (dest, x, y, pixel);
+            }
+        break;
+    default:
+        printf ("gray_image, wrong bpp value (%d).\n", bpp);
+        exit (1);
+        break;
+    }
 
     if (SDL_MUSTLOCK (org)) {
         SDL_UnlockSurface (org);
@@ -400,7 +399,7 @@ gfx_quater_image (SDL_Surface * org1, SDL_Surface * org2, SDL_Surface * org3, SD
     Uint32 pixel;
     SDL_Surface *dest;
     int y,
-      x;
+        x;
 
     dest = SDL_CreateRGBSurface (SDL_HWSURFACE, org1->w, org1->h, org1->format->BitsPerPixel,
                                  org1->format->Rmask, org1->format->Gmask,
@@ -485,29 +484,29 @@ gfx_quater_image (SDL_Surface * org1, SDL_Surface * org2, SDL_Surface * org3, SD
 
 
 /*
- * part of a surface from one to another with the same format 
+ * part of a surface from one to another with the same format
  * if rect = NULL, copy the whole image
  */
-SDL_Surface *gfx_copyfrom (SDL_Surface *img, SDL_Rect *rect) {
+SDL_Surface *gfx_copyfrom (SDL_Surface *img, SDL_Rect *rect)
+{
     SDL_Surface *res;
-	SDL_Rect src, dest;
+    SDL_Rect src, dest;
 
-	if (img == NULL) return NULL;
-	
-	if (rect == NULL) {
-		src.x = 0;
-		src.y = 0;
-		src.h = img->h;
-		src.w = img->w;
-	}
-	else
-		src = *rect;
-	
+    if (img == NULL) return NULL;
+
+    if (rect == NULL) {
+        src.x = 0;
+        src.y = 0;
+        src.h = img->h;
+        src.w = img->w;
+    } else
+        src = *rect;
+
     res =
         SDL_CreateRGBSurface (SDL_HWSURFACE, src.w, src.h, img->format->BitsPerPixel,
                               img->format->Rmask, img->format->Gmask,
                               img->format->Bmask, img->format->Amask);
-	
+
     dest.x = 0;
     dest.y = 0;
     dest.w = src.w;
@@ -520,8 +519,8 @@ SDL_Surface *gfx_copyfrom (SDL_Surface *img, SDL_Rect *rect) {
 /* restore screen from copy */
 void gfx_restorescreen (SDL_Surface *img, SDL_Rect *wnd)
 {
-	SDL_Rect dest;
-	
+    SDL_Rect dest;
+
     dest.x = 0;
     dest.y = 0;
     dest.w = wnd->w;

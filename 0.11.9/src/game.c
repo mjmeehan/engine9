@@ -1,4 +1,4 @@
-/* $Id: game.c,v 1.120 2009-05-11 20:51:25 stpohle Exp $ 
+/* $Id: game.c,v 1.120 2009-05-11 20:51:25 stpohle Exp $
   game.c - procedures for the game. */
 
 #include <string.h>
@@ -15,10 +15,10 @@
 #include "single.h"
 
 extern int blitdb_nr,
-  blitrects_nr;
+       blitrects_nr;
 
 Uint32 game_timediff,
-  game_timediff1;
+       game_timediff1;
 static float hurrywarn_to;
 static int hurrywarn_state;
 static _menu *menu;
@@ -27,13 +27,13 @@ void
 game_draw_info ()
 {
     int i,
-      x,
-      j,
-      col;
+        x,
+        j,
+        col;
     char text[255];
     char scrtext[255];
     SDL_Rect src,
-      dest;
+             dest;
 
     if (GT_MP && (chat.oldscreen == NULL || chat.window.x != 4 || chat.window.y != 4.5 * 16)) {
         chat_show (4, 4.5 * 16, gfx.res.x - 8, gfx.offset.y - 4.5 * 16);
@@ -47,7 +47,7 @@ game_draw_info ()
         dest.w = gfx.res.x;
         gfx_blitupdaterectadd (&dest);
 
-        /* In Multiplayer mode draw Player names and 
+        /* In Multiplayer mode draw Player names and
            count the players who are still alife. */
         for (x = 0, j = 0, i = 0; i < MAX_PLAYERS; i++)
             if ((players[i].state & PSFM_used) != 0) {
@@ -70,8 +70,7 @@ game_draw_info ()
                         col = 4;
                     else
                         col = 3;
-                }
-                else {          // player is alife
+                } else {        // player is alife
                     if (bman.gametype == GT_team)
                         col = teams[players[i].team_nr].col;
                     else
@@ -125,8 +124,7 @@ game_draw_info ()
                                "HURRY HURRY", 1, 0, 2);
                 font_draw ((gfx.res.x - strlen ("HURRY HURRY") * font[1].size.x) / 2, 40,
                            "HURRY HURRY", 1, 1);
-            }
-            else {
+            } else {
                 font_drawbold ((gfx.res.x - strlen ("HURRY HURRY") * font[1].size.x) / 2, 40,
                                "HURRY HURRY", 1, 1, 2);
                 font_draw ((gfx.res.x - strlen ("HURRY HURRY") * font[1].size.x) / 2, 40,
@@ -163,18 +161,17 @@ game_keys_loop ()
         int i;
         for (i = 0; i < BCPK_max * 2; i++)
             keyb_gamekeys.state[i] = 0;
-    }
-    else {
+    } else {
 
         /* don't go into the game_keys if there is no menu displayed */
 
         if (GT_MP_PTPM && bman.state == GS_ready && keyb_gamekeys.state[BCK_pause]
-            && !keyb_gamekeys.old[BCK_pause]) {
+                && !keyb_gamekeys.old[BCK_pause]) {
             /* Server is starting the game
              * check in multiplayer if all players are ready for the game
              */
             int i,
-              ready = 1;
+                ready = 1;
 
             for (i = 0; i < MAX_PLAYERS; i++)
                 if (NET_CANSEND (i) && !players[i].ready)
@@ -196,18 +193,17 @@ game_keys_loop ()
             bman.updatestatusbar = 1; // force an update
         }
 
-		
+
         if (keyb_gamekeys.state[BCK_esc] && !keyb_gamekeys.old[BCK_esc]) {
             if (chat.active && (bman.state == GS_ready || bman.state == GS_running) && IS_LPLAYER2) {
                 chat.active = 0;
                 d_printf ("Chatmode Disabled\n");
-            }
-            else
+            } else
                 game_menu_create ();
         }
 
         if ((GT_MP_PTPM || GT_MP_PTPS) && keyb_gamekeys.state[BCK_chat]
-            && !keyb_gamekeys.old[BCK_chat]) {
+                && !keyb_gamekeys.old[BCK_chat]) {
             chat_setactive (1, 0);
             chat.changed = 1;
             d_printf ("Chatmode Enabled\n");
@@ -226,11 +222,10 @@ game_loop ()
 
     if (GT_MP)
         net_game_fillsockaddr ();
-	if ( SDL_InitSubSystem ( SDL_INIT_JOYSTICK ) < 0 )
-        {
-                fprintf ( stderr, "Unable to initialize Joystick: %s\n", SDL_GetError() );
-        }
-	 printf ( "%i joysticks found\n", SDL_NumJoysticks () );
+    if ( SDL_InitSubSystem ( SDL_INIT_JOYSTICK ) < 0 ) {
+        fprintf ( stderr, "Unable to initialize Joystick: %s\n", SDL_GetError() );
+    }
+    printf ( "%i joysticks found\n", SDL_NumJoysticks () );
 
     menu = NULL;
     bman.updatestatusbar = 1;   // force an update
@@ -255,7 +250,7 @@ game_loop ()
     }
 
     while (!done && (bman.state == GS_running || bman.state == GS_ready)) {
-	SDL_JoystickUpdate ();
+        SDL_JoystickUpdate ();
         if ((eventstate = SDL_PollEvent (&event)) != 0)
             switch (event.type) {
             case (SDL_QUIT):
@@ -264,7 +259,7 @@ game_loop ()
             }
 
         /*
-         * input handling 
+         * input handling
          */
         keyb_loop (&event);
 
@@ -330,9 +325,9 @@ game_loop ()
 
     if (menu != NULL) {
         menu_delete (menu);
-		menu = NULL;
-	}
-	
+        menu = NULL;
+    }
+
     gfx_blitdraw ();
 
     chat_show (-1, -1, -1, -1);
@@ -392,9 +387,8 @@ game_check_endgame ()
 
         if (h_team < 1 || ateam < 2)
             res = 1;
-    }
-    else if ((bman.gametype == GT_bomberman)
-             || (map.state != MS_normal && bman.gametype == GT_deathmatch)) {
+    } else if ((bman.gametype == GT_bomberman)
+               || (map.state != MS_normal && bman.gametype == GT_deathmatch)) {
         int p_nr;               // playernumber
         int h_alife = 0;        // human players who are alife
         int alife = 0;          // ai players who are alife
@@ -429,10 +423,10 @@ game_end ()
     snd_music_stop ();
     snd_free ();
 
-    /* count the wins for the player, and if only one player 
+    /* count the wins for the player, and if only one player
      * left count the points too */
     cnt_left = 0;
-    for (i = 0; i < MAX_PLAYERS; i++){
+    for (i = 0; i < MAX_PLAYERS; i++) {
         // Update player statistics
         players[i].gamestats.killed += players[i].nbrKilled;
         if (PS_IS_used (players[i].state)) {
@@ -440,16 +434,15 @@ game_end ()
                 bman.lastwinner = i;
                 cnt_left++;
                 if ( GT_MP_PTPM )
-                players[i].wins++;
+                    players[i].wins++;
             }
         }
     }
-	
-    if (cnt_left == 1 && GT_MP_PTPM ){
+
+    if (cnt_left == 1 && GT_MP_PTPM ) {
         players[bman.lastwinner].points += 1; // Bonus for victory
         players[bman.lastwinner].points += players[bman.lastwinner].nbrKilled;
-    }
-    else
+    } else
         bman.lastwinner = -1;
 
     /* check which team was alife */
@@ -480,8 +473,7 @@ game_end ()
                     cnt_left++;
             }
             teams[bman.lastwinner].points += cnt_left;
-        }
-        else
+        } else
             bman.lastwinner = -1;
     }
 
@@ -500,7 +492,7 @@ void
 game_start ()
 {
     int p,
-      i;
+        i;
 
     menu_displaytext ("Loading..", "Please Wait");
 
@@ -512,13 +504,11 @@ game_start ()
             if (players[p].gfx_nr == -1) {
                 players[p].gfx = NULL;
                 players[p].state &= (0xff - (PSF_alife + PSF_playing));
-            }
-            else {
+            } else {
                 players[p].state |= PSF_alife + PSF_playing;
                 players[p].gfx = &gfx.players[players[p].gfx_nr];
             }
-        }
-        else
+        } else
             players[p].state = 0;
 
         players[p].bombs_n = bman.start_bombs;
@@ -526,8 +516,8 @@ game_start ()
         players[p].speed = bman.start_speed;
         players[p].collect_shoes = 0;
         players[p].special.type = SP_nothing;
-		players[p].special.use = 0;
-		players[p].special.clear = 0;
+        players[p].special.use = 0;
+        players[p].special.clear = 0;
         players[p].m = 0;
         players[p].old.x = 0;
         players[p].old.y = 0;
@@ -573,7 +563,7 @@ game_start ()
 
     map.state = MS_normal;
     bman.timeout = bman.init_timeout;
-    s_calctimesync ();          // to clean up the timesyc 
+    s_calctimesync ();          // to clean up the timesyc
     s_calctimesync ();          // data run this twice
     if (GT_MP_PTPM)
         net_send_servermode ();
@@ -581,7 +571,7 @@ game_start ()
 
 
 /*
- * Show results of the game 
+ * Show results of the game
  * show the diffrent screens one for players and one for teams
  */
 /* Teamplay */
@@ -592,8 +582,8 @@ void
 game_showresultteam (int pos_x, int pos_y, int pos_w, int pos_h)
 {
     int i,
-      t_nr,
-      p_nr;                     // counter for teams and players
+        t_nr,
+        p_nr;                     // counter for teams and players
     struct {
         _team *team;            // pointer to the team
         _player *pl[MAX_PLAYERS]; // players in the team (sorted)
@@ -603,15 +593,15 @@ game_showresultteam (int pos_x, int pos_y, int pos_w, int pos_h)
         p_maxcount = 0,
         p_sumcount = 0;
     int sx,
-      sy,
-      p_y,
-      p_x,
-      dx,
-      dy,
-      col,
-      x = 0;
+        sy,
+        p_y,
+        p_x,
+        dx,
+        dy,
+        col,
+        x = 0;
     SDL_Rect dest,
-      src;
+             src;
     char text[255];
 
     /* sort all teams */
@@ -643,16 +633,16 @@ game_showresultteam (int pos_x, int pos_y, int pos_w, int pos_h)
         for (p_nr = 0, tdata[t_nr].cnt = 0; p_nr < MAX_PLAYERS; p_nr++) {
             if (t_nr < t_count) {
                 if (tdata[t_nr].team->players[p_nr] != NULL
-                    && PS_IS_used (tdata[t_nr].team->players[p_nr]->state)) {
+                        && PS_IS_used (tdata[t_nr].team->players[p_nr]->state)) {
                     tdata[t_nr].pl[tdata[t_nr].cnt] = tdata[t_nr].team->players[p_nr];
                     i = tdata[t_nr].cnt;
 
                     while (i > 0
-                           && (tdata[t_nr].pl[i - 1]->wins < tdata[t_nr].team->players[p_nr]->wins
-                               || (tdata[t_nr].pl[i - 1]->wins ==
-                                   tdata[t_nr].team->players[p_nr]->wins
-                                   && tdata[t_nr].pl[i - 1]->points <
-                                   tdata[t_nr].team->players[p_nr]->points))) {
+                            && (tdata[t_nr].pl[i - 1]->wins < tdata[t_nr].team->players[p_nr]->wins
+                                || (tdata[t_nr].pl[i - 1]->wins ==
+                                    tdata[t_nr].team->players[p_nr]->wins
+                                    && tdata[t_nr].pl[i - 1]->points <
+                                    tdata[t_nr].team->players[p_nr]->points))) {
                         tdata[t_nr].pl[i] = tdata[t_nr].pl[i - 1];
                         i--;
                         tdata[t_nr].pl[i] = tdata[t_nr].team->players[p_nr];
@@ -715,8 +705,7 @@ game_showresultteam (int pos_x, int pos_y, int pos_w, int pos_h)
                 src.x = 0;
                 src.y = 0;
                 gfx_blit (tdata[t_nr].pl[p_nr]->gfx->small_image, &src, gfx.screen, &dest, 1);
-            }
-            else {
+            } else {
                 dest.x = pos_x + x;
                 dest.y = pos_y + sy;
                 src.w = dest.w = gfx.ghost_small->w;
@@ -749,10 +738,10 @@ game_showresultnormal (int pos_x, int pos_y, int pos_w, int pos_h)
 {
     char text[255];
     int i,
-      p,
-      x,
-      y,
-      pl_cnt = 0,
+        p,
+        x,
+        y,
+        pl_cnt = 0,
         pl_x,
         pl_y,                   // player in a row/col
         dx,
@@ -762,7 +751,7 @@ game_showresultnormal (int pos_x, int pos_y, int pos_w, int pos_h)
         px;                     // start view and position
 
     SDL_Rect dest,
-      src;
+             src;
     _player *pl[MAX_PLAYERS];
 
 
@@ -814,8 +803,7 @@ game_showresultnormal (int pos_x, int pos_y, int pos_w, int pos_h)
                                   pl[p]->name, 0, COLOR_brown, 1, 1);
                 font_gfxdraw (10 + pos_x + x + GFX_MENUPLAYERIMGSIZE_X + 8, pos_y + y - 10,
                               pl[p]->name, 0, COLOR_yellow, 1);
-            }
-            else
+            } else
                 font_gfxdraw (10 + pos_x + x + GFX_MENUPLAYERIMGSIZE_X, pos_y + y - 10, pl[p]->name,
                               0, COLOR_gray, 1);
 
@@ -830,8 +818,7 @@ game_showresultnormal (int pos_x, int pos_y, int pos_w, int pos_h)
                 src.x = 0;
                 src.y = 0;
                 gfx_blit (pl[p]->gfx->menu_image, &src, gfx.screen, &dest, 1);
-            }
-            else {
+            } else {
                 dest.x = pos_x + x;
                 dest.y = pos_y + y - 16;
                 src.w = dest.w = gfx.ghost->w;
@@ -917,7 +904,7 @@ game_showresult ()
         }
 
         if ((keys[SDLK_RETURN] || keys[SDLK_LCTRL] || keys[SDLK_RCTRL]) && (!keypressed)
-            && (event.type = SDL_KEYDOWN)) {
+                && (event.type = SDL_KEYDOWN)) {
             done = 1;
             keypressed = 1;
         }
@@ -983,7 +970,7 @@ game_menu_loop (SDL_Event * event, int eventstate)
     menu_draw (menu);
 
     done = menu_event_loop (menu, event, eventstate);
-    /* 
+    /*
      * check if one of the buttons was pressed
      */
 
@@ -1009,12 +996,13 @@ game_menu_loop (SDL_Event * event, int eventstate)
 };
 
 
-/* reset all old gamedata, this is only needed on join, host or 
+/* reset all old gamedata, this is only needed on join, host or
  * new singleplayer games. */
-void game_resetdata () {
-	int i;
-	
-	for (i = 0; i < MAX_PLAYERS; i++)
-		memset (&players[i], 0, sizeof (_player));
-	bman.p2_nr = bman.p_nr = -1;
+void game_resetdata ()
+{
+    int i;
+
+    for (i = 0; i < MAX_PLAYERS; i++)
+        memset (&players[i], 0, sizeof (_player));
+    bman.p2_nr = bman.p_nr = -1;
 };

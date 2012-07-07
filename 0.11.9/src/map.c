@@ -38,34 +38,33 @@ void
 map_new (char *filename)
 {
     int x,
-      y;
+        y;
     FILE *fmap;
     signed char old_maptype = map.type;
     int pl_cnt, pl;
-    
+
     /* initialize the start_point array in the _map struct */
-    
+
     map_init_start_points();
 
     if (filename) {
         fmap = fopen (filename, "r");
 
-        /* if we can't open the given filename for any reason, reverting 
+        /* if we can't open the given filename for any reason, reverting
            to default value else, load the file map */
         if (fmap)
             map_load (fmap);
-    }
-    else
+    } else
         fmap = NULL;
 
     // Clean and create the field //
     if (fmap == NULL)
-		map_genrandom ();
-	
-	/* Generate a More random map if requested */
+        map_genrandom ();
+
+    /* Generate a More random map if requested */
     if (map.map_selection == MAPS_morerand)
         map_genmorerandom();
-    
+
     if (map.type == -1)
         map.type = s_random (MAPT_max);
 
@@ -92,8 +91,7 @@ map_new (char *filename)
             map.tunnel[2].y = map.size.y - 4;
             map.tunnel[3].x = 3;
             map.tunnel[3].y = 3;
-        }
-        else {
+        } else {
             map.tunnel[0].x = map.size.x - 4;
             map.tunnel[0].y = map.size.y - 4;
             map.tunnel[1].x = 3;
@@ -110,15 +108,15 @@ map_new (char *filename)
     /* count the number of players on this map so we know how many starting points
      * to find
      */
-     
+
     pl_cnt = 0;
     for (pl = 0; pl < MAX_PLAYERS; pl++) {
         if (PS_IS_used (players[pl].state)) {
             pl_cnt++;
         }
     }
-    
-    
+
+
     /* identify possible starting positions for players and store them in the
      * start_point array in the _map struct.  This will always succeed.  If
      * it cannot find starting points within the tolerance, it first attempts
@@ -127,7 +125,7 @@ map_new (char *filename)
      * eventually the tolerence reaches 0, so it can, in the worst case, start
      * all players at the same start point.
      */
-     
+
     map_find_and_add_start_points(pl_cnt - map_num_defined_start_points(), MAP_POSITION_TOLERENCE);
 
     /* Set the Playerinformation */
@@ -152,7 +150,7 @@ map_new (char *filename)
     map_fillitems (FT_sp_liquid, map.sp_push);
     map_fillitems (FT_sp_moved, map.sp_push);
     /* put the push special in the field */
-	map_fillitems(FT_sp_kick,map.sp_kick);
+    map_fillitems(FT_sp_kick,map.sp_kick);
 
     map.type = old_maptype;
 }
@@ -161,8 +159,8 @@ void
 map_genrandom ()
 {
     int x,
-      y,
-      d;
+        y,
+        d;
 
     /* if we can't load the map check first the fieldsize settings */
     if (map.size.x < MIN_FIELDSIZE_X)
@@ -192,19 +190,19 @@ map_genrandom ()
             map.field[x][y].frame = 0.0f;
             map.field[x][y].special = FT_nothing;
         }
-	
-	/* set the corners of the map to be valid start points */
-	
-	// map_ensure_corner_start_points();
+
+    /* set the corners of the map to be valid start points */
+
+    // map_ensure_corner_start_points();
 }
 
 void
 map_genmorerandom ()
 {
     int x,
-      y,
-      d,
-      ra;
+        y,
+        d,
+        ra;
 
     /* This is an enhanced version of genrandom() used by "more random" */
     d_printf("genmorerandom: *** init ***\n");
@@ -224,7 +222,7 @@ map_genmorerandom ()
                 // create random field
                 ra = s_random (256) & 3;
                 d_printf("genmorerandom: ra = %i\n", ra);
-                
+
                 if (ra == 0)
                     map.field[x][y].type = FT_nothing;
                 else if (ra == 1)
@@ -239,11 +237,11 @@ map_genmorerandom ()
             map.field[x][y].frame = 0.0f;
             map.field[x][y].special = FT_nothing;
         }
-	
-	d_printf("genmorerandom: *** exit ***\n");
-	/* set the corners of the map to be valid start points */
-	
-	// map_ensure_corner_start_points();
+
+    d_printf("genmorerandom: *** exit ***\n");
+    /* set the corners of the map to be valid start points */
+
+    // map_ensure_corner_start_points();
 }
 
 
@@ -253,30 +251,30 @@ void
 map_set_playerposition (int usermap)
 {
     int pl;
-	
-	d_printf ("map_set_playerposition\n");
-    
+
+    d_printf ("map_set_playerposition\n");
+
     /* This is the new code that will set every player in a starting point
      * It should never fail, but if it does, it will fall through to the old method
      */
-    
+
     for (pl = 0; pl < MAX_PLAYERS; pl++) {
         if (PS_IS_used(players[pl].state)) {
             map_place_player(pl);
         }
     }
 }
-    
+
 /* load a random map */
 void
 map_random ()
 {
     _direntry *destart,
-     *de,
-     *desel;
+              *de,
+              *desel;
     char path[LEN_PATHFILENAME];
     int max,
-      sel;
+        sel;
 
     sprintf (path, "%s/maps", bman.datapath);
     desel = destart = s_getdir (path);
@@ -303,29 +301,29 @@ map_random ()
 void
 init_map_tileset ()
 {
-	if (GT_MP_PTPM || GT_SP) {
-		switch (map.map_selection) {
-    		case (0):
-        		map_new (map.map);
-        		break;
-    		case (1):
-        		map_random ();
-        		map_new (map.map);
-        		break;
-    		case (2):
-        		map_new (NULL);
-            case (3):
-				map_new (NULL); /* for more random */
-        	break;
-		}
-		if (map.random_tileset)
-    	   	tileset_random ();
-	}
+    if (GT_MP_PTPM || GT_SP) {
+        switch (map.map_selection) {
+        case (0):
+            map_new (map.map);
+            break;
+        case (1):
+            map_random ();
+            map_new (map.map);
+            break;
+        case (2):
+            map_new (NULL);
+        case (3):
+            map_new (NULL); /* for more random */
+            break;
+        }
+        if (map.random_tileset)
+            tileset_random ();
+    }
 }
 
 
-/* read from an open file map, determine field.x and field.y 
-   and fill the field. 
+/* read from an open file map, determine field.x and field.y
+   and fill the field.
    (# correspond to a bloc and @ correspond to a stone,
     an espace is nothing ' '
     % are commentary at the beginning of the map */
@@ -411,35 +409,35 @@ map_ensure_corner_start_points ()
     /* make sure all the corners are empty as well as the 1 field in the Y direction
      * and one in the X direction
      */
-    
+
     /* top left corner is safe start point */
     map.field[1][1].type = FT_nothing;
     map.field[1][2].type = FT_nothing;
     map.field[2][1].type = FT_nothing;
-    
+
     map_add_start_point(1, 1);
 
     /* bottom left corner is safe start point */
     map.field[1][map.size.y - 2].type = FT_nothing;
     map.field[1][map.size.y - 3].type = FT_nothing;
     map.field[2][map.size.y - 2].type = FT_nothing;
-    
+
     map_add_start_point(1, map.size.y - 2);
-    
+
     /* top right corner is safe start point */
     map.field[map.size.x - 2][1].type = FT_nothing;
     map.field[map.size.x - 3][1].type = FT_nothing;
     map.field[map.size.x - 2][2].type = FT_nothing;
-    
+
     map_add_start_point(map.size.x - 2, 1);
-    
+
     /* bottom right corner is safe start point */
     map.field[map.size.x - 2][map.size.y - 2].type = FT_nothing;
     map.field[map.size.x - 2][map.size.y - 3].type = FT_nothing;
     map.field[map.size.x - 3][map.size.y - 2].type = FT_nothing;
-    
+
     map_add_start_point(map.size.x - 2, map.size.y - 2);
-    
+
     return 1;
 }
 
@@ -450,13 +448,13 @@ int
 map_init_start_points()
 {
     int i;
-    
+
     for (i = 0; i < MAX_PLAYERS; i++) {
         map.start_point[i].pos.x = -1;
         map.start_point[i].pos.y = -1;
         map.start_point[i].used = 0;
     }
-    
+
     return 0;
 }
 
@@ -478,18 +476,18 @@ int
 map_add_start_point(int x, int y)
 {
     int i;
-    
+
     /* find the first unset start point */
     for (i = 0; i < MAX_PLAYERS; i++) {
-        
+
         if ((map.start_point[i].pos.x == -1) && (map.start_point[i].pos.y == -1)) {
             map_set_start_point(i, x, y);
             return 0;
         }
     }
-    
+
     /* if all start points are already set, do nothing and return -1 */
-    
+
     return -1;
 }
 
@@ -500,13 +498,13 @@ int
 map_is_start_point(int x, int y)
 {
     int i;
-    
+
     for (i = 0; i < MAX_PLAYERS; i++) {
-        
+
         if ((map.start_point[i].pos.x == x) && (map.start_point[i].pos.y == y))
             return 1;
     }
-    
+
     return 0;
 }
 
@@ -517,18 +515,18 @@ map_num_defined_start_points()
 {
     int pts = 0;
     int i;
-    
+
     for (i = 0; i < MAX_PLAYERS; i++) {
-        
+
         if ((map.start_point[i].pos.x != -1) && (map.start_point[i].pos.y != -1))
             pts++;
     }
-    
+
     return pts;
 }
 
 
-/* checks if the start point (x, y) is far enough away from all the other start points 
+/* checks if the start point (x, y) is far enough away from all the other start points
  * returns 1 if it is far enough, 0 otherwise
  */
 
@@ -538,21 +536,21 @@ map_check_start_point(int x, int y, int tol)
     int i;
     int dx, dy;
     float dist;
-    
+
     for (i = 0; i < MAX_PLAYERS; i++) {
-        
+
         if ((map.start_point[i].pos.x != -1) && (map.start_point[i].pos.y != -1)) {
-            
+
             dx = map.start_point[i].pos.x - x;
             dy = map.start_point[i].pos.y - y;
-            
+
             dist = sqrt(dx * dx + dy * dy);
-            
+
             if (dist < tol)
                 return 0;
         }
     }
-    
+
     return 1;
 }
 
@@ -561,16 +559,16 @@ map_check_start_point(int x, int y, int tol)
  * defined start points and adds (x, y) as a start point if the conditions are met.
  * returns 1 on success, 0 on failure
  */
- 
+
 int
 map_check_and_add_start_point(int x, int y, int tol)
 {
     if ((map_num_defined_start_points() < MAX_PLAYERS) && (map_check_start_point(x, y, tol))) {
-        
+
         map_add_start_point(x, y);
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -584,29 +582,29 @@ map_find_and_add_start_points(int num, int tol)
     int y;
     int i;
     int added = 0;
-    
+
     while ((added < num) && (tol >= 0)) {
         for (x = 0; x < map.size.x; x++) {
-            
+
             for (y = 0; y < map.size.y; y++) {
-                
+
                 if (map_is_possible_start_point(x, y)) {
-                    
+
                     added += map_check_and_add_start_point(x, y, tol);
                 }
             }
         }
-        
+
         for (i = 0; i < num - added; i++) {
-            
+
             added += map_create_and_add_start_point(tol);
         }
-        
+
         tol--;
     }
-    
+
     /* printf("Minimum Tolerance: %d\n", tol + 1); */
-    
+
     return added;
 }
 
@@ -619,87 +617,87 @@ map_find_and_add_start_points(int num, int tol)
 int
 map_is_possible_start_point(int x, int y)
 {
-    
+
     int x_ok_pos;
     int x_ok_neg;
     int y_ok_pos;
     int y_ok_neg;
-    
+
     int x_adj = 0;
     int y_adj = 0;
     int i;
-    
+
     /* if (x, y) is not FT_nothing, this is not a valid start point */
-    
+
     if (map.field[x][y].type != FT_nothing) {
-        
+
         return 0;
     }
-    
+
     x_ok_pos = (x < map.size.x - 2) ? 1:0;
     x_ok_neg = (x > 1) ? 1:0;
-    
+
     y_ok_pos = (y < map.size.y - 2) ? 1:0;
     y_ok_neg = (y > 1) ? 1:0;
-    
+
     /* calculate the number of adjacent FT_nothing fields in the X and Y directions */
-    
+
     for (i = 1; i < bman.start_range + 2; i++) {
-        
+
         if (x_ok_pos) {
-            
+
             if (map.field[x+i][y].type == FT_nothing) {
-                
+
                 x_adj++;
             } else {
-                
+
                 x_ok_pos = 0;
             }
         }
-        
+
         if (x_ok_neg) {
-            
+
             if (map.field[x-i][y].type == FT_nothing) {
-                
+
                 x_adj++;
             } else {
-                
+
                 x_ok_neg = 0;
             }
         }
-        
+
         if (y_ok_pos) {
-            
+
             if (map.field[x][y+i].type == FT_nothing) {
-                
+
                 y_adj++;
             } else {
-                
+
                 y_ok_pos = 0;
             }
         }
-        
+
         if (y_ok_neg) {
-            
+
             if (map.field[x][y-i].type == FT_nothing) {
-                
+
                 y_adj++;
             } else {
                 y_ok_neg = 0;
             }
         }
     }
-    
+
     if ((x_adj >= bman.start_range + 1) || (y_adj >= bman.start_range + 1)) {
-        
+
         return 1;
     }
-    
+
     if ((x_adj >= 1) && (y_adj >= 1)) {
-        
+
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -722,99 +720,99 @@ map_create_and_add_start_point(int tol)
     int end_y;
     int step_x;
     int step_y;
-    
+
     /* this changes how we traverse the map when looking for a place to put
      * a start point.  this is so all the start points don't get stuck in one
      * part of the map if the map is large enough
      */
-    
+
     if (s_random(100) % 2) {
-        
+
         init_x = 0;
         end_x = map.size.x;
         step_x = 1;
     } else {
-        
+
         init_x = map.size.x - 1;
         end_x = -1;
         step_x = -1;
     }
-    
+
     if (s_random(100) % 2) {
-        
+
         init_y = 0;
         end_y = map.size.y;
         step_y = 1;
     } else {
-        
+
         init_y = map.size.y - 1;
         end_y = -1;
         step_y = -1;
     }
-    
-    
+
+
     /* first try only FT_nothing fields as start points */
-    
+
     for (x = init_x; x != end_x; x += step_x) {
-        
+
         for (y = init_y; y != end_y; y+= step_y) {
-            
+
             if ((map.field[x][y].type == FT_nothing) && (map_check_start_point(x, y, tol))) {
-                
+
                 dx = (x >= map.size.x - 2) ? -1:1;
                 dy = (y >= map.size.y - 2) ? -1:1;
-                
+
                 if ((map_is_removable_field(x+dx, y)) && (map_is_removable_field(x, y+dy))) {
-                    
+
                     /* printf("Creating Start Point (%d, %d).\n", x, y); */
-                    
+
                     map.field[x][y].type = FT_nothing;
-                
+
                     map.field[x+dx][y].type = FT_nothing;
                     map.field[x][y+dy].type = FT_nothing;
-    
+
                     map_add_start_point(x, y);
-                
+
                     return 1;
                 }
             }
         }
     }
-    
+
     /* if we get here we didn't find a useful FT_nothing field, so check the FT_stone
      * fields
      */
-     
+
     for (x = init_x; x != end_x; x += step_x) {
-        
+
         for (y = init_y; y != end_y; y+= step_y) {
-            
+
             if ((map.field[x][y].type == FT_stone) && (map_check_start_point(x, y, tol))) {
-                
+
                 dx = (x >= map.size.x - 2) ? -1:1;
                 dy = (y >= map.size.y - 2) ? -1:1;
-                
+
                 if ((map_is_removable_field(x+dx, y)) && (map_is_removable_field(x, y+dy))) {
-                    
+
                     /* printf("Creating Start Point (%d, %d).\n", x, y); */
-                    
+
                     map.field[x][y].type = FT_nothing;
-                
+
                     map.field[x+dx][y].type = FT_nothing;
                     map.field[x][y+dy].type = FT_nothing;
-    
+
                     map_add_start_point(x, y);
-                
+
                     return 1;
                 }
             }
         }
     }
-    
+
     /* if we get to this point, we tried every field that we want to turn into a
      * start point, so we return 0 indicating failure
      */
-    
+
     return 0;
 }
 
@@ -823,15 +821,15 @@ map_create_and_add_start_point(int tol)
  * drastically altering the map (that is to say, not a FT_tunnel or FT_block) returns
  * 1, returns 0 if this is not a field that we want to alter
  */
- 
+
 int
 map_is_removable_field(int x, int y)
 {
     if ((map.field[x][y].type == FT_nothing) || (map.field[x][y].type == FT_stone)) {
-        
+
         return 1;
     } else {
-        
+
         return 0;
     }
 }
@@ -841,7 +839,7 @@ map_is_removable_field(int x, int y)
  * randomly selects the start point so the same players don't always start near each
  * other
  */
- 
+
 int
 map_place_player(int pl)
 {
@@ -849,25 +847,25 @@ map_place_player(int pl)
     int start_points;
     int idx;
     int i;
-    
+
     start_points = map_num_defined_start_points();
     index = (s_random(MAX_PLAYERS) + 1) % start_points;
-    
+
     for (i = 0; i < start_points; i++) {
-        
+
         idx = (index + i) % start_points;
-        
+
         if ((!map.start_point[idx].used) && (map.start_point[idx].pos.x != -1)
-            && (map.start_point[idx].pos.y != -1)) {
-    
+                && (map.start_point[idx].pos.y != -1)) {
+
             players[pl].pos.x = map.start_point[idx].pos.x;
             players[pl].pos.y = map.start_point[idx].pos.y;
             map.start_point[idx].used = 1;
-            
+
             return 1;
         }
     }
-    
+
     return 0;
 }
 
@@ -886,15 +884,15 @@ map_respawn_player(int pl)
 {
     int x;
     int y;
-    
+
     do {
-        
+
         x = s_random (map.size.x - 2) + 1;
         y = s_random (map.size.y - 2) + 1;
     } while (!map_is_possible_start_point(x, y));
-    
+
     players[pl].pos.x = x;
     players[pl].pos.y = y;
-    
+
     return 1;
 }

@@ -1,5 +1,5 @@
 /* $Id: network.h,v 1.24 2006-08-13 21:26:50 stpohle Exp $
- * network.h file... for everything what have to do with the network stuff 
+ * network.h file... for everything what have to do with the network stuff
  */
 
 #include <SDL.h>
@@ -31,16 +31,16 @@
 
 /* Little / Big Endian Convert */
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	#define NTOH16(__i) s_swap16(__i)
-	#define HTON16(__i) s_swap16(__i)
-	#define NTOH32(__i) s_swap32(__i)
-	#define HTON32(__i) s_swap32(__i)
+#define NTOH16(__i) s_swap16(__i)
+#define HTON16(__i) s_swap16(__i)
+#define NTOH32(__i) s_swap32(__i)
+#define HTON32(__i) s_swap32(__i)
 #else
-    /* intel system */
-	#define NTOH16(__i) (__i)
-	#define HTON16(__i) (__i)
-	#define NTOH32(__i) (__i)
-	#define HTON32(__i) (__i)
+/* intel system */
+#define NTOH16(__i) (__i)
+#define HTON16(__i) (__i)
+#define NTOH32(__i) (__i)
+#define HTON32(__i) (__i)
 #endif
 
 /* converting of float to int and other direction */
@@ -52,39 +52,40 @@
 #include "udp.h"
 
 enum _networkflags {
-	NETF_firewall = 1,	// User Behind Firewall
-	NETF_local2			// Lokaler 2 Player
+    NETF_firewall = 1,	// User Behind Firewall
+    NETF_local2			// Lokaler 2 Player
 };
 
 
 struct {  // this holds the network data
-	char host[LEN_SERVERNAME];
-	char port[LEN_PORT];
-	struct _sockaddr sAddr;
-	signed char pl_nr; // pl_nr so we know it in the pkgcache.
+    char host[LEN_SERVERNAME];
+    char port[LEN_PORT];
+    struct _sockaddr sAddr;
+    signed char pl_nr; // pl_nr so we know it in the pkgcache.
 } typedef _net_addr;
 
 
-struct { /* this will hold all needed data for the packet
-			timeout function */
+struct {
+    /* this will hold all needed data for the packet
+    			timeout function */
     signed char send_to;  // sending packet data (playermove) on 0 it will be send
     signed char send_set; // start value for the packet data option (dynamic set)
-	int to_2sec;		// how many unreached packets was send
-	Uint32 to_timestamp;
+    int to_2sec;		// how many unreached packets was send
+    Uint32 to_timestamp;
 } typedef _net_pkgopt;
 
 
 struct {
-	_net_addr addr;			// holds the address
-	int pingreq;			// just to send a ping and to save the number in here
-	int pingack;			// just to wait for an ping reply.. it will show up here
-	Uint32 timestamp;		// time of the last incoming package
-	signed char net_istep;	// -1 gfx all is loaded
-	signed char net_status;
-	unsigned char flags;	// keep some flags.. like NETF_firewall
-	int firstplayer;		// number of the first player (only needed if NETF_local2 is set
-	_net_pkgopt pkgopt;		// packet and network controll data
-} typedef _net_player;	
+    _net_addr addr;			// holds the address
+    int pingreq;			// just to send a ping and to save the number in here
+    int pingack;			// just to wait for an ping reply.. it will show up here
+    Uint32 timestamp;		// time of the last incoming package
+    signed char net_istep;	// -1 gfx all is loaded
+    signed char net_status;
+    unsigned char flags;	// keep some flags.. like NETF_firewall
+    int firstplayer;		// number of the first player (only needed if NETF_local2 is set
+    _net_pkgopt pkgopt;		// packet and network controll data
+} typedef _net_player;
 
 
 // network menu

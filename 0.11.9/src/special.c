@@ -6,17 +6,18 @@
 #include "player.h"
 #include "bomb.h"
 
-void special_trigger (int p_nr) {
+void special_trigger (int p_nr)
+{
     int i,
-      z = 0,
-      ex_nr = bman.last_ex_nr;
+        z = 0,
+        ex_nr = bman.last_ex_nr;
 
     _player *p = &players[p_nr];
 
     // all triggered bombs will explode
     for (i = 0; i < MAX_BOMBS; i++)
         if (p->bombs[i].state == BS_trigger) {
-            p->bombs[i].ex_nr = ex_nr + 5; // we take the next 5 number to be shure 
+            p->bombs[i].ex_nr = ex_nr + 5; // we take the next 5 number to be shure
             bomb_explode (&p->bombs[i], 0); // no other explosion interfear with it.
             z++;                // count the bombs which will explode
         }
@@ -33,7 +34,8 @@ void special_trigger (int p_nr) {
 }
 
 
-void special_row (int p_nr) {
+void special_row (int p_nr)
+{
     _bomb *b = NULL;
     _player *p = &players[p_nr];
     int x = (int) p->pos.x,
@@ -45,7 +47,7 @@ void special_row (int p_nr) {
 
     dx = dir_change[p->d].x;
     dy = dir_change[p->d].y;
-	
+
     x += dx;
     y += dy;
     while (map.bfield[x][y]) {
@@ -76,7 +78,8 @@ void special_row (int p_nr) {
 }
 
 
-void special_liquidmoved (int p_nr) {
+void special_liquidmoved (int p_nr)
+{
     _bomb *b = NULL;
     _player *p = &players[p_nr];
     _point bombs[MAX_PLAYERS * MAX_BOMBS];
@@ -94,9 +97,9 @@ void special_liquidmoved (int p_nr) {
 
     dx = dir_change[p->d].x;
     dy = dir_change[p->d].y;
-	x += dx;
-	y += dy;
-	
+    x += dx;
+    y += dy;
+
     // check that player is beside a bomb
     if (!map.bfield[x][y])
         return;
@@ -106,7 +109,7 @@ void special_liquidmoved (int p_nr) {
 
     // check the field behind the bomb
     if (map.bfield[x1][y1]
-        || (map.field[x1][y1].type != FT_nothing && map.field[x1][y1].type != FT_tunnel))
+            || (map.field[x1][y1].type != FT_nothing && map.field[x1][y1].type != FT_tunnel))
         return;
 
     get_bomb_on ((float) x, (float) y, bombs);
@@ -152,7 +155,7 @@ special_push (int p_nr)
 
     dx = dir_change[p->d].x;
     dy = dir_change[p->d].y;
-	
+
     x += dx;
     y += dy;
 
@@ -165,7 +168,7 @@ special_push (int p_nr)
 
     // check the field behind the bomb
     if (map.bfield[x1][y1]
-        || (map.field[x1][y1].type != FT_nothing && map.field[x1][y1].type != FT_tunnel))
+            || (map.field[x1][y1].type != FT_nothing && map.field[x1][y1].type != FT_tunnel))
         return;
 
     get_bomb_on (x, y, bombs);
@@ -187,11 +190,12 @@ special_push (int p_nr)
     }
 }
 
-/* 
+/*
  * kick the bomb over the field
  */
 #define KICK_MAXTRY 20
-void special_kick (int p_nr) {
+void special_kick (int p_nr)
+{
     _bomb *b = NULL;
     _player *p = &players[p_nr];
     _point bombs[MAX_PLAYERS * MAX_BOMBS];
@@ -201,7 +205,7 @@ void special_kick (int p_nr) {
         dx = 0,
         dy = 0,
         x1,y1,					// new position
-		i,
+        i,
         trycnt = KICK_MAXTRY,	// maximum number of trys to kick the bomb.
         r;
 
@@ -210,7 +214,7 @@ void special_kick (int p_nr) {
 
     dx = dir_change[p->d].x;
     dy = dir_change[p->d].y;
-	
+
     x += dx;
     y += dy;
 
@@ -227,8 +231,7 @@ void special_kick (int p_nr) {
         if (dx != 0) {
             x1 = x + dx * r;
             y1 = y + s_random (r * 2 + 1) - r;
-        }
-        else {
+        } else {
             y1 = y + dy * r;
             x1 = x + s_random (r * 2 + 1) - r;
         }
@@ -236,13 +239,13 @@ void special_kick (int p_nr) {
         if ((x1 >= 0) && (x1 < map.size.x) && (y1 >= 0) && (y1 < map.size.y)) {
             // check if that field is emty
             if (!map.bfield[x1][y1]
-                && (map.field[x1][y1].type == FT_nothing || map.field[x1][y1].type == FT_tunnel)) {
+                    && (map.field[x1][y1].type == FT_nothing || map.field[x1][y1].type == FT_tunnel)) {
                 // move bomb to new destination
-			    get_bomb_on (x, y, bombs);
-				for (i = 0; bombs[i].x != -1; i++) {
+                get_bomb_on (x, y, bombs);
+                for (i = 0; bombs[i].x != -1; i++) {
                     b = &players[bombs[i].x].bombs[bombs[i].y];
-                    if (b->state != BS_exploding) {              
-						b->dest.x = x1;
+                    if (b->state != BS_exploding) {
+                        b->dest.x = x1;
                         b->dest.y = y1;
                         b->fdata = 0.0f;
                         b->mode = BM_kicked;
@@ -250,9 +253,9 @@ void special_kick (int p_nr) {
                         b->source.y = y;
                         map.bfield[x][y] = 0;
                         stonelist_add (x, y);
-						
+
                         if (GT_MP) net_game_send_bomb (bombs[i].x, bombs[i].y);
-					}
+                    }
                 }
                 trycnt = 0;
             }
@@ -267,8 +270,8 @@ special_pickup (int p_nr, int s_nr)
 {
     _special *s = &players[p_nr].special;
 
-	if (s->type != s_nr)
-		special_clear (p_nr);
+    if (s->type != s_nr)
+        special_clear (p_nr);
     s->to = 0;
     s->numuse = 0;
     s->type = s_nr;
@@ -294,11 +297,12 @@ special_pickup (int p_nr, int s_nr)
 }
 
 
-void special_clear (int p_nr) {
+void special_clear (int p_nr)
+{
     if (players[p_nr].special.type == SP_trigger) {
         _bomb *bomb;
         int i;
-        /* put all bombs to normal and if the timeout is higher as usual 
+        /* put all bombs to normal and if the timeout is higher as usual
            set it to normal */
         for (i = 0; i < MAX_BOMBS; i++) {
             bomb = &players[p_nr].bombs[i];
@@ -312,12 +316,13 @@ void special_clear (int p_nr) {
 
     players[p_nr].special.type = 0;
     bman.updatestatusbar = 1;
-	if (bman.p_nr == p_nr || bman.p2_nr == p_nr)
-		net_game_send_special (p_nr, -1, SP_clear);
+    if (bman.p_nr == p_nr || bman.p2_nr == p_nr)
+        net_game_send_special (p_nr, -1, SP_clear);
 }
 
 
-void special_loop () {
+void special_loop ()
+{
     _special *s;
     int p_nr;
 
@@ -347,22 +352,23 @@ void special_loop () {
                     special_kick (p_nr);
                 break;
             }
-        	s->use = 0;
-    	}
+            s->use = 0;
+        }
 
- 	   if (s->type && (s->to > 0.0f)) {
-    	    s->to -= timediff;
-        	if (s->to <= 0.0f) 		s->clear = 1;
-    	}
-		
-		if (s->clear) {
-			s->clear = 0;
-           	special_clear (p_nr);
- 		}			
-	}
+        if (s->type && (s->to > 0.0f)) {
+            s->to -= timediff;
+            if (s->to <= 0.0f) 		s->clear = 1;
+        }
+
+        if (s->clear) {
+            s->clear = 0;
+            special_clear (p_nr);
+        }
+    }
 }
 
 
-void special_use (int p_nr) {
+void special_use (int p_nr)
+{
     players[p_nr].special.use = 1;
 }

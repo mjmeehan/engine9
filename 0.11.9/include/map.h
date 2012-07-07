@@ -18,20 +18,20 @@
  * other.  If the given tolerence cannot be satisfied on the map, it will be decremented
  * by 1 until it can be satisfied.  this is just our initial value
  */
- 
+
 #define MAP_POSITION_TOLERENCE 10
 
 struct __ex_field {
-	unsigned char count;
-	float frame;
-	int bomb_b;			// BombID from the last know
-	int bomb_p;			// explosion on this field
+    unsigned char count;
+    float frame;
+    int bomb_b;			// BombID from the last know
+    int bomb_p;			// explosion on this field
 } typedef _ex_field;
 
 
 struct __field {
     unsigned char type;
-	signed char mixframe;		// data for the mixed frame
+    signed char mixframe;		// data for the mixed frame
     float frame;                // frame (frame > 0 && FS_stone)
     unsigned char special;      // to save special stones, or the tunnel number
     _ex_field ex[4];          	// count up every explosion there is on this field for ever direction
@@ -42,34 +42,34 @@ struct __field {
 /* holds the locatition of a start point and the use count */
 
 struct __start_point {
-	_point pos;
-	int used;
+    _point pos;
+    int used;
 } typedef _start_point;
 
 
 struct __map {
-	_point size;			// dimension of the field
+    _point size;			// dimension of the field
 
     _field field[MAX_FIELDSIZE_X][MAX_FIELDSIZE_Y];
-	_point tunnel[GAME_MAX_TUNNELS];  // save the destination of the tunnel
-	unsigned char bfield[MAX_FIELDSIZE_X][MAX_FIELDSIZE_Y]; // will hold informations if ther is a bomb
+    _point tunnel[GAME_MAX_TUNNELS];  // save the destination of the tunnel
+    unsigned char bfield[MAX_FIELDSIZE_X][MAX_FIELDSIZE_Y]; // will hold informations if ther is a bomb
 
-	char tileset [LEN_TILESETNAME];
-	signed char random_tileset;
-	char map [LEN_PATHFILENAME];
-	signed char map_selection;
-	signed char type;		// type of the map (MAPT_*);
-	int bombs;
-	int fire;
-	int shoes;
-	int mixed;
-	int death;
-	int sp_trigger;
-	int sp_push;
-	int sp_row;
-	int sp_kick;
-	unsigned char state; // state of the map
-	_start_point start_point[MAX_PLAYERS];  // array of starting points for this map
+    char tileset [LEN_TILESETNAME];
+    signed char random_tileset;
+    char map [LEN_PATHFILENAME];
+    signed char map_selection;
+    signed char type;		// type of the map (MAPT_*);
+    int bombs;
+    int fire;
+    int shoes;
+    int mixed;
+    int death;
+    int sp_trigger;
+    int sp_push;
+    int sp_row;
+    int sp_kick;
+    unsigned char state; // state of the map
+    _start_point start_point[MAX_PLAYERS];  // array of starting points for this map
 } typedef _map;
 
 
