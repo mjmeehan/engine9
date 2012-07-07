@@ -265,10 +265,11 @@ udp_get (int sock, char *text, int len, struct _sockaddr *sAddr, int ai_family)
     msglen = 0;
     if (select (sock + 1, &sockset, NULL, NULL, &tval)) if (FD_ISSET (sock, &sockset)) {
         msglen = recvfrom (sock, text, len, MSG_DONTWAIT, (struct sockaddr *) sAddr, &clen);
+	/* msglen is unsigned, impossible for it to be 0
         if (msglen < 0)
-            return 0;
+            return 0; */
 
-        if ((msglen >= 0) && (msglen < len))
+        if ((msglen < len))
             text[msglen] = 0;
     }
     return msglen;

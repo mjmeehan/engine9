@@ -67,7 +67,7 @@ void broadcast_check () {
 				broadcast_list[i].try++;
 		}
 		
-		if (((broadcast_list[i].timestamp < 0) || (timestamp - broadcast_list[i].timestamp < 0))
+		if (((broadcast_list[i].timestamp < 0) || (timestamp < broadcast_list[i].timestamp ))
 			&& broadcast_list[i].host[0] != 0 && broadcast_list[i].lan == 0)	{
 				broadcast_send (broadcast_list[i].host, broadcast_list[i].port);
 				broadcast_list[i].timestamp = timestamp;

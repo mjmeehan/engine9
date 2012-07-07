@@ -476,7 +476,7 @@ ai_invertdir (int dir)
 };
 
 
-inline int
+static inline int
 ai_checknewpos (_point pos, int d)
 {
     _point m;
