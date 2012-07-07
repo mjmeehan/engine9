@@ -534,18 +534,35 @@ player_drop_bomb (int pl_nr)
     }
 };
 
+/* The player can swing their axe to fell trees (FT_stone) */
+void
+player_swing_axe (int pl_nr)
+{
+	_player *player = &players[pl_nr];
+	_point target;
+	int tile = player_field_facing(&target, player, &map);
+	if(FT_stone == tile) {
+		map_smash_block(&map, target.x, target.y);
+	} else {
+		d_printf("I refuse to break %d blocks, I only smash FT_stone!", tile);
+	}
+}
+
+/* @returns field type 
+ * Target here is  */
 int 
-player_field_facing (_player *player, _map *map)
+player_field_facing (_point *target, _player *player, _map *map)
 {
 	int tile;
-	_point *direction = malloc(sizeof(_point));
-	if(direction == NULL) {
-			d_printf("Malloc failed");
-			exit(1);
+	_point direction;
+	if(target == NULL) {
+			d_printf("target not allocated, null pointer");
+			return FT_nothing;
 	}
-	player_direction(direction, player);
-	tile =  map_get_tile(map, player->pos.x + direction->x, player->pos.y + direction->y);
-	free(direction);
+	player_direction(&direction, player);
+	target->x = player->pos.x + direction.x;
+	target->y = player->pos.y + direction.y;
+	tile =  map_get_tile(map, target->x, target->y);
 	return tile;
 }
 
@@ -553,15 +570,26 @@ player_field_facing (_player *player, _map *map)
 void player_direction (_point *direction, _player *player)
 {
 	if(direction != NULL) {
-		if(player->pos.x != player->old.x) {
-			direction->x = player->pos.x > player->old.x ? 1 : -1;
-		} else {
+		switch(player->d) {
+		case left:
+			direction->x = x_left;
+			direction->y = y_left;
+			break;
+		case right:
+			direction->x = x_right;
+			direction->y = y_right;
+			break;
+		case up:
+			direction->x = x_up;
+			direction->y = y_up;
+			break;
+		case down:
+			direction->x = x_down;
+			direction->y = y_down;
+			break;
+		default:
+			d_printf("Invalid direction %d\n", player->d);
 			direction->x = 0;
-		}
-
-		if(player->pos.x != player->old.x) {
-			direction->y = player->pos.y > player->old.y ? 1 : -1;
-		} else {
 			direction->y = 0;
 		}
 	}
@@ -1019,11 +1047,17 @@ void player_check (int pl_nr)
     if ((players[pl_nr].state & PSFM_alife) == PSFM_alife) {
         playerinput_loop (pl_nr);
         player_ilness_loop (pl_nr);
+		if (players[pl_nr].keyf_axe)
+			player_swing_axe (pl_nr);
+		players[pl_nr].keyf_axe = 0;
+
         if (players[pl_nr].keyf_bomb)
             player_drop_bomb (pl_nr);
+
         players[pl_nr].keyf_bomb = 0;
         if (players[pl_nr].keyf_special)
             special_use (pl_nr);
+
         players[pl_nr].keyf_special = 0;
     } else {
         players[pl_nr].m = 0;

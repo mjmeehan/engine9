@@ -884,6 +884,14 @@ map_place_player(int pl)
  * method
  */
 
+void
+map_smash_block(_map *map, int x, int y) 
+{
+	if(FT_stone == map->field[x][y].type) {
+		map->field[x][y].type = FT_nothing;
+	}
+}
+
 int
 map_respawn_player(int pl)
 {

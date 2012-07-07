@@ -161,6 +161,20 @@ enum _direction {               // to handle directions better
     down
 };
 
+enum _dir_x {
+	x_left  = -1,
+	x_right =  1,
+	x_up    =  0,
+	x_down  =  0
+};
+
+enum _dir_y {
+	y_left  =  0,
+	y_right =  0,
+	y_up    = -1,
+	y_down  =  1
+};
+
 enum _mapselection {
     MAPS_select = 0,
     MAPS_randmap,

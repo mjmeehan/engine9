@@ -95,6 +95,7 @@ struct {
     signed char old_m;          // to save the old state..
     signed char keyf_bomb;		// flag for the bomb key
     signed char keyf_special;	// flag for the special key
+	signed char keyf_axe;		// flag for the axe key
 
     int bombs_n;                // maximal number of bombs for the player
     int bomb_lastex;			// number of the bomb which explode the last time
@@ -180,7 +181,7 @@ extern int teammenu_select (_player *pl);
 extern void teammenu ();
 
 /* new for engine9 */
-extern int player_field_facing (_player *player, _map *map);
+extern int player_field_facing (_point *target, _player *player, _map *map);
 extern void player_direction (_point *direction, _player *player);
 
 #endif

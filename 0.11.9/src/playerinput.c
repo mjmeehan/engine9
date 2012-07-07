@@ -78,7 +78,7 @@ inline void playerinput_keyb_read (int pk_offset, int pl_nr)
     }
 
     if (keyb_gamekeys.state[pk_offset + BCPK_drop] && !keyb_gamekeys.old[pk_offset + BCPK_drop])
-        players[pl_nr].keyf_bomb = 1;
+        players[pl_nr].keyf_axe = 1;
 
     if (keyb_gamekeys.state[pk_offset + BCPK_special])
         players[pl_nr].keyf_special = 1;
