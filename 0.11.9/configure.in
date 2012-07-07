@@ -276,6 +276,7 @@ PACKAGE_MENU_DIR="${packageprefix}/${packagemenudir}"
 AC_SUBST(PACKAGE_MENU_DIR)
 
 AM_CONDITIONAL(MINGW32, test x$MINGW32 = xyes)
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([docs/Doxyfile])])
 
 AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "${packageprefix}/${packagedatadir}")
 AC_DEFINE_UNQUOTED(PACKAGE_DOC_DIR, "${packageprefix}/${packagedocdir}")
@@ -288,6 +289,7 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 include/Makefile
+docs/Makefile
 data/Makefile
 data/pixmaps/Makefile
 data/player/Makefile

@@ -3,7 +3,7 @@
 ## If you don't want it to overwrite it,
 ## 	Please disable it in the Anjuta project configuration
 
-SUBDIRS = data include src
+SUBDIRS = data include src docs
 
 bomberclonedocdir = ${prefix}/share/doc/bomberclone
 bomberclonedoc_DATA = \
