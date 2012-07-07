@@ -311,4 +311,5 @@ data/tileset/modern/Makefile
 data/tileset/sheep/Makefile
 data/tileset/tricked/Makefile
 data/tileset/zbb_frog/Makefile
+data/tileset/engine9/Makefile
 ])
