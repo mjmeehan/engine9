@@ -105,4 +105,7 @@ extern int map_is_removable_field(int x, int y);
 extern int map_place_player(int pl);
 extern int map_respawn_player(int pl);
 
+/* new for engine9 */
+extern int map_get_tile(_map *map, int x, int y);
+
 #endif

@@ -179,4 +179,8 @@ extern void playermenu_getflags (char *text, _player *player);
 extern int teammenu_select (_player *pl);
 extern void teammenu ();
 
+/* new for engine9 */
+extern int player_field_facing (_player *player, _map *map);
+extern void player_direction (_point *direction, _player *player);
+
 #endif

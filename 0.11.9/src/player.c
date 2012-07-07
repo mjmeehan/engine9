@@ -9,6 +9,7 @@
 #include "flyingitems.h"
 #include "player.h"
 #include "bomb.h"
+#include "map.h"
 #include "menu.h"
 
 void
@@ -533,6 +534,38 @@ player_drop_bomb (int pl_nr)
     }
 };
 
+int 
+player_field_facing (_player *player, _map *map)
+{
+	int tile;
+	_point *direction = malloc(sizeof(_point));
+	if(direction == NULL) {
+			d_printf("Malloc failed");
+			exit(1);
+	}
+	player_direction(direction, player);
+	tile =  map_get_tile(map, player->pos.x + direction->x, player->pos.y + direction->y);
+	free(direction);
+	return tile;
+}
+
+/* @returns the direction the player is facing as a unit _point */
+void player_direction (_point *direction, _player *player)
+{
+	if(direction != NULL) {
+		if(player->pos.x != player->old.x) {
+			direction->x = player->pos.x > player->old.x ? 1 : -1;
+		} else {
+			direction->x = 0;
+		}
+
+		if(player->pos.x != player->old.x) {
+			direction->y = player->pos.y > player->old.y ? 1 : -1;
+		} else {
+			direction->y = 0;
+		}
+	}
+}
 
 /*
 check the field - 4 pixels from every side.. so it's not anymore that tricky to get

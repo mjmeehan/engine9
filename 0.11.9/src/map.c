@@ -440,7 +440,12 @@ map_ensure_corner_start_points ()
 
     return 1;
 }
-
+/* @returns field type at coordinates (x, y) */ 
+int
+map_get_tile(_map *map, int x, int y)
+{
+	return map->field[x][y].type;
+}
 
 /* initializes all the start points for the map to (-1,-1) and their used flag to 0 */
 
