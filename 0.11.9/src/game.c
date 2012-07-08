@@ -13,6 +13,7 @@
 #include "menu.h"
 #include "keyb.h"
 #include "single.h"
+#include "fire.h"
 
 extern int blitdb_nr,
        blitrects_nr;
@@ -248,7 +249,7 @@ game_loop ()
         if (GT_MP_PTPS)
             send_playerdata (&players[bman.p_servnr].net.addr, bman.p2_nr, &players[bman.p2_nr]);
     }
-
+	fire_init();
     while (!done && (bman.state == GS_running || bman.state == GS_ready)) {
         SDL_JoystickUpdate ();
         if ((eventstate = SDL_PollEvent (&event)) != 0)
@@ -294,6 +295,8 @@ game_loop ()
             single_loop ();
 
         bomb_loop ();
+		/* wind_loop (); SOON */
+		fire_loop ();
         field_loop ();
         flitems_loop ();
 
@@ -420,6 +423,7 @@ game_end ()
 
     gfx_free_players ();
     tileset_free ();
+	fire_clear ();
     snd_music_stop ();
     snd_free ();
 

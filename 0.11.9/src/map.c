@@ -706,6 +706,24 @@ map_is_possible_start_point(int x, int y)
     return 0;
 }
 
+void
+map_rel_direction(_point* target, int direction, int distance)
+{
+	switch(direction) {
+	case left:
+		target->x += x_left * distance;
+		target->y += y_left * distance;
+	case right:
+		target->x += x_right * distance;
+		target->y += y_right * distance;
+	case up:
+		target->x += x_up * distance;
+		target->y += y_up * distance;
+	case down:
+		target->x += x_down * distance;
+		target->y += y_down * distance;
+	}
+}
 
 /* alters the map to create another start point at least tol units from any other
  * start point.  returns 1 on success, 0 on failure

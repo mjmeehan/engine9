@@ -38,8 +38,8 @@ int gfx_get_nr_of_playergfx ()
 void
 gfx_load_players (int sx, int sy)
 {
-    float sfkt,
-          ssfkt;
+    float sfkt;
+          /* ssfkt; */
     char filename[255];
     int i,
         r,
@@ -48,7 +48,7 @@ gfx_load_players (int sx, int sy)
     SDL_Surface *tmpimage,
                 *tmpimage1;
     sfkt = ((float) sx) / ((float) GFX_IMGSIZE);
-    ssfkt = ((float) GFX_SMALLPLAYERIMGSIZE_X) / ((float) GFX_IMGSIZE);
+    /*ssfkt = ((float) GFX_SMALLPLAYERIMGSIZE_X) / ((float) GFX_IMGSIZE); */
 
     d_printf ("gfx_load_players (%d, %d)\n", sx, sy);
 

@@ -183,6 +183,10 @@ draw_stone (int x, int y)
             stone_drawfire (x, y, -1);
             break;
         }
+	if(map.field[x][y].fire.intensity > FIRE_none) {
+		stone_drawfire (x, y, -1);
+		d_printf("stone_drawfire at (%d, %d)\n", x, y);
+	}
 
     if (debug) {
         char txt[64];
@@ -541,6 +545,13 @@ void stone_drawfire (int x, int y, int frame)
     dest.x = gfx.offset.x + x * gfx.block.x;
     dest.y = gfx.offset.y + y * gfx.block.y;
 
+	if (stone->fire.intensity > FIRE_none) {
+		if (frame == -1)
+			frame = map.field[x][y].fire.frame;
+		src.y = frame * src.w;
+		src.x = src.w;
+		gfx_blit (gfx.fire.image, &src, gfx.screen, &dest, (y * 100));
+	}
     for (d = 0; d < 4; d++)
         if (stone->ex[d].count > 0)	{
             if (frame == -1)            // no giving frame

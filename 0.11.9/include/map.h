@@ -28,6 +28,12 @@ struct __ex_field {
     int bomb_p;			// explosion on this field
 } typedef _ex_field;
 
+struct __fire {
+	int intensity;
+	float frame;
+	float spread;
+} typedef _fire;
+
 
 struct __field {
     unsigned char type;
@@ -35,6 +41,7 @@ struct __field {
     float frame;                // frame (frame > 0 && FS_stone)
     unsigned char special;      // to save special stones, or the tunnel number
     _ex_field ex[4];          	// count up every explosion there is on this field for ever direction
+	_fire fire;				// is this field on fire?
     Sint32 ex_nr;               // number to identify the explosion.
 } typedef _field;
 
@@ -108,5 +115,6 @@ extern int map_respawn_player(int pl);
 /* new for engine9 */
 extern int map_get_tile (_map *map, int x, int y);
 extern void map_smash_block (_map *map, int x, int y);
+extern void map_rel_direction(_point* target, int direction, int distance);
 
 #endif

@@ -274,9 +274,14 @@ int check_exfield (short int x, short int y)
 {
     int res = 1, i;
 
+	/* crushed */
     if (map.field[x][y].type == FT_stone || map.field[x][y].type == FT_block)
         res = 0;
-
+	/* burnt */
+	if ( map.field[x][x].fire.intensity > FIRE_none )
+		res = 0;
+	
+	/* exploded */
     for (i = 0; (i < 4 && res == 1); i++)
         if (map.field[x][y].ex[i].count > 0)
             res = 0;
@@ -544,7 +549,7 @@ player_swing_axe (int pl_nr)
 	if(FT_stone == tile) {
 		map_smash_block(&map, target.x, target.y);
 	} else {
-		d_printf("I refuse to break %d blocks, I only smash FT_stone!", tile);
+		d_printf("I refuse to break %d blocks, I only smash FT_stone!\n", tile);
 	}
 }
 

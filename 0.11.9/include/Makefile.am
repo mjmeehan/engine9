@@ -27,6 +27,7 @@ bomberclone_include = \
 	player.h \
 	bomb.h \
 	single.h \
-	broadcast.h
+	broadcast.h \
+	fire.h
 
 noinst_HEADERS = $(bomberclone_include)

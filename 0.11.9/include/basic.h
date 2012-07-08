@@ -153,6 +153,13 @@ enum _poweruptypes {
     PWUP_max
 };
 
+enum _fire_intense {
+		FIRE_none,
+		FIRE_low,
+		FIRE_med,
+		FIRE_high,
+};
+
 
 enum _direction {               // to handle directions better
     left = 0,

@@ -43,6 +43,7 @@ bomberclone_SOURCES = \
 	help.c\
 	playerinput.c\
 	keyb.c\
+	fire.c\
 	playermenu.c\
 	broadcast.c
 

@@ -505,17 +505,18 @@ int explosion_check_field (int x, int y, _bomb *bomb)
  */
 void bomb_kicked (_bomb * bomb)
 {
-    float dist, dX, dY, pX, pY;
+    float dX, dY, pX, pY;
 
     pX = dX = bomb->dest.x - bomb->source.x;
     pY = dY = bomb->dest.y - bomb->source.y;
     if (pX < 0.0f) pX = -dX;
     if (pY < 0.0f) pY = -dY;
+	/*
     if (pX == 0.0f) dist = pY;
     else if (pY == 0.0f) dist = pX;
     else {
         dist = sqrtf (powf (pX,2) + powf (pY,2));
-    }
+    }*/
 
     bomb->fdata += timediff; // * (SPECIAL_KICK_MAXDIST / dist);
     if (bomb->fdata >= 1.0f) {
