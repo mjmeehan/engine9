@@ -274,14 +274,14 @@ int check_exfield (short int x, short int y)
 {
     int res = 1, i;
 
-	/* crushed */
+	/* not crushed */
     if (map.field[x][y].type == FT_stone || map.field[x][y].type == FT_block)
         res = 0;
-	/* burnt */
-	if ( map.field[x][x].fire.intensity > FIRE_none )
+	/* not burnt */
+	if ( map.field[x][y].fire.intensity > FIRE_none )
 		res = 0;
 	
-	/* exploded */
+	/* not exploded */
     for (i = 0; (i < 4 && res == 1); i++)
         if (map.field[x][y].ex[i].count > 0)
             res = 0;
@@ -480,7 +480,7 @@ player_move (int pl_nr)
             net_game_send_playermove (pl_nr, 1);
         p->old_m = p->m;        // save the old state
         p->m = 0;
-
+		
         /* check the players position */
         if (PS_IS_alife (p->state) && (CUTINT(p->pos.x) > EXPLOSION_SAVE_DISTANCE && (p->d == left || p->d == right))
                 && (!check_exfield (p->pos.x + 1.0f, p->pos.y)))

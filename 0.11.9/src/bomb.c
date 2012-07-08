@@ -511,7 +511,7 @@ void bomb_kicked (_bomb * bomb)
     pY = dY = bomb->dest.y - bomb->source.y;
     if (pX < 0.0f) pX = -dX;
     if (pY < 0.0f) pY = -dY;
-	/*
+    /*
     if (pX == 0.0f) dist = pY;
     else if (pY == 0.0f) dist = pX;
     else {

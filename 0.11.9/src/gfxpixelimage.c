@@ -284,11 +284,10 @@ scale_image (SDL_Surface *orginal, int newx, int newy)
 SDL_Surface *
 makegray_image (SDL_Surface * org)
 {
-    /*Uint32 rmask,
+    Uint32 rmask,
            gmask,
            bmask,
            amask;
-		   */
     Uint32 pixel,
            transpixel = 0;
     SDL_Surface *dest;
@@ -299,7 +298,6 @@ makegray_image (SDL_Surface * org)
           g,
           b,
           gray;
-/*
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
     gmask = 0x00ff0000;
@@ -311,7 +309,6 @@ makegray_image (SDL_Surface * org)
     bmask = 0x00ff0000;
     amask = 0xff000000;
 #endif 
-*/
     dest = SDL_CreateRGBSurface (SDL_SWSURFACE, org->w, org->h, org->format->BitsPerPixel,
                                  org->format->Rmask, org->format->Gmask,
                                  org->format->Bmask, org->format->Amask);

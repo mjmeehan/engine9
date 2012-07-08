@@ -178,14 +178,15 @@ draw_stone (int x, int y)
     }
 
     // draw explosions if there is any
-    for (d = 0; d < 4; d++)
+    for (d = 0; d < 4; d++) {
         if (stone->ex[d].count > 0) {
             stone_drawfire (x, y, -1);
             break;
         }
+	}
+
 	if(map.field[x][y].fire.intensity > FIRE_none) {
 		stone_drawfire (x, y, -1);
-		d_printf("stone_drawfire at (%d, %d)\n", x, y);
 	}
 
     if (debug) {
@@ -289,6 +290,9 @@ field_animation ()
                 for (d = 0; d < 4; d++)
                     if (map.field[fieldani[i].x][fieldani[i].y].ex[d].count > 0)
                         break;
+
+				if(map.field[fieldani[i].x][fieldani[i].y].fire.intensity > FIRE_none)
+					d = 4;
 
                 if (d >= 4)
                     fieldani[i].y = fieldani[i].x = -1;

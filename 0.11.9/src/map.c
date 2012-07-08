@@ -713,15 +713,19 @@ map_rel_direction(_point* target, int direction, int distance)
 	case left:
 		target->x += x_left * distance;
 		target->y += y_left * distance;
+		break;
 	case right:
 		target->x += x_right * distance;
 		target->y += y_right * distance;
+		break;
 	case up:
 		target->x += x_up * distance;
 		target->y += y_up * distance;
+		break;
 	case down:
 		target->x += x_down * distance;
 		target->y += y_down * distance;
+		break;
 	}
 }
 
