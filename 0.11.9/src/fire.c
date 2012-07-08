@@ -27,7 +27,8 @@ void spawn_fire(int x, int y, int intensity)
 
     /* fire only catches on combustables */
     if((FT_stone == map.field[x][y].type || FT_block == map.field[x][y].type) &&
-            x < map.size.x -1 && y - 1 < map.size.y ) {
+            x < map.size.x -1 && y  < map.size.y - 1 &&
+	 		x > 0 && y > 0 ) {
         d_printf ("Spawning fire at (%d, %d) with intensity %d\n", x, y, intensity);
         if(map.field[x][y].fire.intensity + intensity > FIRE_high) {
             map.field[x][y].fire.intensity = FIRE_high;
@@ -48,7 +49,7 @@ float fire_spread_time()
 
 void spread_fire()
 {
-    int x, y, direction, intensity;
+    int x, y, direction, intensity, i;
     _point target;
     for(x = 0; x < map.size.x; x++) {
         for( y = 0; y < map.size.y; y++) {
@@ -57,7 +58,8 @@ void spread_fire()
             if(map.field[x][y].fire.intensity > FIRE_low && map.field[x][y].fire.spread < 0) {
                 d_printf("Spreading fire at (%d, %d)\n", x, y);
                 intensity = map.field[x][y].fire.intensity -1;
-                for(direction = 0; direction < 4; direction++) {
+                for(i = 0; i < map.field[x][y].fire.intensity; i++) {
+					direction = s_random(4);
                     target.x = x;
                     target.y = y;
                     map_rel_direction(&target, direction, 1);
